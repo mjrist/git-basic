@@ -1,0 +1,36 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:GitBasic.StyleResources.Themes">
+
+    <!-- ******************** Darks ******************** -->
+    <Color x:Key="Color_001">#FF252525</Color>
+    <Color x:Key="Color_002">#FF454545</Color>
+
+    <!-- ******************** Lights ******************** -->
+    <!-- WhiteSomke -->
+    <Color x:Key="Color_003">#FFF5F5F5</Color>
+    <!-- White 100%  -->
+    <Color x:Key="Color_004">#FFFFFFFF</Color>
+    <!-- White 80%  -->
+    <Color x:Key="Color_005">#CCFFFFFF</Color>
+    <!-- White 60%  -->
+    <Color x:Key="Color_006">#99FFFFFF</Color>
+    <!-- White 40%  -->
+    <Color x:Key="Color_007">#66FFFFFF</Color>
+    <!-- White 20%  -->
+    <Color x:Key="Color_008">#33FFFFFF</Color>
+
+    <!-- ******************** Accents ******************** -->
+    <!--  100%  --> <!-- Can be used as highlight color. -->
+    <Color x:Key="AccentColor1">#FF007ACC</Color>
+    <!--  80%  -->
+    <Color x:Key="AccentColor2">#CC007ACC</Color>
+    <!--  60%  -->
+    <Color x:Key="AccentColor3">#99007ACC</Color>
+    <!--  40%  -->
+    <Color x:Key="AccentColor4">#66007ACC</Color>
+    <!--  20%  -->
+    <Color x:Key="AccentColor5">#33007ACC</Color>
+
+</ResourceDictionary>

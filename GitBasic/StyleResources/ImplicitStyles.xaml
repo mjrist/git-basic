@@ -1,0 +1,16 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:GitBasic">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/StyleResources/ControlStyles/BaseControlStyle.xaml" />
+        <ResourceDictionary Source="/StyleResources/ControlStyles/ButtonStyle.xaml" />
+        <ResourceDictionary Source="/StyleResources/ControlStyles/RichTextBoxStyle.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style BasedOn="{StaticResource BaseControlStyle}" TargetType="{x:Type Control}" />
+    <Style BasedOn="{StaticResource ButtonStyle}" TargetType="{x:Type Button}" />
+    <Style BasedOn="{StaticResource RichTextBoxStyle}" TargetType="{x:Type RichTextBox}" />
+
+</ResourceDictionary>

@@ -1,0 +1,10 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:GitBasic.StyleResources.Themes">
+
+    <ImageSource x:Key="GitLogo_16">/GitBasic;component/Images/GitLogo_16.png</ImageSource>
+    <ImageSource x:Key="GitLogo_24">/GitBasic;component/Images/GitLogo_24.png</ImageSource>
+    <ImageSource x:Key="GitLogo_32">/GitBasic;component/Images/GitLogo_32.png</ImageSource>
+
+</ResourceDictionary>
