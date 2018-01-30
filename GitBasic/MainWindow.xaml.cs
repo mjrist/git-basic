@@ -9,7 +9,9 @@ namespace GitBasic
     {
         public MainWindow()
         {            
-            InitializeComponent();            
+            
+            // add a comment
+            // adding some commands
         }
     }    
 }
