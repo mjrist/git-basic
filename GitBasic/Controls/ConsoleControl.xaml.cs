@@ -176,5 +176,10 @@ namespace GitBasic.Controls
         private const string CD = "cd";
         private const string GIT_STATUS = "git status";
         private const string COMMIT_ALL = "git commit -a -m \"\"";
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Hello");
+        }
     }
 }
