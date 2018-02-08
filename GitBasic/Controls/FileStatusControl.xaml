@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0" Margin="2">
-            <TextBlock Grid.Row="0" Text="Staged Files" />
+            <TextBlock Text="Staged Files" />
         </Grid>
 
         <GridSplitter
@@ -25,26 +25,9 @@
             HorizontalAlignment="Stretch"
             Background="{DynamicResource BorderBrush}" />
 
-        <StackPanel Grid.Row="2" Margin="2">
-            <TextBlock Text="Unstaged Files" />
-            <TreeView
-                Grid.Row="0"
-                BorderThickness="0"
-                Style="{StaticResource BaseControlStyle}">
-                <TreeView.Resources>
-                    <Style BasedOn="{StaticResource BaseControlStyle}" TargetType="TreeViewItem" />
-                </TreeView.Resources>
-                <TreeViewItem Header="ProgramRoot" IsExpanded="True">
-                    <TreeViewItem Header="Controls" IsExpanded="True">
-                        <TreeViewItem Header="Window.cs" />
-                        <TreeViewItem Header="Button.cs" />
-                    </TreeViewItem>
-                    <TreeViewItem Header="File.cs" />
-                    <TreeViewItem Header="Themes.xaml" />
-                </TreeViewItem>
-            </TreeView>
-        </StackPanel>
-
+        <Grid Grid.Row="2" Margin="2">
+            <TextBlock Text="Unstaged Files" />            
+        </Grid>
 
     </Grid>
 </UserControl>
