@@ -94,7 +94,10 @@
     <Compile Include="Controls\StatusControl.xaml.cs">
       <DependentUpon>StatusControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Lib\Command.cs" />
     <Compile Include="Lib\ExtensionMethods\ControlExtensions.cs" />
+    <Compile Include="Lib\Reactive\Prop.cs" />
+    <Compile Include="Lib\Reactive\ReactiveAction.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -137,6 +140,8 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MainVM.cs" />
+    <Compile Include="Lib\Observable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -171,8 +176,6 @@
   <ItemGroup>
     <Resource Include="GitLogoIcon.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Lib\Reactive\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

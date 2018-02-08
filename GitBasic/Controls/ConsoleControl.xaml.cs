@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,19 +22,26 @@ namespace GitBasic.Controls
 
         private void ConsoleControl_Loaded(object sender, RoutedEventArgs e)
         {
+            if (!Directory.Exists(WorkingDirectory))
+            {
+                WorkingDirectory = _defaultDirectory;
+            }
+
             StartCMD();
             InputBox.Focus();
         }
 
         private void StartCMD()
         {
-            SetCurrentDirectory(_workingDirectory);
+            // Attempting to access WorkingDirectory from the Task seen below would
+            // cause a threading exception. Therefore copy it to a local variable first.
+            string workingDirectory = WorkingDirectory;            
 
             Task.Factory.StartNew(() =>
             {
                 _process = new Process();
                 _process.StartInfo.FileName = "cmd.exe";
-                _process.StartInfo.WorkingDirectory = _workingDirectory;
+                _process.StartInfo.WorkingDirectory = workingDirectory;
                 _process.StartInfo.UseShellExecute = false;
                 _process.StartInfo.ErrorDialog = false;
                 _process.StartInfo.CreateNoWindow = true;
@@ -53,8 +61,7 @@ namespace GitBasic.Controls
             });
         }
 
-        private Process _process;
-        private string _workingDirectory = "C:\\Source";
+        private Process _process;        
         private bool _isInputLine = false;
         private bool _setDirectory = false;
 
@@ -84,7 +91,7 @@ namespace GitBasic.Controls
                 if (text != string.Empty)
                 {
                     _setDirectory = false;
-                    SetCurrentDirectory(text.Split('>')[0]);
+                    WorkingDirectory = text.Split('>')[0];
                 }
                 return;
             }
@@ -123,13 +130,7 @@ namespace GitBasic.Controls
                     InputBox.Focus();
                 }
             }
-        }
-
-        private void SetCurrentDirectory(string text)
-        {
-            _workingDirectory = text;
-            CurrentDirectory.Text = $"{text}>";
-        }
+        }        
 
         public void RunCommand(string input)
         {
@@ -176,5 +177,28 @@ namespace GitBasic.Controls
         private const string CD = "cd";
         private const string GIT_STATUS = "git status";
         private const string COMMIT_ALL = "git commit -a -m \"\"";
+
+
+        private string _defaultDirectory => Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+        #region Dependency Properties
+
+        public string WorkingDirectory
+        {
+            get { return (string)GetValue(WorkingDirectoryProperty); }
+            set { SetValue(WorkingDirectoryProperty, value); }
+        }        
+        public static readonly DependencyProperty WorkingDirectoryProperty =
+            DependencyProperty.Register("WorkingDirectory", typeof(string), typeof(ConsoleControl), new PropertyMetadata(string.Empty, OnWorkingDirectoryChanged));
+
+        private static void OnWorkingDirectoryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            string newWorkingDirectory = e.NewValue.ToString();            
+            // Save the new working directory. This way it can be restored if the app is restarted.
+            Properties.Settings.Default.WorkingDirectory = newWorkingDirectory;
+            Properties.Settings.Default.Save();
+        }
+
+        #endregion
     }
 }
