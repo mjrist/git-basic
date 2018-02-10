@@ -12,7 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using LibGit2Sharp;
+//using LibGit2Sharp;
+using GitSharp;
+using GitSharp.Commands;
 
 namespace Playground
 {
@@ -29,16 +31,26 @@ namespace Playground
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            Dispatcher.Invoke(() =>
+            //TestLibGit2Sharp();
+            TestGitSharp();
+        }
+
+        //private void TestLibGit2Sharp()
+        //{
+        //    using (var repo = new Repository("C:\\source\\git-basic"))
+        //    {
+        //        var repoDifferences = repo.Diff.Compare<Patch>(new string[] { "Playground\\MainWindow.xaml.cs" }, true);
+        //        DiffViewer.Text = repoDifferences.Content;
+        //    }
+        //}
+
+        private void TestGitSharp()
+        {
+            Diff diff = new Diff(Properties.Settings.Default.OldString, Properties.Settings.Default.NewString);
+            foreach (var section in diff.Sections)
             {
-                using (var repo = new Repository("C:\\source\\git-basic"))
-                {
-                    foreach (TreeEntryChanges c in repo.Diff.Compare<TreeChanges>())
-                    {
-                        DiffViewer.Text += $"{c}\n";
-                    }
-                }
-            });
+
+            }
         }
     }
 }

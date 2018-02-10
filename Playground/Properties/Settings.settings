@@ -1,7 +1,110 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Playground.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="OldString" Type="System.String" Scope="User">
+      <Value Profile="(Default)">using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+//using LibGit2Sharp;
+using GitSharp;
+using GitSharp.Commands;
+
+namespace Playground
+{
+    /// &lt;summary&gt;
+    /// Interaction logic for MainWindow.xaml
+    /// &lt;/summary&gt;
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+            Loaded += MainWindow_Loaded;
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            //TestLibGit2Sharp();
+            TestGitSharp();
+        }
+
+        //private void TestLibGit2Sharp()
+        //{
+        //    using (var repo = new Repository("C:\\source\\git-basic"))
+        //    {
+        //        var repoDifferences = repo.Diff.Compare&lt;Patch&gt;(new string[] { "Playground\\MainWindow.xaml.cs" }, true);
+        //        DiffViewer.Text = repoDifferences.Content;
+        //    }
+        //}
+
+        private void TestGitSharp()
+        {
+            Diff diff = new Diff(Properties.Settings.Default.OldString, Properties.Settings.Default.NewString);
+            foreach (var section in diff.Sections)
+            {
+
+            }
+        }        
+    }
+}
+</Value>
+    </Setting>
+    <Setting Name="NewString" Type="System.String" Scope="User">
+      <Value Profile="(Default)">using System.Windows;
+//using LibGit2Sharp;
+using GitSharp;
+
+namespace Playground
+{
+    /// &lt;summary&gt;
+    /// Interaction logic for MainWindow.xaml
+    /// &lt;/summary&gt;
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+            Loaded += MainWindow_Loaded;
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            //TestLibGit2Sharp();
+            TestGitSharp();
+        }
+
+        //private void TestLibGit2Sharp()
+        //{
+        //    using (var repo = new Repository("C:\\source\\git-basic"))
+        //    {
+        //        var repoDifferences = repo.Diff.Compare&lt;Patch&gt;(new string[] { "Playground\\MainWindow.xaml.cs" }, true);
+        //        DiffViewer.Text = repoDifferences.Content;
+        //    }
+        //}
+
+        private void TestGitSharp()
+        {
+            Diff diff = new Diff(Properties.Settings.Default.OldString, Properties.Settings.Default.NewString);
+            foreach (var section in diff.Sections)
+            {
+                DiffViewer.Text = section.TextA;                
+            }
+        }        
+    }
+}
+</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>
