@@ -43,7 +43,7 @@
                     Grid.Row="2"
                     Click="Status_Click"
                     Content="Status" />
-                <Button Click="Button_Click" Grid.Row="3" Content="Push" />
+                <Button Grid.Row="3" Content="Push" />
                 <Button Grid.Row="4" Content="Pull" />
                 <Button Grid.Row="5" Content="Diff" />
                 <Button Grid.Row="6" Content="Checkout" />

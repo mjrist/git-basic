@@ -141,7 +141,14 @@ namespace GitBasic.Controls
         /////////////
 
         private void SelectRepo_Click(object sender, RoutedEventArgs e)
-        {            
+        {
+            //using (var folderDialog = new System.Windows.Forms.FolderBrowserDialog())
+            //{
+            //    if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            //    {
+            //        EnterText($"{CD} {folderDialog.SelectedPath}");
+            //    }
+            //}
         }
 
         private void CommitAll_Click(object sender, RoutedEventArgs e)
@@ -169,11 +176,5 @@ namespace GitBasic.Controls
         private const string CD = "cd";
         private const string GIT_STATUS = "git status";
         private const string COMMIT_ALL = "git commit -a -m \"\"";
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            //do something
-
-        }
     }
 }
