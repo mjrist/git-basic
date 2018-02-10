@@ -22,6 +22,9 @@ namespace Playground
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {             
             Diff();
+
+            // Comment out Diff() above and uncomment this for file status example.
+            //GetFileStatus();
         }
 
         private void Diff()
@@ -81,6 +84,34 @@ namespace Playground
                 newSection.Children.Add(newTextBlock);
 
                 LayoutRoot.Children.Add(newSection);
+            }
+        }
+        
+        private void GetFileStatus()
+        {
+            // Didn't spend a lot of time on this yet. Still some to be explored here.
+
+            // Modify this to point to your repo root dir.
+            string repoRoot = "C:\\source\\git-basic";            
+
+            using (var repo = new Repository(repoRoot))
+            {
+                // Haven't tested these, but this should stage/unstage a file.
+
+                //Commands.Stage(repo, "pathtofile");
+                //Commands.Unstage(repo, "pathtofile");
+
+                foreach (var item in repo.RetrieveStatus())
+                {
+                    // You'll have to figure out how to tell what is staged/unstaged/untracked
+                    if (item.State != FileStatus.Unaltered)
+                    {
+                        TextBlock filePathTextBlock = new TextBlock();
+                        filePathTextBlock.Text = item.FilePath;
+
+                        LayoutRoot.Children.Add(filePathTextBlock);
+                    }                    
+                }                
             }
         }
     }
