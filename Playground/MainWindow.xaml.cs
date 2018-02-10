@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using LibGit2Sharp;
 
 
@@ -18,7 +20,8 @@ namespace Playground
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {            
+        {   
+            // New line
             Diff();
         }
 
@@ -37,12 +40,11 @@ namespace Playground
                     string oldText = oldBlob.GetContentText();
                     string newText = File.ReadAllText(Path.Combine(repoRoot, relativeFilePath));
 
+                    oldText = Regex.Replace(oldText, @"\r\n|\n\r|\n|\r", "\r\n");
+                    newText = Regex.Replace(newText, @"\r\n|\n\r|\n|\r", "\r\n");
+
                     ShowDiff(oldText, newText);
                 }
-
-
-                //var repoDifferences = repo.Diff.Compare<Patch>(new string[] { "Playground\\MainWindow.xaml.cs" }, true);
-                //DiffViewer.Text = repoDifferences.Content;
             }
         }
 
@@ -51,7 +53,23 @@ namespace Playground
             GitSharp.Diff diff = new GitSharp.Diff(oldText, newText);
             foreach (var section in diff.Sections)
             {
-                DiffViewer.Text = section.TextA;
+                TextBlock oldTextBlock = new TextBlock();
+                Grid.SetColumn(oldTextBlock, 0);
+                oldTextBlock.Text = section.TextA.TrimEnd('\r', '\n');
+
+                TextBlock newTextBlock = new TextBlock();
+                Grid.SetColumn(newTextBlock, 1);
+                newTextBlock.Text = section.TextB.TrimEnd('\r', '\n');
+
+                Grid newSection = new Grid();
+                ColumnDefinition oldColumn = new ColumnDefinition();
+                ColumnDefinition newColumn = new ColumnDefinition();
+                newSection.ColumnDefinitions.Add(oldColumn);
+                newSection.ColumnDefinitions.Add(newColumn);
+                newSection.Children.Add(oldTextBlock);
+                newSection.Children.Add(newTextBlock);
+
+                LayoutRoot.Children.Add(newSection);                
             }
         }
     }
