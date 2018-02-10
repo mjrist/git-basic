@@ -1,9 +1,9 @@
-﻿using System.IO;
+﻿using LibGit2Sharp;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using LibGit2Sharp;
 
 
 namespace Playground
@@ -20,13 +20,15 @@ namespace Playground
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {   
-            // New line
+        {             
             Diff();
         }
 
         private void Diff()
         {
+            // Make a small change to this file, save (don't commit), and you will see side-by-side diff.
+
+            // Modify this to point to your repo root dir.
             string repoRoot = "C:\\source\\git-basic";
             string relativeFilePath = "Playground\\MainWindow.xaml.cs";
 
@@ -40,6 +42,7 @@ namespace Playground
                     string oldText = oldBlob.GetContentText();
                     string newText = File.ReadAllText(Path.Combine(repoRoot, relativeFilePath));
 
+                    // Have to normalize the line endings because LibGit2Sharp is using '\n' but Windows in '\r\n'.
                     oldText = Regex.Replace(oldText, @"\r\n|\n\r|\n|\r", "\r\n");
                     newText = Regex.Replace(newText, @"\r\n|\n\r|\n|\r", "\r\n");
 
@@ -53,6 +56,14 @@ namespace Playground
             GitSharp.Diff diff = new GitSharp.Diff(oldText, newText);
             foreach (var section in diff.Sections)
             {
+                // This is a quick and easy way to get the sections of the diff to line up.
+                // We don't really want to do it this way because you can't select the text.
+                // Use the properties on section (BeginA, BeginB, EditWithRespectToA, ...)
+                // in order to insert the appropriate whitespace. These properties will also
+                // help you determine highlighting. It would be nice to have line numbers
+                // as well if possible. The closer it looks to visual studio's built-in
+                // diff viewer, the better.
+
                 TextBlock oldTextBlock = new TextBlock();
                 Grid.SetColumn(oldTextBlock, 0);
                 oldTextBlock.Text = section.TextA.TrimEnd('\r', '\n');
@@ -69,7 +80,7 @@ namespace Playground
                 newSection.Children.Add(oldTextBlock);
                 newSection.Children.Add(newTextBlock);
 
-                LayoutRoot.Children.Add(newSection);                
+                LayoutRoot.Children.Add(newSection);
             }
         }
     }
