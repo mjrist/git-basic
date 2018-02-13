@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace GitBasic
+namespace Reactive
 {
     public abstract class Observable : INotifyPropertyChanged
     {

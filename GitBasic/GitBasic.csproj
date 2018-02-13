@@ -117,8 +117,10 @@
     </Compile>
     <Compile Include="Lib\Command.cs" />
     <Compile Include="Lib\ExtensionMethods\ControlExtensions.cs" />
+    <Compile Include="Lib\ExtensionMethods\StringExtensions.cs" />
     <Compile Include="Lib\Reactive\Prop.cs" />
     <Compile Include="Lib\Reactive\ReactiveAction.cs" />
+    <Compile Include="Lib\Reactive\ReactiveProp.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -162,7 +164,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainVM.cs" />
-    <Compile Include="Lib\Observable.cs" />
+    <Compile Include="Lib\Reactive\Observable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
