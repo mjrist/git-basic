@@ -14,6 +14,9 @@
     Style="{StaticResource MetroWindowStyle}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
+    <controls:MetroWindow.Resources>
+        <local:MainVM x:Key="MainVM"></local:MainVM>
+    </controls:MetroWindow.Resources>
     <controls:MetroWindow.TitleBarIcon>
         <Image
             Width="24"
@@ -22,7 +25,7 @@
             Source="{DynamicResource GitLogo_24}" />
     </controls:MetroWindow.TitleBarIcon>
 
-    <Grid>
+    <Grid DataContext="{StaticResource MainVM}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="5" />
@@ -48,7 +51,7 @@
                 <ColumnDefinition Width="0.3*" />
             </Grid.ColumnDefinitions>
 
-            <controls:ConsoleControl Grid.Column="0" />
+            <controls:ConsoleControl WorkingDirectory="{Binding WorkingDirectory.Value}" Grid.Column="0" />
 
             <GridSplitter
                 Grid.Column="1"
