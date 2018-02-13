@@ -21,8 +21,7 @@ namespace GitBasic.Controls
         }
 
         private void ConsoleControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            //test
+        {            
             if (!Directory.Exists(WorkingDirectory))
             {
                 WorkingDirectory = _defaultDirectory;
