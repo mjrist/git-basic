@@ -15,7 +15,7 @@
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <controls:MetroWindow.Resources>
-        <local:MainVM x:Key="MainVM"></local:MainVM>
+        <local:MainVM x:Key="MainVM" />
     </controls:MetroWindow.Resources>
     <controls:MetroWindow.TitleBarIcon>
         <Image
@@ -51,7 +51,7 @@
                 <ColumnDefinition Width="0.3*" />
             </Grid.ColumnDefinitions>
 
-            <controls:ConsoleControl WorkingDirectory="{Binding WorkingDirectory.Value}" Grid.Column="0" />
+            <controls:ConsoleControl Grid.Column="0" WorkingDirectory="{Binding WorkingDirectory.Value, Mode=TwoWay}" />
 
             <GridSplitter
                 Grid.Column="1"
@@ -63,6 +63,10 @@
         </Grid>
 
         <!--  Row 3  -->
-        <controls:StatusControl Grid.Row="3" DockPanel.Dock="Bottom" />
+        <controls:StatusControl
+            Grid.Row="3"
+            BranchName="{Binding BranchName.Value}"
+            DockPanel.Dock="Bottom"
+            RepositoryName="{Binding RepositoryName.Value}" />
     </Grid>
 </controls:MetroWindow>
