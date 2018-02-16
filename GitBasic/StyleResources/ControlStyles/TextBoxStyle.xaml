@@ -9,11 +9,9 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Style
-        x:Key="RichTextBoxStyle"
+        x:Key="TextBoxStyle"
         BasedOn="{StaticResource BaseControlStyle}"
-        TargetType="{x:Type RichTextBox}">
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Padding" Value="0,2,0,2" />
+        TargetType="{x:Type TextBox}">
         <Setter Property="ContextMenu" Value="{StaticResource TextBoxContextMenu}" />
     </Style>
 
