@@ -63,7 +63,6 @@
                 Name="OutputBox"
                 Grid.Row="0"
                 Margin="0,2,0,2"
-                Background="{DynamicResource BackgroundBrush}"
                 BorderThickness="0"
                 FontFamily="Consolas"
                 IsReadOnly="True">
@@ -92,7 +91,6 @@
                         Margin="2,0,1,0"
                         VerticalAlignment="Stretch"
                         VerticalContentAlignment="Center"
-                        Background="{DynamicResource BackgroundBrush}"
                         BorderThickness="0"
                         Foreground="LimeGreen"
                         IsReadOnly="True"
@@ -102,10 +100,8 @@
                         Grid.Column="1"
                         VerticalAlignment="Stretch"
                         VerticalContentAlignment="Center"
-                        Background="{DynamicResource BackgroundBrush}"
                         BorderThickness="0"
                         FontFamily="Consolas"
-                        Foreground="{DynamicResource ForegoundBrush}"
                         KeyDown="InputBox_KeyDown"
                         MinLines="2" />
                 </Grid>

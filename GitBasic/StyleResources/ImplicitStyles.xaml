@@ -5,12 +5,26 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/StyleResources/ControlStyles/BaseControlStyle.xaml" />
+        <ResourceDictionary Source="/StyleResources/ControlStyles/GridSplitterStyle.xaml" />
+        <ResourceDictionary Source="/StyleResources/ControlStyles/TextBlockStyle.xaml" />
         <ResourceDictionary Source="/StyleResources/ControlStyles/ButtonStyle.xaml" />
         <ResourceDictionary Source="/StyleResources/ControlStyles/RichTextBoxStyle.xaml" />
+        <ResourceDictionary Source="/StyleResources/ControlStyles/TextBoxStyle.xaml" />
+        <ResourceDictionary Source="/StyleResources/ControlStyles/ContextMenuStyle.xaml" />
+        <ResourceDictionary Source="/StyleResources/ControlStyles/MenuItemStyle.xaml" />
+        <ResourceDictionary Source="/StyleResources/ControlStyles/ListBoxStyle.xaml" />
+        <ResourceDictionary Source="/StyleResources/ControlStyles/ListBoxItemStyle.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style BasedOn="{StaticResource BaseControlStyle}" TargetType="{x:Type Control}" />
+    <Style BasedOn="{StaticResource GridSplitterStyle}" TargetType="{x:Type GridSplitter}" />
     <Style BasedOn="{StaticResource ButtonStyle}" TargetType="{x:Type Button}" />
     <Style BasedOn="{StaticResource RichTextBoxStyle}" TargetType="{x:Type RichTextBox}" />
+    <Style BasedOn="{StaticResource TextBoxStyle}" TargetType="{x:Type TextBox}" />
+    <Style BasedOn="{StaticResource ContextMenuStyle}" TargetType="{x:Type ContextMenu}" />
+    <Style BasedOn="{StaticResource MenuItemStyle}" TargetType="{x:Type MenuItem}" />
+    <Style BasedOn="{StaticResource ListBoxStyle}" TargetType="{x:Type ListBox}" />
+    <Style BasedOn="{StaticResource ListBoxItemStyle}" TargetType="{x:Type ListBoxItem}" />
+    <Style BasedOn="{StaticResource TextBlockStyle}" TargetType="{x:Type TextBlock}" />
 
 </ResourceDictionary>

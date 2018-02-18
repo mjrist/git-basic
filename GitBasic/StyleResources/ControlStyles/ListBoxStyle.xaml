@@ -5,15 +5,11 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="BaseControlStyle.xaml" />
-        <ResourceDictionary Source="TextBoxContextMenu.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style
-        x:Key="RichTextBoxStyle"
+        x:Key="ListBoxStyle"
         BasedOn="{StaticResource BaseControlStyle}"
-        TargetType="{x:Type RichTextBox}">
-        <Setter Property="Padding" Value="0,2,0,2" />
-        <Setter Property="ContextMenu" Value="{StaticResource TextBoxContextMenu}" />
-    </Style>
+        TargetType="{x:Type ListBox}" />
 
 </ResourceDictionary>
