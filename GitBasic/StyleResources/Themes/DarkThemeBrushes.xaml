@@ -36,10 +36,10 @@
 
 
     <!--  MenuItem Brushes  -->
-    <SolidColorBrush x:Key="MenuItemSelectedBackgroundBrush" Color="{StaticResource Color_008}" />
-    <SolidColorBrush x:Key="MenuItemSelectedBorderBrush" Color="{StaticResource Color_008}" />
-    <SolidColorBrush x:Key="MenuItemDisabledBackgroundBrush" Color="{StaticResource Color_009}" />
-    <SolidColorBrush x:Key="MenuItemDisabledBorderBrush" Color="{StaticResource Color_009}" />
+    <SolidColorBrush x:Key="MenuItemSelectedBackgroundBrush" Color="{StaticResource Color_009}" />
+    <SolidColorBrush x:Key="MenuItemSelectedBorderBrush" Color="{StaticResource Color_009}" />
+    <SolidColorBrush x:Key="MenuItemDisabledBackgroundBrush" Color="{StaticResource Color_010}" />
+    <SolidColorBrush x:Key="MenuItemDisabledBorderBrush" Color="{StaticResource Color_010}" />
 
 
 

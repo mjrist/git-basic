@@ -10,6 +10,7 @@
         <ResourceDictionary Source="/StyleResources/ControlStyles/TextBoxStyle.xaml" />
         <ResourceDictionary Source="/StyleResources/ControlStyles/ContextMenuStyle.xaml" />
         <ResourceDictionary Source="/StyleResources/ControlStyles/MenuItemStyle.xaml" />
+        <ResourceDictionary Source="/StyleResources/ControlStyles/ListBoxStyle.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style BasedOn="{StaticResource BaseControlStyle}" TargetType="{x:Type Control}" />
@@ -18,5 +19,6 @@
     <Style BasedOn="{StaticResource TextBoxStyle}" TargetType="{x:Type TextBox}" />
     <Style BasedOn="{StaticResource ContextMenuStyle}" TargetType="{x:Type ContextMenu}" />
     <Style BasedOn="{StaticResource MenuItemStyle}" TargetType="{x:Type MenuItem}" />
+    <Style BasedOn="{StaticResource ListBoxStyle}" TargetType="{x:Type ListBox}" />
 
 </ResourceDictionary>

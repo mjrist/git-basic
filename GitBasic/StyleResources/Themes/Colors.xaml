@@ -8,7 +8,7 @@
     <Color x:Key="Color_002">#FF454545</Color>
 
     <!--  Dark 60%  -->
-    <Color x:Key="Color_009">#99252525</Color>
+    <Color x:Key="Color_010">#99252525</Color>
 
 
     <!--  ******************** Lights ********************  -->
@@ -24,6 +24,8 @@
     <Color x:Key="Color_007">#66FFFFFF</Color>
     <!--  White 20%  -->
     <Color x:Key="Color_008">#33FFFFFF</Color>
+    <!--  White 10%  -->
+    <Color x:Key="Color_009">#19FFFFFF</Color>
 
     <!--  ******************** Accents ********************  -->
     <!--  100%  --> 
