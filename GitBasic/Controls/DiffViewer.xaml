@@ -15,7 +15,10 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0" Margin="2">
-            <RichTextBox x:Name="OldDiff" IsReadOnly="True">
+            <RichTextBox
+                x:Name="OldDiff"
+                BorderThickness="0"
+                IsReadOnly="True">
                 <RichTextBox.Resources>
                     <Style TargetType="{x:Type Paragraph}">
                         <Setter Property="Margin" Value="0" />
@@ -26,10 +29,12 @@
         <GridSplitter
             Grid.Column="1"
             Width="5"
-            HorizontalAlignment="Stretch"
-            Background="{DynamicResource BorderBrush}" />
+            HorizontalAlignment="Stretch" />
         <Grid Grid.Column="2" Margin="2">
-            <RichTextBox x:Name="NewDiff" IsReadOnly="True">
+            <RichTextBox
+                x:Name="NewDiff"
+                BorderThickness="0"
+                IsReadOnly="True">
                 <RichTextBox.Resources>
                     <Style TargetType="{x:Type Paragraph}">
                         <Setter Property="Margin" Value="0" />
