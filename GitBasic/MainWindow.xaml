@@ -14,6 +14,9 @@
     Style="{StaticResource MetroWindowStyle}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
+    <controls:MetroWindow.Resources>
+        <local:MainVM x:Key="MainVM" />
+    </controls:MetroWindow.Resources>
     <controls:MetroWindow.TitleBarIcon>
         <Image
             Width="24"
@@ -22,7 +25,7 @@
             Source="{DynamicResource GitLogo_24}" />
     </controls:MetroWindow.TitleBarIcon>
 
-    <Grid>
+    <Grid DataContext="{StaticResource MainVM}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="5" />
@@ -37,29 +40,31 @@
         <GridSplitter
             Grid.Row="1"
             Height="5"
-            HorizontalAlignment="Stretch"
-            Background="{DynamicResource BorderBrush}" />
+            HorizontalAlignment="Stretch" />
 
         <!--  Row 2  -->
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.7*" />
+                <ColumnDefinition Width="0.7*" MinWidth="100" />
                 <ColumnDefinition Width="5" />
                 <ColumnDefinition Width="0.3*" />
             </Grid.ColumnDefinitions>
 
-            <controls:ConsoleControl Grid.Column="0" />
+            <controls:ConsoleControl Grid.Column="0" WorkingDirectory="{Binding WorkingDirectory.Value, Mode=TwoWay}" />
 
             <GridSplitter
                 Grid.Column="1"
                 Width="5"
-                HorizontalAlignment="Stretch"
-                Background="{DynamicResource BorderBrush}" />
+                HorizontalAlignment="Stretch" />
 
             <controls:FileStatusControl Grid.Column="2" />
         </Grid>
 
         <!--  Row 3  -->
-        <controls:StatusControl Grid.Row="3" DockPanel.Dock="Bottom" />
+        <controls:StatusControl
+            Grid.Row="3"
+            BranchName="{Binding BranchName.Value}"
+            DockPanel.Dock="Bottom"
+            RepositoryName="{Binding RepositoryName.Value}" />
     </Grid>
 </controls:MetroWindow>

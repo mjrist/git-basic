@@ -1,0 +1,49 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:GitBasic.StyleResources.ControlStyles">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="BaseControlStyle.xaml" />
+        <ResourceDictionary Source="FocusVisual.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style
+        x:Key="ListBoxItemStyle"
+        BasedOn="{StaticResource BaseControlStyle}"
+        TargetType="{x:Type ListBoxItem}">
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="BorderBrush" Value="{DynamicResource MenuItemSelectedBorderBrush}" />
+                <Setter Property="Background" Value="{DynamicResource MenuItemSelectedBackgroundBrush}" />
+            </Trigger>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush1}" />
+                <Setter Property="Background" Value="{DynamicResource AccentBrush1}" />
+            </Trigger>
+        </Style.Triggers>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="MinHeight" Value="22" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        SnapsToDevicePixels="True">
+                        <ContentPresenter
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

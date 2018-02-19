@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace GitBasic.Controls
 {
@@ -24,5 +12,25 @@ namespace GitBasic.Controls
         {
             InitializeComponent();
         }
+
+        #region Dependency Properties
+
+        public string RepositoryName
+        {
+            get { return (string)GetValue(RepositoryNameProperty); }
+            set { SetValue(RepositoryNameProperty, value); }
+        }        
+        public static readonly DependencyProperty RepositoryNameProperty =
+            DependencyProperty.Register("RepositoryName", typeof(string), typeof(StatusControl), new PropertyMetadata(string.Empty));
+
+        public string BranchName
+        {
+            get { return (string)GetValue(BranchNameProperty); }
+            set { SetValue(BranchNameProperty, value); }
+        }
+        public static readonly DependencyProperty BranchNameProperty =
+            DependencyProperty.Register("BranchName", typeof(string), typeof(StatusControl), new PropertyMetadata(string.Empty));
+
+        #endregion
     }
 }

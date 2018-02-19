@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,53 +21,47 @@ namespace GitBasic.Controls
         }
 
         private void ConsoleControl_Loaded(object sender, RoutedEventArgs e)
-        {
+        {            
+            if (!Directory.Exists(WorkingDirectory))
+            {
+                WorkingDirectory = _defaultDirectory;
+            }
+
             StartCMD();
             InputBox.Focus();
         }
 
         private void StartCMD()
         {
-            SetCurrentDirectory(_workingDirectory);
+            // Attempting to access WorkingDirectory from the Task seen below would
+            // cause a threading exception. Therefore copy it to a local variable first.
+            string workingDirectory = WorkingDirectory;            
 
             Task.Factory.StartNew(() =>
             {
-                _process = new Process();
-                _process.StartInfo.FileName = "cmd.exe";
-                _process.StartInfo.WorkingDirectory = _workingDirectory;
-                _process.StartInfo.UseShellExecute = false;
-                _process.StartInfo.ErrorDialog = false;
-                _process.StartInfo.CreateNoWindow = true;
-                _process.StartInfo.RedirectStandardError = true;
-                _process.StartInfo.RedirectStandardInput = true;
-                _process.StartInfo.RedirectStandardOutput = true;
-                _process.EnableRaisingEvents = true;
+                _cmd = new Process();
+                _cmd.StartInfo.FileName = "cmd.exe";
+                _cmd.StartInfo.WorkingDirectory = workingDirectory;
+                _cmd.StartInfo.UseShellExecute = false;
+                _cmd.StartInfo.ErrorDialog = false;
+                _cmd.StartInfo.CreateNoWindow = true;
+                _cmd.StartInfo.RedirectStandardError = true;
+                _cmd.StartInfo.RedirectStandardInput = true;
+                _cmd.StartInfo.RedirectStandardOutput = true;
+                _cmd.EnableRaisingEvents = true;
 
-                _process.ErrorDataReceived += _process_ErrorDataReceived;
-                _process.OutputDataReceived += _process_OutputDataReceived;
+                _cmd.ErrorDataReceived += (s, e) => { Dispatcher.Invoke(() => PrintStandardError(e.Data)); };
+                _cmd.OutputDataReceived += (s, e) => { Dispatcher.Invoke(() => PrintStandardOutput(e.Data)); };
 
-                _process.Start();
-                _process.BeginErrorReadLine();
-                _process.BeginOutputReadLine();
+                _cmd.Start();
+                _cmd.BeginErrorReadLine();
+                _cmd.BeginOutputReadLine();
 
-                _process.WaitForExit();
+                _cmd.WaitForExit();
             });
         }
 
-        private Process _process;
-        private string _workingDirectory = "C:\\Source";
-        private bool _isInputLine = false;
-        private bool _setDirectory = false;
-
-        private void _process_OutputDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            Dispatcher.Invoke(() => PrintStandardOutput(e.Data));
-        }
-
-        private void _process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            Dispatcher.Invoke(() => PrintStandardError(e.Data));
-        }
+        private Process _cmd;
 
         private void PrintStandardError(string text)
         {
@@ -84,7 +79,7 @@ namespace GitBasic.Controls
                 if (text != string.Empty)
                 {
                     _setDirectory = false;
-                    SetCurrentDirectory(text.Split('>')[0]);
+                    WorkingDirectory = text.Split('>')[0];
                 }
                 return;
             }
@@ -105,6 +100,9 @@ namespace GitBasic.Controls
             OutputBox.ScrollToEnd();
         }
 
+        private bool _isInputLine = false;
+        private bool _setDirectory = false;
+
         void InputBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -123,22 +121,55 @@ namespace GitBasic.Controls
                     InputBox.Focus();
                 }
             }
-        }
-
-        private void SetCurrentDirectory(string text)
-        {
-            _workingDirectory = text;
-            CurrentDirectory.Text = $"{text}>";
-        }
+        }        
 
         public void RunCommand(string input)
         {
-            _process.StandardInput.WriteLine(input);
+            _cmd.StandardInput.WriteLine(input);
         }
 
-        /////////////
-        // Buttons
-        /////////////
+        private void EnterText(string text)
+        {
+            EnterText(text, text.Length);
+        }
+
+        private void EnterText(string text, int selectionIndex)
+        {
+            InputBox.Text = text;
+            InputBox.Select(selectionIndex, 0);
+            InputBox.Focus();
+        }
+
+        private const string CD = "cd";
+        
+
+        
+       
+        private string _defaultDirectory => Environment.GetFolderPath(Environment.SpecialFolder.Desktop);        
+
+        #region Dependency Properties
+
+        public string WorkingDirectory
+        {
+            get { return (string)GetValue(WorkingDirectoryProperty); }
+            set { SetValue(WorkingDirectoryProperty, value); }
+        }        
+        public static readonly DependencyProperty WorkingDirectoryProperty =
+            DependencyProperty.Register("WorkingDirectory", typeof(string), typeof(ConsoleControl), new PropertyMetadata(string.Empty, OnWorkingDirectoryChanged));
+
+        private static void OnWorkingDirectoryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            string newWorkingDirectory = e.NewValue.ToString();            
+            // Save the new working directory. This way it can be restored if the app is restarted.
+            Properties.Settings.Default.WorkingDirectory = newWorkingDirectory;
+            Properties.Settings.Default.Save();
+        }
+
+        #endregion
+
+        #region Command Buttons
+
+        // TODO: Consider breaking command buttons out into separate control.
 
         private void SelectRepo_Click(object sender, RoutedEventArgs e)
         {
@@ -161,20 +192,9 @@ namespace GitBasic.Controls
             EnterText(GIT_STATUS);
         }
 
-        private void EnterText(string text)
-        {
-            EnterText(text, text.Length);
-        }
-
-        private void EnterText(string text, int selectionIndex)
-        {
-            InputBox.Text = text;
-            InputBox.Select(selectionIndex, 0);
-            InputBox.Focus();
-        }
-
-        private const string CD = "cd";
         private const string GIT_STATUS = "git status";
         private const string COMMIT_ALL = "git commit -a -m \"\"";
+
+        #endregion
     }
 }

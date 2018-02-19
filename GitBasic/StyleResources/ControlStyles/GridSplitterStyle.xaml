@@ -5,15 +5,13 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="BaseControlStyle.xaml" />
-        <ResourceDictionary Source="TextBoxContextMenu.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style
-        x:Key="RichTextBoxStyle"
+        x:Key="GridSplitterStyle"
         BasedOn="{StaticResource BaseControlStyle}"
-        TargetType="{x:Type RichTextBox}">
-        <Setter Property="Padding" Value="0,2,0,2" />
-        <Setter Property="ContextMenu" Value="{StaticResource TextBoxContextMenu}" />
+        TargetType="{x:Type GridSplitter}">
+        <Setter Property="Background" Value="{DynamicResource BorderBrush}" />
     </Style>
 
 </ResourceDictionary>
