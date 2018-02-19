@@ -119,6 +119,8 @@
     <Compile Include="Lib\Command.cs" />
     <Compile Include="Lib\ExtensionMethods\ControlExtensions.cs" />
     <Compile Include="Lib\ExtensionMethods\StringExtensions.cs" />
+    <Compile Include="Lib\HotKey.cs" />
+    <Compile Include="Lib\HotKeyHelper.cs" />
     <Compile Include="Lib\Reactive\Prop.cs" />
     <Compile Include="Lib\Reactive\ReactiveAction.cs" />
     <Compile Include="Lib\Reactive\ReactiveProp.cs" />

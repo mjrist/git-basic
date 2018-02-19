@@ -16,6 +16,7 @@ namespace GitBasic
         public ReactiveProp<Repository> Repo { get; set; }
         public ReactiveProp<string> RepositoryName { get; set; }
         public ReactiveProp<string> BranchName { get; set; }
+        public HotKeyHelper HotKeyHelper { get; set; }
 
         public MainVM()
         {            

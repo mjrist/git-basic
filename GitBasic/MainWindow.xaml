@@ -7,16 +7,14 @@
     xmlns:local="clr-namespace:GitBasic"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Git Basic"
-    Width="1000"
-    Height="600"
+    Width="1100"
+    Height="680"
     MinWidth="300"
     MinHeight="150"
     Style="{StaticResource MetroWindowStyle}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
-    <controls:MetroWindow.Resources>
-        <local:MainVM x:Key="MainVM" />
-    </controls:MetroWindow.Resources>
+
     <controls:MetroWindow.TitleBarIcon>
         <Image
             Width="24"
@@ -25,7 +23,7 @@
             Source="{DynamicResource GitLogo_24}" />
     </controls:MetroWindow.TitleBarIcon>
 
-    <Grid DataContext="{StaticResource MainVM}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="5" />

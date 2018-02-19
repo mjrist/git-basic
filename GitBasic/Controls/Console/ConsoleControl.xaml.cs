@@ -29,6 +29,7 @@ namespace GitBasic.Controls
 
             StartCMD();
             InputBox.Focus();
+            RegisterHotKeys();            
         }
 
         private void StartCMD()
@@ -189,22 +190,26 @@ namespace GitBasic.Controls
 
         #region Command Buttons
 
+        private void RegisterHotKeys()
+        {
+            if (DataContext is MainVM mainVM)
+            {
+                mainVM.HotKeyHelper.RegisterHotKey(new HotKey(Key.D1, ModifierKeys.Control, () => { Fetch_Click(null, null); }));
+                mainVM.HotKeyHelper.RegisterHotKey(new HotKey(Key.D2, ModifierKeys.Control, () => { CommitAll_Click(null, null); }));
+                mainVM.HotKeyHelper.RegisterHotKey(new HotKey(Key.D3, ModifierKeys.Control, () => { Status_Click(null, null); }));
+            }
+        }
+
         // TODO: Consider breaking command buttons out into separate control.
 
-        private void SelectRepo_Click(object sender, RoutedEventArgs e)
+        private void Fetch_Click(object sender, RoutedEventArgs e)
         {
-            //using (var folderDialog = new System.Windows.Forms.FolderBrowserDialog())
-            //{
-            //    if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            //    {
-            //        EnterText($"{CD} {folderDialog.SelectedPath}");
-            //    }
-            //}
+            EnterText(GIT_FETCH);
         }
 
         private void CommitAll_Click(object sender, RoutedEventArgs e)
         {
-            EnterText(COMMIT_ALL, COMMIT_ALL.Length - 1);
+            EnterText(GIT_COMMIT_ALL, GIT_COMMIT_ALL.Length - 1);
         }
 
         private void Status_Click(object sender, RoutedEventArgs e)
@@ -212,8 +217,9 @@ namespace GitBasic.Controls
             EnterText(GIT_STATUS);
         }
 
-        private const string GIT_STATUS = "git status";
-        private const string COMMIT_ALL = "git commit -a -m \"\"";
+        private const string GIT_FETCH = "git fetch";
+        private const string GIT_COMMIT_ALL = "git commit -a -m \"\"";
+        private const string GIT_STATUS = "git status";        
 
         #endregion
     }
