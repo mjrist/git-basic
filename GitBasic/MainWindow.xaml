@@ -55,7 +55,7 @@
                 Width="5"
                 HorizontalAlignment="Stretch" />
 
-            <controls:FileStatusControl Grid.Column="2" />
+            <controls:FileStatusControl SelectedFile="{Binding SelectedFile.Value}" Grid.Column="2" />
         </Grid>
 
         <!--  Row 3  -->

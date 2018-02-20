@@ -12,11 +12,12 @@ namespace GitBasic
 {
     public class MainVM : Observable
     {
-        public Prop<string> WorkingDirectory { get; set; } = new Prop<string>();
+        public Prop<string> WorkingDirectory { get; set; } = new Prop<string>(string.Empty);
         public ReactiveProp<Repository> Repo { get; set; }
         public ReactiveProp<string> RepositoryName { get; set; }
         public ReactiveProp<string> BranchName { get; set; }
-        public HotKeyHelper HotKeyHelper { get; set; }
+        public HotKeyHelper HotKeyHelper { get; set; }        
+        public Prop<string> SelectedFile { get; set; } = new Prop<string>(string.Empty);
 
         public MainVM()
         {            
@@ -27,7 +28,7 @@ namespace GitBasic
             BranchName = new ReactiveProp<string>(() => { return (Repo.Value != null) ? Repo.Value.Head.FriendlyName : string.Empty; }, Repo);
 
             WorkingDirectory.Value = Properties.Settings.Default.WorkingDirectory;
-        }        
+        }
 
         private Repository UpdateRepository()
         {
