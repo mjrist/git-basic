@@ -29,10 +29,10 @@
                     <RowDefinition Height="*" MinHeight="30" />
                 </Grid.RowDefinitions>
                 <Button
-                    x:Name="SelectRepo"
+                    x:Name="Fetch"
                     Grid.Row="0"
-                    Click="SelectRepo_Click"
-                    Content="Select Repo" />
+                    Click="Fetch_Click"
+                    Content="Fetch" />
                 <Button
                     x:Name="CommitAll"
                     Grid.Row="1"
@@ -93,6 +93,7 @@
                         VerticalContentAlignment="Center"
                         BorderThickness="0"
                         Foreground="LimeGreen"
+                        IsTabStop="False"
                         IsReadOnly="True"
                         Text="{Binding WorkingDirectory, Mode=OneWay, StringFormat='{}{0}>'}" />
                     <TextBox
@@ -103,6 +104,7 @@
                         BorderThickness="0"
                         FontFamily="Consolas"
                         KeyDown="InputBox_KeyDown"
+                        PreviewKeyDown="InputBox_PreviewKeyDown"
                         MinLines="2" />
                 </Grid>
             </Border>

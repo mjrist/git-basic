@@ -78,7 +78,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Controls\ConsoleControl.xaml">
+    <Page Include="Controls\Console\ConsoleControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -102,7 +102,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controls\ConsoleControl.xaml.cs">
+    <Compile Include="Controls\Console\CommandHistory.cs" />
+    <Compile Include="Controls\Console\ConsoleControl.xaml.cs">
       <DependentUpon>ConsoleControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\DiffViewer.xaml.cs">
@@ -118,6 +119,8 @@
     <Compile Include="Lib\Command.cs" />
     <Compile Include="Lib\ExtensionMethods\ControlExtensions.cs" />
     <Compile Include="Lib\ExtensionMethods\StringExtensions.cs" />
+    <Compile Include="Lib\HotKey.cs" />
+    <Compile Include="Lib\HotKeyHelper.cs" />
     <Compile Include="Lib\Reactive\Prop.cs" />
     <Compile Include="Lib\Reactive\ReactiveAction.cs" />
     <Compile Include="Lib\Reactive\ReactiveProp.cs" />

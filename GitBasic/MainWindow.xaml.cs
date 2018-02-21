@@ -9,7 +9,15 @@ namespace GitBasic
     {
         public MainWindow()
         {            
-            InitializeComponent();            
+            InitializeComponent();
+            CreateViewModel();
+        }
+
+        public void CreateViewModel()
+        {
+            MainVM mainVM = new MainVM();
+            mainVM.HotKeyHelper = new HotKeyHelper(this);
+            DataContext = mainVM;
         }
     }    
 }

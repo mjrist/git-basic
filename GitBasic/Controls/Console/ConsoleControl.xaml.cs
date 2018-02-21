@@ -29,6 +29,7 @@ namespace GitBasic.Controls
 
             StartCMD();
             InputBox.Focus();
+            RegisterHotKeys();            
         }
 
         private void StartCMD()
@@ -61,6 +62,8 @@ namespace GitBasic.Controls
             });
         }
 
+        
+
         private Process _cmd;
 
         private void PrintStandardError(string text)
@@ -73,7 +76,9 @@ namespace GitBasic.Controls
         private void PrintStandardOutput(string text)
         {
             Color textColor = Colors.White;
-
+            
+            // TODO: This code is a hack to get the working directory to update.
+            // Move it into its own function.
             if (_setDirectory)
             {
                 if (text != string.Empty)
@@ -87,12 +92,18 @@ namespace GitBasic.Controls
             if (_isInputLine)
             {
                 _isInputLine = false;
-                string command = text.Split('>')[1].Trim();
-                if (command.StartsWith(CD, StringComparison.InvariantCultureIgnoreCase) && command.Length > 2)
+
+                string[] tokens = text.Split('>');
+                if (tokens.Length > 1)
                 {
-                    _setDirectory = true;
-                    RunCommand(CD);
+                    string command = tokens[1].Trim();
+                    if (command.StartsWith(CD, StringComparison.InvariantCultureIgnoreCase) && command.Length > 2)
+                    {
+                        _setDirectory = true;
+                        RunCommand(CD);
+                    }
                 }
+
                 textColor = Colors.LimeGreen;
             }
 
@@ -107,9 +118,10 @@ namespace GitBasic.Controls
         {
             if (e.Key == Key.Enter)
             {
-                string command = InputBox.Text.Trim();
+                string command = InputBox.Text;
+                _commandHistory.AddCommand(command);
 
-                if (command.ToLower() == "exit")
+                if (command.Trim().ToLower() == "exit")
                 {
                     Application.Current.Shutdown();
                 }
@@ -120,8 +132,8 @@ namespace GitBasic.Controls
                     InputBox.Text = string.Empty;
                     InputBox.Focus();
                 }
-            }
-        }        
+            }            
+        }
 
         public void RunCommand(string input)
         {
@@ -140,11 +152,20 @@ namespace GitBasic.Controls
             InputBox.Focus();
         }
 
-        private const string CD = "cd";
-        
+        private void InputBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Up)
+            {
+                EnterText(_commandHistory.GetOlderCommand());
+            }
+            else if (e.Key == Key.Down)
+            {
+                EnterText(_commandHistory.GetNewerCommand());
+            }
+        }
 
-        
-       
+        private CommandHistory _commandHistory = new CommandHistory();
+        private const string CD = "cd";       
         private string _defaultDirectory => Environment.GetFolderPath(Environment.SpecialFolder.Desktop);        
 
         #region Dependency Properties
@@ -169,22 +190,26 @@ namespace GitBasic.Controls
 
         #region Command Buttons
 
+        private void RegisterHotKeys()
+        {
+            if (DataContext is MainVM mainVM)
+            {
+                mainVM.HotKeyHelper.RegisterHotKey(new HotKey(Key.D1, ModifierKeys.Control, () => { Fetch_Click(null, null); }));
+                mainVM.HotKeyHelper.RegisterHotKey(new HotKey(Key.D2, ModifierKeys.Control, () => { CommitAll_Click(null, null); }));
+                mainVM.HotKeyHelper.RegisterHotKey(new HotKey(Key.D3, ModifierKeys.Control, () => { Status_Click(null, null); }));
+            }
+        }
+
         // TODO: Consider breaking command buttons out into separate control.
 
-        private void SelectRepo_Click(object sender, RoutedEventArgs e)
+        private void Fetch_Click(object sender, RoutedEventArgs e)
         {
-            //using (var folderDialog = new System.Windows.Forms.FolderBrowserDialog())
-            //{
-            //    if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            //    {
-            //        EnterText($"{CD} {folderDialog.SelectedPath}");
-            //    }
-            //}
+            EnterText(GIT_FETCH);
         }
 
         private void CommitAll_Click(object sender, RoutedEventArgs e)
         {
-            EnterText(COMMIT_ALL, COMMIT_ALL.Length - 1);
+            EnterText(GIT_COMMIT_ALL, GIT_COMMIT_ALL.Length - 1);
         }
 
         private void Status_Click(object sender, RoutedEventArgs e)
@@ -192,8 +217,9 @@ namespace GitBasic.Controls
             EnterText(GIT_STATUS);
         }
 
-        private const string GIT_STATUS = "git status";
-        private const string COMMIT_ALL = "git commit -a -m \"\"";
+        private const string GIT_FETCH = "git fetch";
+        private const string GIT_COMMIT_ALL = "git commit -a -m \"\"";
+        private const string GIT_STATUS = "git status";        
 
         #endregion
     }
