@@ -123,9 +123,10 @@ namespace GitBasic.Controls
             {
                 try
                 {
-                    PrintStandardOutput();
+                    PrintFirstLine();
                     PrintStandardError();
-                    Dispatcher.Invoke(() => WriteLine());
+                    PrintStandardOutput();                    
+                    //Dispatcher.Invoke(() => WriteLine());
                 }
                 catch (InvalidOperationException)
                 {
@@ -137,7 +138,7 @@ namespace GitBasic.Controls
             });
         }
 
-        private void PrintStandardOutput()
+        private void PrintFirstLine()
         {
             string line;
             // Skip any initial empty output lines.
@@ -145,7 +146,11 @@ namespace GitBasic.Controls
 
             // First output line is green.
             Dispatcher.Invoke(() => WriteLine(line, Colors.LimeGreen));
-            // Write the rest of the output.
+        }
+
+        private void PrintStandardOutput()
+        {
+            string line;            
             while (!(line = _cmd.StandardOutput.ReadLine()).EndsWith(DELIMITER))
             {
                 Dispatcher.Invoke(() => WriteLine(line));
@@ -153,7 +158,7 @@ namespace GitBasic.Controls
 
             _cmd.StandardOutput.DiscardBufferedData();
             SetWorkingDirectory();
-            Dispatcher.Invoke(() => RemoveLastLineIfEmpty());
+            //Dispatcher.Invoke(() => RemoveLastLineIfEmpty());
         }
 
         private void SetWorkingDirectory()
