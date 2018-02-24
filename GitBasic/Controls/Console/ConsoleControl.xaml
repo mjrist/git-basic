@@ -103,7 +103,6 @@
                         VerticalContentAlignment="Center"
                         BorderThickness="0"
                         FontFamily="Consolas"
-                        KeyDown="InputBox_KeyDown"
                         PreviewKeyDown="InputBox_PreviewKeyDown"
                         MinLines="2" />
                 </Grid>

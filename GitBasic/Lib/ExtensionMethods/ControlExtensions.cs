@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 
@@ -6,7 +7,7 @@ namespace GitBasic
 {
     public static class ControlExtensions
     {
-        public static void AppendText(this RichTextBox box, string text, Color color)
+        public static void Append(this RichTextBox box, string text, Color color)
         {
             Paragraph lastBlock = box.Document.Blocks.LastBlock as Paragraph;
 
@@ -20,6 +21,11 @@ namespace GitBasic
             {
                 Foreground = new SolidColorBrush(color)
             });
+        }
+
+        public static void AppendLine(this RichTextBox box, string text, Color color)
+        {
+            box.Append(text + Environment.NewLine, color);
         }
     }
 }
