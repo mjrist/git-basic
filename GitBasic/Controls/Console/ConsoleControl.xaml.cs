@@ -31,6 +31,7 @@ namespace GitBasic.Controls
             StartCmdExe();
             InputBox.Focus();
             RegisterHotKeys();
+            StartWatchingSelectionChange();
         }
 
         private void StartCmdExe()
@@ -89,6 +90,16 @@ namespace GitBasic.Controls
             {
                 SetInputText(_commandHistory.GetNewerCommand());
             }
+            else if (Keyboard.Modifiers == ModifierKeys.Shift && e.Key == Key.Tab)
+            {
+                AutoComplete(Selection.Previous);
+                e.Handled = true;
+            }
+            else if (e.Key == Key.Tab)
+            {
+                AutoComplete(Selection.Next);
+                e.Handled = true;
+            }            
             else if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.C)
             {
                 ProcessCtrlC();
@@ -218,12 +229,63 @@ namespace GitBasic.Controls
             InputBox.Focus();
         }
 
+        private void StartWatchingSelectionChange()
+        {
+            InputBox.SelectionChanged += InputBox_SelectionChanged;
+        }
+
+        private void StopWatchingSelectionChange()
+        {
+            InputBox.SelectionChanged -= InputBox_SelectionChanged;
+        }
+
+        private void InputBox_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            SetCurrentToken();
+        }
+
+        private void SetCurrentToken()
+        {
+            _token.Reset();
+            int i = InputBox.CaretIndex - 1;
+            while (i > -1 && !char.IsWhiteSpace(InputBox.Text[i]))
+            {
+                _token.Text = InputBox.Text[i] + _token.Text;
+                i--;
+            }
+            _token.StartIndex = i + 1;
+        }
+
+        private void AutoComplete(Selection selection)
+        {
+            string completionText;
+            if (selection == Selection.Next)
+            {
+                completionText = _autoCompletion.GetNext(_token.Text, WorkingDirectory);
+            }
+            else
+            {
+                completionText = _autoCompletion.GetPrevious(_token.Text, WorkingDirectory);
+            }
+
+            StopWatchingSelectionChange();
+            int lengthToRemove = InputBox.CaretIndex - _token.StartIndex;
+            InputBox.Text = InputBox.Text.Remove(_token.StartIndex, lengthToRemove);
+            InputBox.Text = InputBox.Text.Insert(_token.StartIndex, completionText);
+            InputBox.CaretIndex = _token.StartIndex + completionText.Length;
+            StartWatchingSelectionChange();
+        }
+
+        private enum Selection { Next, Previous };
+
         private const string CD_COMMAND = "cd";
         private const string DELIMITER = "\x01";
 
         private object _lockKey = new object();
         private Process _cmd;
         private CommandHistory _commandHistory = new CommandHistory();
+        private Token _token = new Token();
+        private AutoCompletion _autoCompletion = new AutoCompletion();
         private BackgroundQueue _backgroundQueue = new BackgroundQueue();
         private string _defaultDirectory => Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 

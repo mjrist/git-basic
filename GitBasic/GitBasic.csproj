@@ -103,10 +103,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controls\Console\AutoCompletion.cs" />
     <Compile Include="Controls\Console\CommandHistory.cs" />
     <Compile Include="Controls\Console\ConsoleControl.xaml.cs">
       <DependentUpon>ConsoleControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Console\Token.cs" />
     <Compile Include="Controls\DiffViewer.xaml.cs">
       <DependentUpon>DiffViewer.xaml</DependentUpon>
     </Compile>
