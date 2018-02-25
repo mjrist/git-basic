@@ -132,22 +132,19 @@ namespace GitBasic.Controls
 
             _backgroundQueue.QueueTask(() =>
             {
-                new Task(() => { try { PrintStandardOutput(); } catch { } }).Start();
-                new Task(() => { try { PrintStandardError(); } catch { } }).Start();
-
-                //try
-                //{
-                //    PrintStandardOutput();
-                //    PrintStandardError();
-                //    Dispatcher.Invoke(() => WriteLine());
-                //}
-                //catch (Exception ex) when (ex is InvalidOperationException || ex is NullReferenceException)
-                //{
-                //    // There is no way to cancel pending reads on StandardOutput and StandardError.
-                //    // When Ctrl+C is pressed cmd.exe is restarted. When this happens, if there is
-                //    // a pending read or a read is about to be called, an exception will be thrown.
-                //    // In this case we don't care so we should just swallow it and move on.
-                //}
+                try
+                {
+                    PrintStandardOutput();
+                    PrintStandardError();
+                    Dispatcher.Invoke(() => WriteLine());
+                }
+                catch (Exception ex) when (ex is InvalidOperationException || ex is NullReferenceException)
+                {
+                    // There is no way to cancel pending reads on StandardOutput and StandardError.
+                    // When Ctrl+C is pressed cmd.exe is restarted. When this happens, if there is
+                    // a pending read or a read is about to be called, an exception will be thrown.
+                    // In this case we don't care so we should just swallow it and move on.
+                }
             });
         }
 
@@ -192,7 +189,7 @@ namespace GitBasic.Controls
             string line = string.Empty;
             while (!(line = _cmd.StandardError.ReadLine()).StartsWith($"'{DELIMITER}'"))
             {
-                Dispatcher.Invoke(() => WriteLine(line, Colors.Red));
+                Dispatcher.Invoke(() => WriteLine(line));
             }
             _cmd.StandardError.DiscardBufferedData();
         }
