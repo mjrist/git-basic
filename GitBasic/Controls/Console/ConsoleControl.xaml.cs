@@ -127,7 +127,7 @@ namespace GitBasic.Controls
                     PrintStandardError();
                     Dispatcher.Invoke(() => WriteLine());
                 }
-                catch (InvalidOperationException)
+                catch (Exception ex) when (ex is InvalidOperationException || ex is NullReferenceException)
                 {
                     // There is no way to cancel pending reads on StandardOutput and StandardError.
                     // When Ctrl+C is pressed cmd.exe is restarted. When this happens, if there is
