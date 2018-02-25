@@ -9,104 +9,59 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ConsoleControl}}}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="1" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+        <RichTextBox
+            Name="OutputBox"
+            Grid.Row="0"
+            Margin="0,2,0,2"
+            BorderThickness="0"
+            FontFamily="Consolas"
+            IsReadOnly="True">
+            <RichTextBox.Resources>
+                <Style TargetType="{x:Type Paragraph}">
+                    <Setter Property="Margin" Value="0" />
+                </Style>
+            </RichTextBox.Resources>
+        </RichTextBox>
 
-        <ScrollViewer VerticalScrollBarVisibility="Hidden">
+        <Rectangle
+            Grid.Row="1"
+            Height="1"
+            HorizontalAlignment="Stretch"
+            Fill="{DynamicResource BorderBrush}" />
+
+        <Border Grid.Row="2">
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" MinHeight="30" />
-                    <RowDefinition Height="*" MinHeight="30" />
-                    <RowDefinition Height="*" MinHeight="30" />
-                    <RowDefinition Height="*" MinHeight="30" />
-                    <RowDefinition Height="*" MinHeight="30" />
-                    <RowDefinition Height="*" MinHeight="30" />
-                    <RowDefinition Height="*" MinHeight="30" />
-                    <RowDefinition Height="*" MinHeight="30" />
-                    <RowDefinition Height="*" MinHeight="30" />
-                    <RowDefinition Height="*" MinHeight="30" />
-                </Grid.RowDefinitions>
-                <Button
-                    x:Name="Fetch"
-                    Grid.Row="0"
-                    Click="Fetch_Click"
-                    Content="Fetch" />
-                <Button
-                    x:Name="CommitAll"
-                    Grid.Row="1"
-                    Click="CommitAll_Click"
-                    Content="Commit All" />
-                <Button
-                    x:Name="Status"
-                    Grid.Row="2"
-                    Click="Status_Click"
-                    Content="Status" />
-                <Button Grid.Row="3" Content="Push" />
-                <Button Grid.Row="4" Content="Pull" />
-                <Button Grid.Row="5" Content="Diff" />
-                <Button Grid.Row="6" Content="Checkout" />
-                <Button Grid.Row="7" Content="Branch" />
-                <Button Grid.Row="8" Content="Merge" />
-                <Button Grid.Row="9" Content="Log" />
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBox
+                    Name="CurrentDirectory"
+                    Grid.Column="0"
+                    Margin="2,0,1,0"
+                    VerticalAlignment="Stretch"
+                    VerticalContentAlignment="Center"
+                    BorderThickness="0"
+                    Foreground="LimeGreen"
+                    IsReadOnly="True"
+                    IsTabStop="False"
+                    Text="{Binding WorkingDirectory, Mode=OneWay, StringFormat='{}{0}>'}" />
+                <TextBox
+                    Name="InputBox"
+                    Text="{Binding InputText, Mode=OneWay}"
+                    Grid.Column="1"
+                    VerticalAlignment="Stretch"
+                    VerticalContentAlignment="Center"
+                    BorderThickness="0"
+                    FontFamily="Consolas"
+                    MinLines="2"
+                    PreviewKeyDown="InputBox_PreviewKeyDown" />
             </Grid>
-        </ScrollViewer>
-
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="1" />
-                <RowDefinition Height="30" />
-            </Grid.RowDefinitions>
-            <RichTextBox
-                Name="OutputBox"
-                Grid.Row="0"
-                Margin="0,2,0,2"
-                BorderThickness="0"
-                FontFamily="Consolas"
-                IsReadOnly="True">
-                <RichTextBox.Resources>
-                    <Style TargetType="{x:Type Paragraph}">
-                        <Setter Property="Margin" Value="0" />
-                    </Style>
-                </RichTextBox.Resources>
-            </RichTextBox>
-
-            <Rectangle
-                Grid.Row="1"
-                Height="1"
-                HorizontalAlignment="Stretch"
-                Fill="{DynamicResource BorderBrush}" />
-
-            <Border Grid.Row="2">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBox
-                        Name="CurrentDirectory"
-                        Grid.Column="0"
-                        Margin="2,0,1,0"
-                        VerticalAlignment="Stretch"
-                        VerticalContentAlignment="Center"
-                        BorderThickness="0"
-                        Foreground="LimeGreen"
-                        IsTabStop="False"
-                        IsReadOnly="True"
-                        Text="{Binding WorkingDirectory, Mode=OneWay, StringFormat='{}{0}>'}" />
-                    <TextBox
-                        Name="InputBox"
-                        Grid.Column="1"
-                        VerticalAlignment="Stretch"
-                        VerticalContentAlignment="Center"
-                        BorderThickness="0"
-                        FontFamily="Consolas"
-                        PreviewKeyDown="InputBox_PreviewKeyDown"
-                        MinLines="2" />
-                </Grid>
-            </Border>
-        </Grid>
+        </Border>
     </Grid>
 </UserControl>

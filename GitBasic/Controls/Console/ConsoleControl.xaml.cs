@@ -9,7 +9,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 
-
 namespace GitBasic.Controls
 {
     /// <summary>
@@ -29,8 +28,9 @@ namespace GitBasic.Controls
             WriteLine(string.Empty);
 
             StartCmdExe();
+            Execute = RunCommand;
+            SetInput = SetInputText;
             InputBox.Focus();
-            RegisterHotKeys();
             StartWatchingSelectionChange();
         }
 
@@ -305,42 +305,23 @@ namespace GitBasic.Controls
             // Save the new working directory. This way it can be restored if the app is restarted.
             Properties.Settings.Default.WorkingDirectory = newWorkingDirectory;
             Properties.Settings.Default.Save();
-        }
+        }        
 
-        #endregion
-
-        #region Command Buttons
-
-        private void RegisterHotKeys()
+        public Action<string, int> SetInput
         {
-            if (DataContext is MainVM mainVM)
-            {
-                mainVM.HotKeyHelper.RegisterHotKey(new HotKey(Key.D1, ModifierKeys.Control, () => { Fetch_Click(null, null); }));
-                mainVM.HotKeyHelper.RegisterHotKey(new HotKey(Key.D2, ModifierKeys.Control, () => { CommitAll_Click(null, null); }));
-                mainVM.HotKeyHelper.RegisterHotKey(new HotKey(Key.D3, ModifierKeys.Control, () => { Status_Click(null, null); }));
-            }
+            get { return (Action<string, int>)GetValue(SetInputProperty); }
+            set { SetValue(SetInputProperty, value); }
         }
+        public static readonly DependencyProperty SetInputProperty =
+            DependencyProperty.Register("SetInput", typeof(Action<string, int>), typeof(ConsoleControl), new PropertyMetadata(new Action<string, int>((input, caretIndex) => { })));
 
-        // TODO: Consider breaking command buttons out into separate control.
-
-        private void Fetch_Click(object sender, RoutedEventArgs e)
+        public Action<string> Execute
         {
-            SetInputText(GIT_FETCH);
+            get { return (Action<string>)GetValue(ExecuteProperty); }
+            set { SetValue(ExecuteProperty, value); }
         }
-
-        private void CommitAll_Click(object sender, RoutedEventArgs e)
-        {
-            SetInputText(GIT_COMMIT_ALL, GIT_COMMIT_ALL.Length - 1);
-        }
-
-        private void Status_Click(object sender, RoutedEventArgs e)
-        {
-            SetInputText(GIT_STATUS);
-        }
-
-        private const string GIT_FETCH = "git fetch";
-        private const string GIT_COMMIT_ALL = "git commit -a -m \"\"";
-        private const string GIT_STATUS = "git status";
+        public static readonly DependencyProperty ExecuteProperty =
+            DependencyProperty.Register("Execute", typeof(Action<string>), typeof(ConsoleControl), new PropertyMetadata(new Action<string>((input) => { } )));
 
         #endregion
     }

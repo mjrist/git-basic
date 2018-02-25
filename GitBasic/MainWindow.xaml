@@ -11,6 +11,8 @@
     Height="680"
     MinWidth="300"
     MinHeight="150"
+    PreviewKeyDown="MainWindow_KeyUpOrDown"
+    PreviewKeyUp="MainWindow_KeyUpOrDown"
     Style="{StaticResource MetroWindowStyle}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
@@ -43,19 +45,42 @@
         <!--  Row 2  -->
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.7*" MinWidth="100" />
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="0.7*" />
                 <ColumnDefinition Width="5" />
                 <ColumnDefinition Width="0.3*" />
             </Grid.ColumnDefinitions>
 
-            <controls:ConsoleControl Grid.Column="0" WorkingDirectory="{Binding WorkingDirectory.Value, Mode=TwoWay}" />
+            <controls:CommandButtonPanel
+                x:Name="CommandButtonPanel"
+                Grid.Column="0"
+                Button10Text="Log"
+                Button1Action="{Binding Fetch}"
+                Button1Text="Fetch"
+                Button2Action="{Binding Commit}"
+                Button2Text="Commit All"
+                Button3Action="{Binding Status}"
+                Button3Text="Status"
+                Button4Text="Push"
+                Button5Text="Pull"
+                Button6Text="Diff"
+                Button7Text="Checkout"
+                Button8Text="Branch"
+                Button9Text="Merge"
+                DataContext="{Binding CommandButtonVM}" />
+
+            <controls:ConsoleControl
+                Grid.Column="1"
+                Execute="{Binding Path=ConsoleControlVM.ExecuteCommand, Mode=OneWayToSource}"
+                SetInput="{Binding Path=ConsoleControlVM.SetInputCommand, Mode=OneWayToSource}"
+                WorkingDirectory="{Binding WorkingDirectory.Value, Mode=TwoWay}" />
 
             <GridSplitter
-                Grid.Column="1"
+                Grid.Column="2"
                 Width="5"
                 HorizontalAlignment="Stretch" />
 
-            <controls:FileStatusControl Grid.Column="2" />
+            <controls:FileStatusControl Grid.Column="3" />
         </Grid>
 
         <!--  Row 3  -->
