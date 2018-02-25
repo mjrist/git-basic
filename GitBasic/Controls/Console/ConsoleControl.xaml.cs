@@ -132,9 +132,8 @@ namespace GitBasic.Controls
 
             _backgroundQueue.QueueTask(() =>
             {
-                new Task(() => { try { PrintStandardError(); } catch { } }).Start();
                 new Task(() => { try { PrintStandardOutput(); } catch { } }).Start();
-
+                new Task(() => { try { PrintStandardError(); } catch { } }).Start();
 
                 //try
                 //{
