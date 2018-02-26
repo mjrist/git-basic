@@ -4,8 +4,11 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
+
 
 namespace GitBasic.Controls
 {
@@ -21,152 +24,208 @@ namespace GitBasic.Controls
         }
 
         private void ConsoleControl_Loaded(object sender, RoutedEventArgs e)
-        {            
+        {
+            WriteLine("Welcome to Git Basic!");
+            WriteLine(string.Empty);
+
+            StartCmdExe();
+            InputBox.Focus();
+            RegisterHotKeys();
+        }
+
+        private void StartCmdExe()
+        {
             if (!Directory.Exists(WorkingDirectory))
             {
                 WorkingDirectory = _defaultDirectory;
             }
 
-            StartCMD();
-            InputBox.Focus();
-            RegisterHotKeys();            
-        }
-
-        private void StartCMD()
-        {
-            // Attempting to access WorkingDirectory from the Task seen below would
-            // cause a threading exception. Therefore copy it to a local variable first.
-            string workingDirectory = WorkingDirectory;            
-
             Task.Factory.StartNew(() =>
             {
-                _cmd = new Process();
-                _cmd.StartInfo.FileName = "cmd.exe";
-                _cmd.StartInfo.WorkingDirectory = workingDirectory;
-                _cmd.StartInfo.UseShellExecute = false;
-                _cmd.StartInfo.ErrorDialog = false;
-                _cmd.StartInfo.CreateNoWindow = true;
-                _cmd.StartInfo.RedirectStandardError = true;
-                _cmd.StartInfo.RedirectStandardInput = true;
-                _cmd.StartInfo.RedirectStandardOutput = true;
-                _cmd.EnableRaisingEvents = true;
+                lock (_lockKey)
+                {
+                    // If this is a restart, the old cmd and child processes get killed first.
+                    _cmd?.KillProcessTree();
 
-                _cmd.ErrorDataReceived += (s, e) => { Dispatcher.Invoke(() => PrintStandardError(e.Data)); };
-                _cmd.OutputDataReceived += (s, e) => { Dispatcher.Invoke(() => PrintStandardOutput(e.Data)); };
+                    _cmd = new Process();
+                    _cmd.StartInfo.FileName = "cmd.exe";
+                    _cmd.StartInfo.UseShellExecute = false;
+                    _cmd.StartInfo.ErrorDialog = false;
+                    _cmd.StartInfo.CreateNoWindow = true;
+                    _cmd.EnableRaisingEvents = true;
+                    _cmd.StartInfo.RedirectStandardError = true;
+                    _cmd.StartInfo.RedirectStandardInput = true;
+                    _cmd.StartInfo.RedirectStandardOutput = true;
+                    Dispatcher.Invoke(() => { _cmd.StartInfo.WorkingDirectory = WorkingDirectory; });
 
-                _cmd.Start();
-                _cmd.BeginErrorReadLine();
-                _cmd.BeginOutputReadLine();
+                    _cmd.Start();
+                    Dispatcher.Invoke(ClearInitialOutput);
+                }
 
-                _cmd.WaitForExit();
+                _cmd?.WaitForExit();
             });
         }
 
-        
-
-        private Process _cmd;
-
-        private void PrintStandardError(string text)
+        private void ClearInitialOutput()
         {
-            Color errorColor = Colors.Red;
-            OutputBox.AppendText($"{text}{Environment.NewLine}", errorColor);
-            OutputBox.ScrollToEnd();
+            _cmd.StandardInput.WriteLine(DELIMITER);
+            while (!(_cmd.StandardOutput.ReadLine()).EndsWith(DELIMITER)) { }
+            _cmd.StandardOutput.DiscardBufferedData();
+            while (!(_cmd.StandardError.ReadLine()).StartsWith($"'{DELIMITER}'")) { }
+            _cmd.StandardError.DiscardBufferedData();
         }
 
-        private void PrintStandardOutput(string text)
-        {
-            Color textColor = Colors.White;
-            
-            // TODO: This code is a hack to get the working directory to update.
-            // Move it into its own function.
-            if (_setDirectory)
-            {
-                if (text != string.Empty)
-                {
-                    _setDirectory = false;
-                    WorkingDirectory = text.Split('>')[0];
-                }
-                return;
-            }
-
-            if (_isInputLine)
-            {
-                _isInputLine = false;
-
-                string[] tokens = text.Split('>');
-                if (tokens.Length > 1)
-                {
-                    string command = tokens[1].Trim();
-                    if (command.StartsWith(CD, StringComparison.InvariantCultureIgnoreCase) && command.Length > 2)
-                    {
-                        _setDirectory = true;
-                        RunCommand(CD);
-                    }
-                }
-
-                textColor = Colors.LimeGreen;
-            }
-
-            OutputBox.AppendText($"{text}{Environment.NewLine}", textColor);
-            OutputBox.ScrollToEnd();
-        }
-
-        private bool _isInputLine = false;
-        private bool _setDirectory = false;
-
-        void InputBox_KeyDown(object sender, KeyEventArgs e)
+        private void InputBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                string command = InputBox.Text;
-                _commandHistory.AddCommand(command);
+                ProcessInputCommand();
+            }
+            else if (e.Key == Key.Up)
+            {
+                SetInputText(_commandHistory.GetOlderCommand());
+            }
+            else if (e.Key == Key.Down)
+            {
+                SetInputText(_commandHistory.GetNewerCommand());
+            }
+            else if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.C)
+            {
+                ProcessCtrlC();
+            }
+        }
 
-                if (command.Trim().ToLower() == "exit")
-                {
-                    Application.Current.Shutdown();
-                }
-                else
-                {
-                    _isInputLine = true;
-                    RunCommand(command);
-                    InputBox.Text = string.Empty;
-                    InputBox.Focus();
-                }
-            }            
+        private void ProcessInputCommand()
+        {
+            string command = InputBox.Text;
+            _commandHistory.AddCommand(command);
+
+            if (command.Trim().ToLower() == "exit")
+            {
+                Application.Current.Shutdown();
+            }
+            else
+            {
+                RunCommand(command);
+                InputBox.Text = string.Empty;
+                InputBox.Focus();
+            }
         }
 
         public void RunCommand(string input)
         {
             _cmd.StandardInput.WriteLine(input);
+            // A delimiter must be input to determine when to stop
+            // reading standard output and standard error.
+            _cmd.StandardInput.WriteLine(DELIMITER);
+
+            _backgroundQueue.QueueTask(() =>
+            {
+                try
+                {
+                    PrintStandardOutput();
+                    PrintStandardError();
+                    Dispatcher.Invoke(() => WriteLine());
+                }
+                catch (Exception ex) when (ex is InvalidOperationException || ex is NullReferenceException)
+                {
+                    // There is no way to cancel pending reads on StandardOutput and StandardError.
+                    // When Ctrl+C is pressed cmd.exe is restarted. When this happens, if there is
+                    // a pending read or a read is about to be called, an exception will be thrown.
+                    // In this case we don't care so we should just swallow it and move on.
+                }
+            });
         }
 
-        private void EnterText(string text)
+        private void PrintStandardOutput()
         {
-            EnterText(text, text.Length);
+            string line;
+            // Skip any initial empty output lines.
+            while (string.IsNullOrWhiteSpace(line = _cmd.StandardOutput.ReadLine())) { }
+
+            // First output line is green.
+            Dispatcher.Invoke(() => WriteLine(line, Colors.LimeGreen));
+            while (!(line = _cmd.StandardOutput.ReadLine()).EndsWith(DELIMITER))
+            {
+                Dispatcher.Invoke(() => WriteLine(line));
+            }
+
+            _cmd.StandardOutput.DiscardBufferedData();
+            SetWorkingDirectory();
+            Dispatcher.Invoke(() => RemoveLastLineIfEmpty());
         }
 
-        private void EnterText(string text, int selectionIndex)
+        private void SetWorkingDirectory()
         {
+            _cmd.StandardInput.WriteLine(CD_COMMAND);
+            while (!(_cmd.StandardOutput.ReadLine()).EndsWith(CD_COMMAND)) { }
+            string dir = _cmd.StandardOutput.ReadLine();
+            Dispatcher.Invoke(() => WorkingDirectory = dir);
+            _cmd.StandardOutput.DiscardBufferedData();
+        }
+
+        private void RemoveLastLineIfEmpty()
+        {
+            var inlines = ((Paragraph)OutputBox.Document.Blocks.LastBlock).Inlines;
+            if (string.IsNullOrWhiteSpace(((Run)inlines.LastInline).Text))
+            {
+                inlines.Remove(inlines.LastInline);
+            }
+        }
+
+        private void PrintStandardError()
+        {
+            string line = string.Empty;
+            while (!(line = _cmd.StandardError.ReadLine()).StartsWith($"'{DELIMITER}'"))
+            {
+                Dispatcher.Invoke(() => WriteLine(line, Colors.Red));
+            }
+            _cmd.StandardError.DiscardBufferedData();
+        }
+
+        private void WriteLine(string text = "", Color color = default(Color))
+        {
+            if (color == default(Color))
+            {
+                color = Colors.White;
+            }
+
+            OutputBox.AppendLine(text, color);
+            OutputBox.ScrollToEnd();
+        }
+
+        private void ProcessCtrlC()
+        {
+            WriteLine("Control-C pressed.");
+            RestartCmdExe();
+        }
+
+        private void RestartCmdExe()
+        {
+            _backgroundQueue = new BackgroundQueue();
+            StartCmdExe();
+        }
+
+        public void SetInputText(string text, int selectionIndex = -1)
+        {
+            if (selectionIndex == -1)
+            {
+                selectionIndex = text.Length;
+            }
+
             InputBox.Text = text;
             InputBox.Select(selectionIndex, 0);
             InputBox.Focus();
         }
 
-        private void InputBox_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Up)
-            {
-                EnterText(_commandHistory.GetOlderCommand());
-            }
-            else if (e.Key == Key.Down)
-            {
-                EnterText(_commandHistory.GetNewerCommand());
-            }
-        }
+        private const string CD_COMMAND = "cd";
+        private const string DELIMITER = "\x01";
 
+        private object _lockKey = new object();
+        private Process _cmd;
         private CommandHistory _commandHistory = new CommandHistory();
-        private const string CD = "cd";       
-        private string _defaultDirectory => Environment.GetFolderPath(Environment.SpecialFolder.Desktop);        
+        private BackgroundQueue _backgroundQueue = new BackgroundQueue();
+        private string _defaultDirectory => Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
         #region Dependency Properties
 
@@ -174,13 +233,13 @@ namespace GitBasic.Controls
         {
             get { return (string)GetValue(WorkingDirectoryProperty); }
             set { SetValue(WorkingDirectoryProperty, value); }
-        }        
+        }
         public static readonly DependencyProperty WorkingDirectoryProperty =
             DependencyProperty.Register("WorkingDirectory", typeof(string), typeof(ConsoleControl), new PropertyMetadata(string.Empty, OnWorkingDirectoryChanged));
 
         private static void OnWorkingDirectoryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            string newWorkingDirectory = e.NewValue.ToString();            
+            string newWorkingDirectory = e.NewValue.ToString();
             // Save the new working directory. This way it can be restored if the app is restarted.
             Properties.Settings.Default.WorkingDirectory = newWorkingDirectory;
             Properties.Settings.Default.Save();
@@ -204,22 +263,22 @@ namespace GitBasic.Controls
 
         private void Fetch_Click(object sender, RoutedEventArgs e)
         {
-            EnterText(GIT_FETCH);
+            SetInputText(GIT_FETCH);
         }
 
         private void CommitAll_Click(object sender, RoutedEventArgs e)
         {
-            EnterText(GIT_COMMIT_ALL, GIT_COMMIT_ALL.Length - 1);
+            SetInputText(GIT_COMMIT_ALL, GIT_COMMIT_ALL.Length - 1);
         }
 
         private void Status_Click(object sender, RoutedEventArgs e)
         {
-            EnterText(GIT_STATUS);
+            SetInputText(GIT_STATUS);
         }
 
         private const string GIT_FETCH = "git fetch";
         private const string GIT_COMMIT_ALL = "git commit -a -m \"\"";
-        private const string GIT_STATUS = "git status";        
+        private const string GIT_STATUS = "git status";
 
         #endregion
     }
