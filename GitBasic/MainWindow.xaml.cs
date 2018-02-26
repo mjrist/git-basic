@@ -1,4 +1,5 @@
 ﻿using GitBasic.Controls;
+using System.Windows.Input;
 
 namespace GitBasic
 {
@@ -16,8 +17,20 @@ namespace GitBasic
         public void CreateViewModel()
         {
             MainVM mainVM = new MainVM();
-            mainVM.HotKeyHelper = new HotKeyHelper(this);
+            mainVM.CommandButtonVM.HotKeyHelper.Value = new HotKeyHelper(this);
             DataContext = mainVM;
         }
+
+        private void MainWindow_KeyUpOrDown(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                CommandButtonPanel.ShowButtonNumbers = true;
+            }
+            else
+            {
+                CommandButtonPanel.ShowButtonNumbers = false;
+            }
+        }        
     }    
 }
