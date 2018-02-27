@@ -4,8 +4,25 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Playground"
+        xmlns:lib="clr-namespace:Playground.Lib.FileSystem"
+        xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="800">
-    <StackPanel x:Name="LayoutRoot">        
+    <Window.Resources>
+
+        <HierarchicalDataTemplate DataType="{x:Type lib:DirectoryItem}"
+                                  ItemsSource="{Binding Items}">
+            <TextBlock Text="{Binding Path=Name}" ToolTip="{Binding Path=Path}" />
+        </HierarchicalDataTemplate>
+
+        <DataTemplate DataType="{x:Type lib:FileItem}">
+            <TextBlock Text="{Binding Path=Name}" ToolTip="{Binding Path=Path}" />
+        </DataTemplate>
+
+    </Window.Resources>
+    <StackPanel x:Name="LayoutRoot">
+        <TreeView x:Name="Staged" Height="100" dd:DragDrop.IsDropTarget="True"/>
+        <TreeView x:Name="Unstaged" Height="100" dd:DragDrop.IsDropTarget="True" ItemsSource="{Binding}"/>
+
     </StackPanel>
 </Window>

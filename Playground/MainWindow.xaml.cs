@@ -1,4 +1,5 @@
 ﻿using LibGit2Sharp;
+using Playground.Lib;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -16,15 +17,22 @@ namespace Playground
         public MainWindow()
         {
             InitializeComponent();
+
+            var itemProvider = new ItemProvider();
+
+            var items = itemProvider.GetItems("C:\\Users\\shaama\\Desktop\\Test Directory");
+
+            DataContext = items;
+
             Loaded += MainWindow_Loaded;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {             
-            Diff();
+            //Diff();
 
             // Comment out Diff() above and uncomment this for file status example.
-            //GetFileStatus();
+            GetFileStatus();
         }
 
         private void Diff()
@@ -92,7 +100,7 @@ namespace Playground
             // Didn't spend a lot of time on this yet. Still some to be explored here.
 
             // Modify this to point to your repo root dir.
-            string repoRoot = "C:\\source\\git-basic";            
+            string repoRoot = "C:\\Users\\shaama\\Desktop\\Test Directory";            
 
             using (var repo = new Repository(repoRoot))
             {
@@ -108,7 +116,7 @@ namespace Playground
                     {
                         TextBlock filePathTextBlock = new TextBlock();
                         filePathTextBlock.Text = item.FilePath;
-
+                        
                         LayoutRoot.Children.Add(filePathTextBlock);
                     }                    
                 }                
