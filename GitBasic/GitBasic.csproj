@@ -54,6 +54,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -78,7 +79,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Controls\ConsoleControl.xaml">
+    <Page Include="Controls\CommandButtonPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Console\ConsoleControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -102,9 +107,16 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controls\ConsoleControl.xaml.cs">
+    <Compile Include="ViewModels\CommandButtonVM.cs" />
+    <Compile Include="Controls\CommandButtonPanel.xaml.cs">
+      <DependentUpon>CommandButtonPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Console\AutoCompletion.cs" />
+    <Compile Include="Controls\Console\CommandHistory.cs" />
+    <Compile Include="Controls\Console\ConsoleControl.xaml.cs">
       <DependentUpon>ConsoleControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Console\Token.cs" />
     <Compile Include="Controls\DiffViewer.xaml.cs">
       <DependentUpon>DiffViewer.xaml</DependentUpon>
     </Compile>
@@ -115,9 +127,13 @@
     <Compile Include="Controls\StatusControl.xaml.cs">
       <DependentUpon>StatusControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Lib\BackgroundQueue.cs" />
     <Compile Include="Lib\Command.cs" />
     <Compile Include="Lib\ExtensionMethods\ControlExtensions.cs" />
+    <Compile Include="Lib\ExtensionMethods\ProcessExtensions.cs" />
     <Compile Include="Lib\ExtensionMethods\StringExtensions.cs" />
+    <Compile Include="Lib\HotKey.cs" />
+    <Compile Include="Lib\HotKeyHelper.cs" />
     <Compile Include="Lib\Reactive\Prop.cs" />
     <Compile Include="Lib\Reactive\ReactiveAction.cs" />
     <Compile Include="Lib\Reactive\ReactiveProp.cs" />
@@ -199,7 +215,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainVM.cs" />
+    <Compile Include="ViewModels\ConsoleControlVM.cs" />
+    <Compile Include="ViewModels\DiffViewerVM.cs" />
+    <Compile Include="ViewModels\FileStatusVM.cs" />
+    <Compile Include="ViewModels\MainVM.cs" />
     <Compile Include="Lib\Reactive\Observable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

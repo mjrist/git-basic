@@ -7,16 +7,16 @@
     xmlns:local="clr-namespace:GitBasic"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Git Basic"
-    Width="1000"
-    Height="600"
+    Width="1100"
+    Height="680"
     MinWidth="300"
     MinHeight="150"
+    PreviewKeyDown="MainWindow_KeyUpOrDown"
+    PreviewKeyUp="MainWindow_KeyUpOrDown"
     Style="{StaticResource MetroWindowStyle}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
-    <controls:MetroWindow.Resources>
-        <local:MainVM x:Key="MainVM" />
-    </controls:MetroWindow.Resources>
+
     <controls:MetroWindow.TitleBarIcon>
         <Image
             Width="24"
@@ -25,7 +25,7 @@
             Source="{DynamicResource GitLogo_24}" />
     </controls:MetroWindow.TitleBarIcon>
 
-    <Grid DataContext="{StaticResource MainVM}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="5" />
@@ -45,19 +45,49 @@
         <!--  Row 2  -->
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.7*" MinWidth="100" />
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="0.7*" />
                 <ColumnDefinition Width="5" />
                 <ColumnDefinition Width="0.3*" />
             </Grid.ColumnDefinitions>
 
-            <controls:ConsoleControl Grid.Column="0" WorkingDirectory="{Binding WorkingDirectory.Value, Mode=TwoWay}" />
+            <controls:CommandButtonPanel
+                x:Name="CommandButtonPanel"
+                Grid.Column="0"
+                Button10Action="{Binding Merge}"
+                Button10Text="Merge"
+                Button1Action="{Binding Status}"
+                Button1Text="Status"
+                Button2Action="{Binding Fetch}"
+                Button2Text="Fetch"
+                Button3Action="{Binding Checkout}"
+                Button3Text="Checkout"
+                Button4Action="{Binding Commit}"
+                Button4Text="Commit"
+                Button5Action="{Binding AddAll}"
+                Button5Text="Add All"
+                Button6Action="{Binding CommitAll}"
+                Button6Text="Commit All"
+                Button7Action="{Binding Pull}"
+                Button7Text="Pull"
+                Button8Action="{Binding Push}"
+                Button8Text="Push"
+                Button9Action="{Binding Branch}"
+                Button9Text="Branch"
+                DataContext="{Binding CommandButtonVM}" />
+
+            <controls:ConsoleControl
+                Grid.Column="1"
+                Execute="{Binding Path=ConsoleControlVM.ExecuteCommand, Mode=OneWayToSource}"
+                SetInput="{Binding Path=ConsoleControlVM.SetInputCommand, Mode=OneWayToSource}"
+                WorkingDirectory="{Binding WorkingDirectory.Value, Mode=TwoWay}" />
 
             <GridSplitter
-                Grid.Column="1"
+                Grid.Column="2"
                 Width="5"
                 HorizontalAlignment="Stretch" />
 
-            <controls:FileStatusControl Grid.Column="2" />
+            <controls:FileStatusControl Grid.Column="3" />
         </Grid>
 
         <!--  Row 3  -->

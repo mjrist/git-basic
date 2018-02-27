@@ -1,12 +1,5 @@
-﻿using Reactive;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LibGit2Sharp;
-using System.Windows;
-using System.IO;
+﻿using LibGit2Sharp;
+using Reactive;
 
 namespace GitBasic
 {
@@ -26,7 +19,23 @@ namespace GitBasic
             BranchName = new ReactiveProp<string>(() => { return (Repo.Value != null) ? Repo.Value.Head.FriendlyName : string.Empty; }, Repo);
 
             WorkingDirectory.Value = Properties.Settings.Default.WorkingDirectory;
-        }        
+
+            CreateSubViewModels();
+        }
+
+        // Sub View Models
+        public CommandButtonVM CommandButtonVM { get; set; }
+        public ConsoleControlVM ConsoleControlVM { get; set; }
+        public FileStatusVM FileStatusVM { get; set; }
+        public DiffViewerVM DiffViewerVM { get; set; }
+
+        private void CreateSubViewModels()
+        {
+            CommandButtonVM = new CommandButtonVM(this);
+            ConsoleControlVM = new ConsoleControlVM(this);
+            FileStatusVM = new FileStatusVM(this);
+            DiffViewerVM = new DiffViewerVM(this);            
+        }
 
         private Repository UpdateRepository()
         {
