@@ -21,6 +21,14 @@
                 <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush1}" />
                 <Setter Property="Background" Value="{DynamicResource AccentBrush1}" />
             </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="true" />
+                    <Condition Property="Selector.IsSelectionActive" Value="true" />
+                </MultiTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush1}" />
+                <Setter Property="Background" Value="{DynamicResource AccentBrush1}" />
+            </MultiTrigger>
         </Style.Triggers>
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}" />
         <Setter Property="BorderThickness" Value="0" />
