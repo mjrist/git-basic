@@ -3,8 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:GitBasic.StyleResources.ControlStyles">
 
-    <Style x:Key="TextBlockStyle" TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="{DynamicResource ForegoundBrush}" />
+    <Style x:Key="StatusBarStyle" TargetType="{x:Type StatusBar}">
+        <Setter Property="Foreground" Value="{DynamicResource LightForegroundBrush}" />
     </Style>
 
 </ResourceDictionary>

@@ -13,6 +13,7 @@
     <SolidColorBrush x:Key="ForegoundBrush" Color="{StaticResource Color_003}" />
     <SolidColorBrush x:Key="LightForegroundBrush" Color="{StaticResource Color_004}" />
     <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource Color_002}" />
+    <SolidColorBrush x:Key="DisabledFilterBrush" Color="{StaticResource Color_010}" />
     <SolidColorBrush x:Key="AccentBrush1" Color="{StaticResource AccentColor1}" />
     <SolidColorBrush x:Key="AccentBrush2" Color="{StaticResource AccentColor2}" />
     <SolidColorBrush x:Key="AccentBrush3" Color="{StaticResource AccentColor3}" />
