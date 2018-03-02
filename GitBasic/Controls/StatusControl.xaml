@@ -22,10 +22,12 @@
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
             <StatusBarItem Grid.Column="0">
-                <TextBlock Margin="5,0" Text="{Binding RepositoryName, Mode=OneWay}" />
+                <Button x:Name="LeftButton" Click="LeftButton_Click" Style="{StaticResource TransparentButtonStyle}">
+                    <TextBlock Margin="5,0,5,0" Text="{Binding RepositoryName, Mode=OneWay}" />
+                </Button>
             </StatusBarItem>
             <StatusBarItem Grid.Column="2">
-                <TextBlock Margin="5,0" Text="{Binding BranchName, Mode=OneWay}" />
+                <TextBlock Margin="5,0,5,0" Text="{Binding BranchName, Mode=OneWay}" />
             </StatusBarItem>
         </StatusBar>
     </Grid>

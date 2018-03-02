@@ -8,6 +8,10 @@ namespace GitBasic
         private Predicate<object> _canExecute;
         private Action<object> _execute;
 
+        public Command(Action execute) : this(new Predicate<object>((obj) => { return true; }), new Action<object>((obj) => { execute(); }))
+        {            
+        }
+
         public Command(Predicate<object> canExecute, Action<object> execute)
         {
             _canExecute = canExecute;
