@@ -9,11 +9,11 @@
     </ResourceDictionary.MergedDictionaries>
 
     <!--  Basic Default Brushes  -->
-    <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource Color_001}" />
-    <SolidColorBrush x:Key="ForegoundBrush" Color="{StaticResource Color_003}" />
-    <SolidColorBrush x:Key="LightForegroundBrush" Color="{StaticResource Color_004}" />
-    <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource Color_002}" />
-    <SolidColorBrush x:Key="DisabledFilterBrush" Color="{StaticResource Color_010}" />
+    <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource DarkColor1}" />
+    <SolidColorBrush x:Key="ForegoundBrush" Color="{StaticResource LightColor1}" />
+    <SolidColorBrush x:Key="LightForegroundBrush" Color="{StaticResource White1}" />
+    <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource DarkColor3}" />
+    <SolidColorBrush x:Key="DisabledFilterBrush" Color="{StaticResource DarkColor7}" />
     <SolidColorBrush x:Key="AccentBrush1" Color="{StaticResource AccentColor1}" />
     <SolidColorBrush x:Key="AccentBrush2" Color="{StaticResource AccentColor2}" />
     <SolidColorBrush x:Key="AccentBrush3" Color="{StaticResource AccentColor3}" />
@@ -21,133 +21,41 @@
     <SolidColorBrush x:Key="AccentBrush5" Color="{StaticResource AccentColor5}" />
 
     <!--  Window Brushes  -->
-    <SolidColorBrush x:Key="WindowButtonHoverBrush" Color="{StaticResource Color_008}" />
-    <SolidColorBrush x:Key="WindowButtonPressedBrush" Color="{StaticResource Color_007}" />
+    <SolidColorBrush x:Key="WindowButtonHoverBrush" Color="{StaticResource White5}" />
+    <SolidColorBrush x:Key="WindowButtonPressedBrush" Color="{StaticResource White4}" />
 
     <!--  Button Brushes  -->
-    <SolidColorBrush x:Key="ButtonBackgroundBrush" Color="{StaticResource Color_002}" />
-    <SolidColorBrush x:Key="ButtonBorderBrush" Color="{StaticResource Color_002}" />
-    <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource Color_007}" />
-    <SolidColorBrush x:Key="Button.MouseOver.Border" Color="{StaticResource Color_007}" />
+    <SolidColorBrush x:Key="ButtonBackgroundBrush" Color="{StaticResource DarkColor3}" />
+    <SolidColorBrush x:Key="ButtonBorderBrush" Color="{StaticResource DarkColor3}" />
+    <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource White4}" />
+    <SolidColorBrush x:Key="Button.MouseOver.Border" Color="{StaticResource White4}" />
     <SolidColorBrush x:Key="Button.Pressed.Background" Color="{StaticResource AccentColor1}" />
     <SolidColorBrush x:Key="Button.Pressed.Border" Color="{StaticResource AccentColor1}" />
     <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4" />
     <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5" />
     <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383" />
 
-
     <!--  MenuItem Brushes  -->
-    <SolidColorBrush x:Key="MenuItemSelectedBackgroundBrush" Color="{StaticResource Color_009}" />
-    <SolidColorBrush x:Key="MenuItemSelectedBorderBrush" Color="{StaticResource Color_009}" />
-    <SolidColorBrush x:Key="MenuItemDisabledBackgroundBrush" Color="{StaticResource Color_010}" />
-    <SolidColorBrush x:Key="MenuItemDisabledBorderBrush" Color="{StaticResource Color_010}" />
+    <SolidColorBrush x:Key="MenuItemSelectedBackgroundBrush" Color="{StaticResource White6}" />
+    <SolidColorBrush x:Key="MenuItemSelectedBorderBrush" Color="{StaticResource White6}" />
+    <SolidColorBrush x:Key="MenuItemDisabledBackgroundBrush" Color="{StaticResource DarkColor7}" />
+    <SolidColorBrush x:Key="MenuItemDisabledBorderBrush" Color="{StaticResource DarkColor7}" />
 
-
-
-
-
-    <!--  re-set brushes too  -->
-    <!--
-    <SolidColorBrush
-        x:Key="HighlightBrush"
-        options:Freeze="True"
-        Color="{StaticResource HighlightColor}" />
-    <SolidColorBrush
-        x:Key="AccentBaseColorBrush"
-        options:Freeze="True"
-        Color="{StaticResource AccentBaseColor}" />
-    <SolidColorBrush
-        x:Key="AccentColorBrush"
-        options:Freeze="True"
-        Color="{StaticResource AccentColor}" />
-    <SolidColorBrush
-        x:Key="AccentColorBrush2"
-        options:Freeze="True"
-        Color="{StaticResource AccentColor2}" />
-    <SolidColorBrush
-        x:Key="AccentColorBrush3"
-        options:Freeze="True"
-        Color="{StaticResource AccentColor3}" />
-    <SolidColorBrush
-        x:Key="AccentColorBrush4"
-        options:Freeze="True"
-        Color="{StaticResource AccentColor4}" />
-
-    <SolidColorBrush
-        x:Key="WindowTitleColorBrush"
-        options:Freeze="True"
-        Color="{StaticResource AccentColor}" />
-
-    <LinearGradientBrush x:Key="ProgressBrush" options:Freeze="True" StartPoint="1.002,0.5" EndPoint="0.001,0.5">
-        <GradientStop Offset="0" Color="{StaticResource HighlightColor}" />
-        <GradientStop Offset="1" Color="{StaticResource AccentColor3}" />
-    </LinearGradientBrush>
-
-    <SolidColorBrush
-        x:Key="CheckmarkFill"
-        options:Freeze="True"
-        Color="{StaticResource AccentColor}" />
-    <SolidColorBrush
-        x:Key="RightArrowFill"
-        options:Freeze="True"
-        Color="{StaticResource AccentColor}" />
-
-    <Color x:Key="IdealForegroundColor">White</Color>
-    <SolidColorBrush
-        x:Key="IdealForegroundColorBrush"
-        options:Freeze="True"
-        Color="{StaticResource IdealForegroundColor}" />
-    <SolidColorBrush
-        x:Key="IdealForegroundDisabledBrush"
-        options:Freeze="True"
-        Opacity="0.4"
-        Color="{StaticResource IdealForegroundColor}" />
-    <SolidColorBrush
-        x:Key="AccentSelectedColorBrush"
-        options:Freeze="True"
-        Color="{StaticResource IdealForegroundColor}" />
-
-    -->
-    <!--  DataGrid brushes  -->
-    <!--
-    <SolidColorBrush
-        x:Key="MetroDataGrid.HighlightBrush"
-        options:Freeze="True"
-        Color="{StaticResource AccentColor}" />
-    <SolidColorBrush
-        x:Key="MetroDataGrid.HighlightTextBrush"
-        options:Freeze="True"
-        Color="{StaticResource IdealForegroundColor}" />
-    <SolidColorBrush
-        x:Key="MetroDataGrid.MouseOverHighlightBrush"
-        options:Freeze="True"
-        Color="{StaticResource AccentColor3}" />
-    <SolidColorBrush
-        x:Key="MetroDataGrid.FocusBorderBrush"
-        options:Freeze="True"
-        Color="{StaticResource AccentColor}" />
-    <SolidColorBrush
-        x:Key="MetroDataGrid.InactiveSelectionHighlightBrush"
-        options:Freeze="True"
-        Color="{StaticResource AccentColor2}" />
-    <SolidColorBrush
-        x:Key="MetroDataGrid.InactiveSelectionHighlightTextBrush"
-        options:Freeze="True"
-        Color="{StaticResource IdealForegroundColor}" />
-
-    <SolidColorBrush
-        x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.OnSwitchBrush.Win10"
-        options:Freeze="True"
-        Color="{StaticResource AccentColor}" />
-    <SolidColorBrush
-        x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.OnSwitchMouseOverBrush.Win10"
-        options:Freeze="True"
-        Color="{StaticResource AccentColor2}" />
-    <SolidColorBrush
-        x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.ThumbIndicatorCheckedBrush.Win10"
-        options:Freeze="True"
-        Color="{StaticResource IdealForegroundColor}" />-->
-
-
+    <!--  Scrollbar/ScrollViewer Brushes  -->
+    <SolidColorBrush x:Key="HScrollbarThumbBackgroundBrush" Color="{StaticResource DarkColor4}" />
+    <SolidColorBrush x:Key="VScrollbarThumbBackgroundBrush" Color="{StaticResource DarkColor4}" />
+    <SolidColorBrush x:Key="ScrollbarPageButtonArrowBackgroundBrush" Color="{StaticResource DarkColor4}" />
+    <SolidColorBrush x:Key="ScrollbarPageButtonArrowPressedBackgroundBrush" Color="{StaticResource AccentColor1}" />
+    <SolidColorBrush x:Key="ScrollbarPageButtonArrowHoverBackgroundBrush" Color="{StaticResource DarkColor6}" />
+    <SolidColorBrush x:Key="ScrollbarPageButtonArrowDisabledBackgroundBrush" Color="{StaticResource DarkColor1}" />
+    <SolidColorBrush x:Key="VScrollbarThumbHoverBackgroundBrush" Color="{StaticResource DarkColor6}" />
+    <SolidColorBrush x:Key="HScrollbarThumbHoverBackgroundBrush" Color="{StaticResource DarkColor6}" />
+    <SolidColorBrush x:Key="VScrollbarThumbPressedBackgroundBrush" Color="{StaticResource AccentColor1}" />
+    <SolidColorBrush x:Key="HScrollbarThumbPressedBackgroundBrush" Color="{StaticResource AccentColor1}" />
+    <SolidColorBrush x:Key="VScrollbarThumbDisabledBackgroundBrush" Color="{StaticResource DarkColor1}" />
+    <SolidColorBrush x:Key="HScrollbarThumbDisabledBackgroundBrush" Color="{StaticResource DarkColor1}" />
+    <SolidColorBrush x:Key="ScrollbarDisabledBackgroundBrush" Color="{StaticResource DarkColor2}" />
+    <SolidColorBrush x:Key="ScrollbarBackgroundBrush" Color="{StaticResource DarkColor2}" />
+    <SolidColorBrush x:Key="ScrollViewerCornerBackgroundBrush" Color="{StaticResource DarkColor2}" />
 
 </ResourceDictionary>
