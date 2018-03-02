@@ -16,6 +16,9 @@
         <ResourceDictionary Source="/StyleResources/ControlStyles/ListBoxItemStyle.xaml" />
         <ResourceDictionary Source="/StyleResources/ControlStyles/TreeViewStyle.xaml" />
         <ResourceDictionary Source="/StyleResources/ControlStyles/TreeViewItemStyle.xaml" />
+        <ResourceDictionary Source="/StyleResources/ControlStyles/ScrollBarStyle.xaml" />
+        <ResourceDictionary Source="/StyleResources/ControlStyles/ScrollViewerStyle.xaml" />
+        <ResourceDictionary Source="/StyleResources/ControlStyles/ToolTipStyle.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style BasedOn="{StaticResource BaseControlStyle}" TargetType="{x:Type Control}" />
@@ -30,5 +33,8 @@
     <Style BasedOn="{StaticResource StatusBarStyle}" TargetType="{x:Type StatusBar}" />
     <Style BasedOn="{StaticResource TreeViewStyle}" TargetType="{x:Type TreeView}" />
     <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}" />
+    <Style BasedOn="{StaticResource ScrollBarStyle}" TargetType="{x:Type ScrollBar}" />
+    <Style BasedOn="{StaticResource ScrollViewerStyle}" TargetType="{x:Type ScrollViewer}" />
+    <Style BasedOn="{StaticResource ToolTipStyle}" TargetType="{x:Type ToolTip}" />
 
 </ResourceDictionary>
