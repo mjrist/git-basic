@@ -22,8 +22,21 @@
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
             <StatusBarItem Grid.Column="0">
-                <Button x:Name="LeftButton" Click="LeftButton_Click" Style="{StaticResource TransparentButtonStyle}">
-                    <TextBlock Margin="5,0,5,0" Text="{Binding RepositoryName, Mode=OneWay}" />
+                <Button
+                    x:Name="LeftButton"
+                    Click="LeftButton_Click"
+                    Style="{StaticResource TransparentButtonStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image
+                            Width="16"
+                            Height="16"
+                            Margin="1,0,1,0"
+                            Source="{DynamicResource GitLogo_16}" />
+                        <TextBlock
+                            Margin="1,0,2,0"
+                            Text="{Binding RepositoryName, Mode=OneWay}"
+                            Visibility="{Binding RepositoryName, Converter={StaticResource StringEmptyToVisibilityConverter}}" />
+                    </StackPanel>
                 </Button>
             </StatusBarItem>
             <StatusBarItem Grid.Column="2">

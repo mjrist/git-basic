@@ -108,6 +108,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Lib\Converters\StringEmptyToVisibilityConverter.cs" />
     <Compile Include="ViewModels\CommandButtonVM.cs" />
     <Compile Include="Controls\CommandButtonPanel.xaml.cs">
       <DependentUpon>CommandButtonPanel.xaml</DependentUpon>
@@ -215,6 +216,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="StyleResources\ControlStyles\TreeViewStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StyleResources\Converters.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
