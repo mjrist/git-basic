@@ -6,6 +6,7 @@ namespace GitBasic
     public class MainVM : Observable
     {
         public Prop<string> WorkingDirectory { get; set; } = new Prop<string>();
+        public Prop<string> SelectedFile { get; set; } = new Prop<string>();
         public ReactiveProp<Repository> Repo { get; set; }
         public ReactiveProp<string> RepositoryName { get; set; }
         public ReactiveProp<string> BranchName { get; set; }
@@ -14,7 +15,7 @@ namespace GitBasic
         {            
             Repo = new ReactiveProp<Repository>(UpdateRepository, WorkingDirectory);
             RepositoryName = new ReactiveProp<string>(() => { return (Repo.Value != null) ? Repo.Value.Info.WorkingDirectory.TrimEnd('\\').SubstringFromLast('\\') : string.Empty; }, Repo);
-
+ 
             // TODO: This needs to update on branch changes as well. Currently only watching Repo which changes on directory changes.
             BranchName = new ReactiveProp<string>(() => { return (Repo.Value != null) ? Repo.Value.Head.FriendlyName : string.Empty; }, Repo);
 
