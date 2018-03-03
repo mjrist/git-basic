@@ -8,39 +8,53 @@
     d:DesignHeight="300"
     d:DesignWidth="300"
     mc:Ignorable="d">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0" Margin="2">
-            <RichTextBox
-                x:Name="OldDiff"
-                BorderThickness="0"
-                IsReadOnly="True">
-                <RichTextBox.Resources>
-                    <Style TargetType="{x:Type Paragraph}">
-                        <Setter Property="Margin" Value="0" />
-                    </Style>
-                </RichTextBox.Resources>
-            </RichTextBox>
+    <ScrollViewer DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:DiffViewer}}}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0" Margin="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock Name="oldTitle" />
+                <RichTextBox
+                    x:Name="OldDiff"
+                    Grid.Row="1"
+                    BorderThickness="0"
+                    IsReadOnly="True">
+                    <RichTextBox.Resources>
+                        <Style TargetType="{x:Type Paragraph}">
+                            <Setter Property="Margin" Value="0" />
+                        </Style>
+                    </RichTextBox.Resources>
+                </RichTextBox>
+            </Grid>
+            <GridSplitter
+                Grid.Column="1"
+                Width="5"
+                HorizontalAlignment="Stretch" />
+            <Grid Grid.Column="2" Margin="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock Name="newTitle" />
+                <RichTextBox
+                    x:Name="NewDiff"
+                    Grid.Row="1"
+                    BorderThickness="0"
+                    IsReadOnly="True">
+                    <RichTextBox.Resources>
+                        <Style TargetType="{x:Type Paragraph}">
+                            <Setter Property="Margin" Value="0" />
+                        </Style>
+                    </RichTextBox.Resources>
+                </RichTextBox>
+            </Grid>
         </Grid>
-        <GridSplitter
-            Grid.Column="1"
-            Width="5"
-            HorizontalAlignment="Stretch" />
-        <Grid Grid.Column="2" Margin="2">
-            <RichTextBox
-                x:Name="NewDiff"
-                BorderThickness="0"
-                IsReadOnly="True">
-                <RichTextBox.Resources>
-                    <Style TargetType="{x:Type Paragraph}">
-                        <Setter Property="Margin" Value="0" />
-                    </Style>
-                </RichTextBox.Resources>
-            </RichTextBox>
-        </Grid>
-    </Grid>
+    </ScrollViewer>
 </UserControl>

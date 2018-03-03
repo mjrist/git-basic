@@ -34,7 +34,7 @@
         </Grid.RowDefinitions>
 
         <!--  Row 0  -->
-        <controls:DiffViewer Grid.Row="0" />
+        <controls:DiffViewer Grid.Row="0" FileName="{Binding SelectedFile.Value, Mode=OneWay}" />
 
         <!--  Row 1  -->
         <GridSplitter
