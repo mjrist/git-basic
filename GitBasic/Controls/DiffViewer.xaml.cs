@@ -29,6 +29,13 @@ namespace GitBasic.Controls
 
         private void Diff(string fileName)
         {
+            // I had to add this because OnFileNameChanged sometimes call this with null or empty fileName.
+            // Feel free to rewrite this function and clean this up.
+            if (string.IsNullOrWhiteSpace(fileName))
+            {
+                return;
+            }
+
             string repoPath = Repository.Discover(fileName);
 
             if (string.IsNullOrEmpty(repoPath)) 
@@ -92,7 +99,7 @@ namespace GitBasic.Controls
             DependencyProperty.Register("FileName", typeof(string), typeof(DiffViewer), new PropertyMetadata(string.Empty, OnFileNameChanged));
 
         private static void OnFileNameChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) 
-        {
+        {            
             ((DiffViewer) d).Diff((string) e.NewValue);
         }
 
