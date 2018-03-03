@@ -1,5 +1,7 @@
-﻿using LibGit2Sharp;
+﻿using System;
+using LibGit2Sharp;
 using Reactive;
+using System.Windows.Forms;
 
 namespace GitBasic
 {
@@ -10,9 +12,10 @@ namespace GitBasic
         public ReactiveProp<Repository> Repo { get; set; }
         public ReactiveProp<string> RepositoryName { get; set; }
         public ReactiveProp<string> BranchName { get; set; }
+        public Action SelectDirectoryCommand { get; set; } 
 
         public MainVM()
-        {            
+        {
             Repo = new ReactiveProp<Repository>(UpdateRepository, WorkingDirectory);
             RepositoryName = new ReactiveProp<string>(() => { return (Repo.Value != null) ? Repo.Value.Info.WorkingDirectory.TrimEnd('\\').SubstringFromLast('\\') : string.Empty; }, Repo);
  
@@ -20,9 +23,10 @@ namespace GitBasic
             BranchName = new ReactiveProp<string>(() => { return (Repo.Value != null) ? Repo.Value.Head.FriendlyName : string.Empty; }, Repo);
 
             WorkingDirectory.Value = Properties.Settings.Default.WorkingDirectory;
+            SelectDirectoryCommand =  new Action(SelectDirectory);
 
             CreateSubViewModels();
-        }
+        }        
 
         // Sub View Models
         public CommandButtonVM CommandButtonVM { get; set; }
@@ -35,7 +39,7 @@ namespace GitBasic
             CommandButtonVM = new CommandButtonVM(this);
             ConsoleControlVM = new ConsoleControlVM(this);
             FileStatusVM = new FileStatusVM(this);
-            DiffViewerVM = new DiffViewerVM(this);            
+            DiffViewerVM = new DiffViewerVM(this);
         }
 
         private Repository UpdateRepository()
@@ -43,6 +47,18 @@ namespace GitBasic
             Repo.Value?.Dispose();
             string repoPath = Repository.Discover(WorkingDirectory.Value);
             return (repoPath != null) ? new Repository(repoPath) : null;
+        }
+
+        private void SelectDirectory()
+        {
+            FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
+            folderBrowser.ShowNewFolderButton = false;
+            folderBrowser.SelectedPath = WorkingDirectory.Value;
+
+            if (folderBrowser.ShowDialog() == DialogResult.OK)
+            {
+                ConsoleControlVM.ExecuteCommand($"cd {folderBrowser.SelectedPath}");
+            }
         }
     }
 }

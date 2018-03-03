@@ -35,6 +35,12 @@
     <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5" />
     <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383" />
 
+    <!-- Transparent Button Brushes  -->
+    <SolidColorBrush x:Key="TransparentButton.MouseOver.Background" Color="{StaticResource White5}" />
+    <SolidColorBrush x:Key="TransparentButton.MouseOver.Border" Color="{StaticResource White5}" />
+    <SolidColorBrush x:Key="TransparentButton.Pressed.Background" Color="{StaticResource White4}" />
+    <SolidColorBrush x:Key="TransparentButton.Pressed.Border" Color="{StaticResource White4}" />
+
     <!--  MenuItem Brushes  -->
     <SolidColorBrush x:Key="MenuItemSelectedBackgroundBrush" Color="{StaticResource White6}" />
     <SolidColorBrush x:Key="MenuItemSelectedBorderBrush" Color="{StaticResource White6}" />
