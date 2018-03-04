@@ -87,7 +87,10 @@
                 Width="5"
                 HorizontalAlignment="Stretch" />
 
-            <controls:FileStatusControl Grid.Column="3" />
+            <controls:FileStatusControl 
+                StagedItems="{Binding Path=FileStatusVM.StagedItems}" 
+                UnstagedItems="{Binding Path=FileStatusVM.UnstagedItems}" 
+                Grid.Column="3" />
         </Grid>
 
         <!--  Row 3  -->

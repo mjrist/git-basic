@@ -26,10 +26,26 @@ namespace GitBasic.Controls
         // variable used to hold the item we will be dragging between controls
         Item dragged_item;
 
-        List<Item> stagedItems;
-        List<Item> unstagedItems;
 
-        //string working_directory;
+
+
+        public List<Item> StagedItems
+        {
+            get { return (List<Item>)GetValue(StagedItemsProperty); }
+            set { SetValue(StagedItemsProperty, value); }
+        }
+
+        public static readonly DependencyProperty StagedItemsProperty =
+            DependencyProperty.Register("StagedItems", typeof(List<Item>), typeof(FileStatusControl), new PropertyMetadata(new List<Item>()));
+
+        public List<Item> UnstagedItems
+        {
+            get { return (List<Item>)GetValue(UnstagedItemsProperty); }
+            set { SetValue(UnstagedItemsProperty, value); }
+        }
+
+        public static readonly DependencyProperty UnstagedItemsProperty =
+            DependencyProperty.Register("UnstagedItems", typeof(List<Item>), typeof(FileStatusControl), new PropertyMetadata(new List<Item>()));
 
 
         public FileStatusControl()
@@ -38,8 +54,8 @@ namespace GitBasic.Controls
 
             var itemProvider = new ItemProvider();
 
-            stagedItems = itemProvider.GetItems("C:\\Users\\shaama\\Desktop\\Test Directory", "Staged");
-            unstagedItems = itemProvider.GetItems("C:\\Users\\shaama\\Desktop\\Test Directory", "Unstaged");
+            StagedItems = itemProvider.GetItems("C:\\Users\\shaama\\Desktop\\Test Directory", "Staged");
+            UnstagedItems = itemProvider.GetItems("C:\\Users\\shaama\\Desktop\\Test Directory", "Unstaged");
 
         }
 
@@ -118,7 +134,7 @@ namespace GitBasic.Controls
                     }
                     else
                     {
-                        // Commands.Stage(repo, dir_item.Path);
+                        //Commands.Stage(repo, dir_item.Path);
                         Debug.Print(dir_item.Name + " file added to Staged TreeView");
                     }
                 }

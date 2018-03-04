@@ -12,14 +12,14 @@
     <UserControl.Resources>
         <HierarchicalDataTemplate DataType="{x:Type fs:DirectoryItem}"
                                   ItemsSource="{Binding Items}">
-            <TextBlock Text="{Binding Path=Name}" ToolTip="{Binding Path=Path}" />
+            <TextBlock Foreground="{DynamicResource ForegoundBrush}" Text="{Binding Path=Name}" ToolTip="{Binding Path=Path}" />
         </HierarchicalDataTemplate>
 
         <DataTemplate DataType="{x:Type fs:FileItem}">
-            <TextBlock Text="{Binding Path=Name}" ToolTip="{Binding Path=Path}" />
+            <TextBlock Foreground="{DynamicResource ForegoundBrush}" Text="{Binding Path=Name}" ToolTip="{Binding Path=Path}" />
         </DataTemplate>
     </UserControl.Resources>
-    <Grid>
+    <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FileStatusControl}}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="5" />
@@ -32,7 +32,7 @@
                 AllowDrop="True" 
                 DragOver="treeView_DragOver"
                 Drop="treeView_Drop"
-                ItemsSource="{Binding}">
+                ItemsSource="{Binding Path=StagedItems}">
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="{x:Type TreeViewItem}">
                         <EventSetter Event="TreeViewItem.MouseMove"
@@ -53,7 +53,7 @@
                 AllowDrop="True"
                 DragOver="treeView_DragOver"
                 Drop="treeView_Drop"
-                ItemsSource="{Binding}">
+                ItemsSource="{Binding Path=UnstagedItems}">
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="{x:Type TreeViewItem}">
                         <EventSetter Event="TreeViewItem.MouseMove"
