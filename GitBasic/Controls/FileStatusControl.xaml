@@ -4,29 +4,40 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:GitBasic.Controls"
+    xmlns:fs="clr-namespace:GitBasic.FileSystem"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="300"
     d:DesignWidth="300"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <HierarchicalDataTemplate DataType="{x:Type fs:DirectoryItem}"
+                                  ItemsSource="{Binding Items}">
+            <TextBlock Text="{Binding Path=Name}" ToolTip="{Binding Path=Path}" />
+        </HierarchicalDataTemplate>
+
+        <DataTemplate DataType="{x:Type fs:FileItem}">
+            <TextBlock Text="{Binding Path=Name}" ToolTip="{Binding Path=Path}" />
+        </DataTemplate>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="5" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
+    
         <Grid Grid.Row="0" Margin="2">
-            <TreeView Name="Staged" AllowDrop="True">
-
+            <TreeView 
+                Name="Staged" 
+                AllowDrop="True" 
+                DragOver="treeView_DragOver"
+                Drop="treeView_Drop"
+                ItemsSource="{Binding}">
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="{x:Type TreeViewItem}">
-                        <!-- We have to select the item which is right-clicked on -->
-                        <!--<EventSetter Event="TreeViewItem.PreviewMouseRightButtonDown" Handler="TreeViewItem_PreviewMouseRightButtonDown"/>-->
-                        <EventSetter Event="TreeViewItem.DragOver" Handler="treeView_DragOver"/>
-                        <EventSetter Event="TreeViewItem.Drop" Handler="treeView_Drop"/>
-                        <EventSetter Event="TreeViewItem.MouseMove" Handler="treeView_MouseMove"/>
+                        <EventSetter Event="TreeViewItem.MouseMove"
+                                 Handler="treeView_MouseMove"/>
                     </Style>
-
                 </TreeView.ItemContainerStyle>
             </TreeView>
         </Grid>
@@ -37,7 +48,19 @@
             HorizontalAlignment="Stretch" />
 
         <Grid Grid.Row="2" Margin="2">
-            <TextBlock Text="Unstaged Files" />            
+            <TreeView 
+                Name="Unstaged" 
+                AllowDrop="True"
+                DragOver="treeView_DragOver"
+                Drop="treeView_Drop"
+                ItemsSource="{Binding}">
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="{x:Type TreeViewItem}">
+                        <EventSetter Event="TreeViewItem.MouseMove"
+                                 Handler="treeView_MouseMove"/>
+                    </Style>
+                </TreeView.ItemContainerStyle>
+            </TreeView>         
         </Grid>
 
     </Grid>

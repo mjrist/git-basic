@@ -4,17 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Playground"
-        xmlns:lib="clr-namespace:Playground.Lib.FileSystem"
+        xmlns:fs="clr-namespace:Playground.Lib.FileSystem"
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="800">
     <Window.Resources>
 
-        <HierarchicalDataTemplate DataType="{x:Type lib:DirectoryItem}"
+        <HierarchicalDataTemplate DataType="{x:Type fs:DirectoryItem}"
                                   ItemsSource="{Binding Items}">
             <TextBlock Text="{Binding Path=Name}" ToolTip="{Binding Path=Path}" />
         </HierarchicalDataTemplate>
 
-        <DataTemplate DataType="{x:Type lib:FileItem}">
+        <DataTemplate DataType="{x:Type fs:FileItem}">
             <TextBlock Text="{Binding Path=Name}" ToolTip="{Binding Path=Path}" />
         </DataTemplate>
 
@@ -24,18 +24,20 @@
             x:Name="Staged" 
             AllowDrop="True" 
             Height="100" 
-            PreviewMouseLeftButtonDown="treeView2_MouseDown"
+            PreviewMouseLeftButtonDown="Staged_MouseDown"
             DragOver="Staged_DragOver"
-            Drop="Staged_Drop"/>
+            Drop="Staged_Drop">
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <EventSetter Event="TreeViewItem.MouseMove"
+                                 Handler="treeView_MouseMove"/>
+                </Style>
+            </TreeView.ItemContainerStyle>
+        </TreeView>
 
         <TreeView x:Name="Unstaged" AllowDrop="True" Height="100" ItemsSource="{Binding}">
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
-                    <!-- We have to select the item which is right-clicked on -->
-                    <!--<EventSetter Event="TreeViewItem.PreviewMouseRightButtonDown" Handler="TreeViewItem_PreviewMouseRightButtonDown"/>-->
-                    <EventSetter Event="TreeViewItem.PreviewMouseLeftButtonDown" Handler="treeView_MouseDown"/>
-                    <EventSetter Event="TreeViewItem.DragOver" Handler="treeView_DragOver"/>
-                    <EventSetter Event="TreeViewItem.Drop" Handler="treeView_Drop"/>
                     <EventSetter Event="TreeViewItem.MouseMove" Handler="treeView_MouseMove"/>
                 </Style>
             </TreeView.ItemContainerStyle>

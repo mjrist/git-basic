@@ -1,14 +1,17 @@
 ﻿using System.IO;
 using System.Collections.Generic;
-using Playground.Lib.FileSystem;
+using GitBasic.FileSystem;
 using LibGit2Sharp;
 using System;
 
-namespace Playground.Lib
+namespace GitBasic
 {
     public class ItemProvider
     {
-        public List<Item> GetItems(string path)
+
+        private StatusOptions statusOptions;
+
+        public List<Item> GetItems(string path, string status)
         {
             var items = new List<Item>();
             List<string> repo_items = new List<string>();
@@ -20,7 +23,21 @@ namespace Playground.Lib
 
                 BuildTreeFromRepo file_tree = new BuildTreeFromRepo();
 
-                foreach (var repo_item in repo.RetrieveStatus())
+                if (status == "Staged")
+                {
+                    statusOptions = new StatusOptions()
+                    {
+                        IncludeIgnored = false
+                    };
+                }
+                else if (status == "Unstaged") {
+                    statusOptions = new StatusOptions()
+                    {
+                        IncludeIgnored = false
+                    };
+                }
+
+                foreach (var repo_item in repo.RetrieveStatus(statusOptions))
                 {
                     repo_items.Add(repo_item.FilePath);
                 }

@@ -1,5 +1,8 @@
-﻿using System;
+﻿using GitBasic.FileSystem;
+using LibGit2Sharp;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +23,112 @@ namespace GitBasic.Controls
     /// </summary>
     public partial class FileStatusControl : UserControl
     {
+        // variable used to hold the item we will be dragging between controls
+        Item dragged_item;
+
+        List<Item> stagedItems;
+        List<Item> unstagedItems;
+
+        //string working_directory;
+
+
         public FileStatusControl()
         {
             InitializeComponent();
+
+            var itemProvider = new ItemProvider();
+
+            stagedItems = itemProvider.GetItems("C:\\Users\\shaama\\Desktop\\Test Directory", "Staged");
+            unstagedItems = itemProvider.GetItems("C:\\Users\\shaama\\Desktop\\Test Directory", "Unstaged");
+
+        }
+
+        private void treeView_MouseMove(object sender, MouseEventArgs e)
+        {
+
+            try
+            {
+                if (e.LeftButton == MouseButtonState.Pressed)
+                {
+                    dragged_item = (Item)Unstaged.SelectedItem;
+
+                    if (dragged_item != null)
+                    {
+                        DragDropEffects finalDropEffect = DragDrop.DoDragDrop(Unstaged, Unstaged.SelectedValue,
+                            DragDropEffects.Move);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.Print(ex.ToString());
+            }
+        }
+
+        private void treeView_DragOver(object sender, DragEventArgs e)
+        {
+            try
+            {
+                e.Effects = DragDropEffects.Move;
+                e.Handled = true;
+            }
+            catch (Exception ex)
+            {
+                Debug.Print(ex.ToString());
+            }
+        }
+
+        private void treeView_Drop(object sender, DragEventArgs e)
+        {
+            try
+            {
+                e.Effects = DragDropEffects.None;
+                e.Handled = true;
+
+                if (dragged_item != null)
+                {
+                    // No need to modify control, the TreeView will refresh automagically upon repo change
+                    Stage_Items(dragged_item);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.Print(ex.ToString());
+            }
+        }
+
+        private void Stage_Items(Item item)
+        {
+            List<Item> directory_items;
+
+            // if a DirectoryItem
+            if (item is DirectoryItem)
+            {
+                directory_items = ((DirectoryItem)item).Items;
+
+                Debug.Print(item.Name + " directory added to Staged TreeView");
+                // Iterate directory Items
+                foreach (Item dir_item in directory_items)
+                {
+                    // if DirectoryItem, recurse. else stage FileItem
+                    if (dir_item is DirectoryItem)
+                    {
+                        Debug.Print(dir_item.Name + " directory added to Staged TreeView");
+                        Stage_Items(dir_item);
+                    }
+                    else
+                    {
+                        // Commands.Stage(repo, dir_item.Path);
+                        Debug.Print(dir_item.Name + " file added to Staged TreeView");
+                    }
+                }
+            }
+            else  // it's a FileItem, stage it
+            {
+
+                //Commands.Stage(repo, item.Path);
+                Debug.Print(item.Name + " file added to Staged TreeView");
+            }
         }
     }
 }
