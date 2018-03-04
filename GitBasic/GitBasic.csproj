@@ -80,6 +80,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Lib\ExtensionMethods\IEnumerableExtensions.cs" />
+    <Compile Include="Lib\Reactive\ThrottledAction.cs" />
+    <Compile Include="ViewModels\RepositoryWatcher.cs" />
     <Page Include="Controls\CommandButtonPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
