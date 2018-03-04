@@ -1,6 +1,6 @@
-﻿using System;
-using LibGit2Sharp;
+﻿using LibGit2Sharp;
 using Reactive;
+using System;
 using System.Windows.Forms;
 
 namespace GitBasic
@@ -11,6 +11,7 @@ namespace GitBasic
         public Prop<string> SelectedFile { get; set; } = new Prop<string>();
         public ReactiveProp<Repository> Repo { get; set; }
         public ReactiveProp<string> RepositoryName { get; set; }
+        public RepositoryChangeNotifier RepoNotifier { get; set; }
         public ReactiveProp<string> BranchName { get; set; }
         public Action SelectDirectoryCommand { get; set; } 
 
@@ -18,28 +19,12 @@ namespace GitBasic
         {
             Repo = new ReactiveProp<Repository>(UpdateRepository, WorkingDirectory);
             RepositoryName = new ReactiveProp<string>(() => { return (Repo.Value != null) ? Repo.Value.Info.WorkingDirectory.TrimEnd('\\').SubstringFromLast('\\') : string.Empty; }, Repo);
- 
-            // TODO: This needs to update on branch changes as well. Currently only watching Repo which changes on directory changes.
-            BranchName = new ReactiveProp<string>(() => { return (Repo.Value != null) ? Repo.Value.Head.FriendlyName : string.Empty; }, Repo);
-
+            RepoNotifier = new RepositoryChangeNotifier(Repo);                      
+            BranchName = new ReactiveProp<string>(() => { return (Repo.Value != null) ? Repo.Value.Head.FriendlyName : string.Empty; }, Repo, RepoNotifier);
             WorkingDirectory.Value = Properties.Settings.Default.WorkingDirectory;
             SelectDirectoryCommand =  new Action(SelectDirectory);
 
             CreateSubViewModels();
-        }        
-
-        // Sub View Models
-        public CommandButtonVM CommandButtonVM { get; set; }
-        public ConsoleControlVM ConsoleControlVM { get; set; }
-        public FileStatusVM FileStatusVM { get; set; }
-        public DiffViewerVM DiffViewerVM { get; set; }
-
-        private void CreateSubViewModels()
-        {
-            CommandButtonVM = new CommandButtonVM(this);
-            ConsoleControlVM = new ConsoleControlVM(this);
-            FileStatusVM = new FileStatusVM(this);
-            DiffViewerVM = new DiffViewerVM(this);
         }
 
         private Repository UpdateRepository()
@@ -60,5 +45,19 @@ namespace GitBasic
                 ConsoleControlVM.ExecuteCommand($"cd {folderBrowser.SelectedPath}");
             }
         }
+
+        // Sub View Models
+        public CommandButtonVM CommandButtonVM { get; set; }
+        public ConsoleControlVM ConsoleControlVM { get; set; }
+        public FileStatusVM FileStatusVM { get; set; }
+        public DiffViewerVM DiffViewerVM { get; set; }
+
+        private void CreateSubViewModels()
+        {
+            CommandButtonVM = new CommandButtonVM(this);
+            ConsoleControlVM = new ConsoleControlVM(this);
+            FileStatusVM = new FileStatusVM(this);
+            DiffViewerVM = new DiffViewerVM(this);
+        }                
     }
 }
