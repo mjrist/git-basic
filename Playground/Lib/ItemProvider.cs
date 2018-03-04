@@ -18,8 +18,6 @@ namespace Playground.Lib
 
                 var repo = new Repository(path);
 
-                var dir_info = new DirectoryInfo(path);
-
                 BuildTreeFromRepo file_tree = new BuildTreeFromRepo();
 
                 foreach (var repo_item in repo.RetrieveStatus())
@@ -42,11 +40,11 @@ namespace Playground.Lib
                 foreach (var repo_item in repo_file_list)
                 {
                     // if file in a directory
-                    if (repo_item.IndexOf("\\") > 0)
+                    if (repo_item.IndexOf(Path.DirectorySeparatorChar) > 0)
                     {
                         // split the next level directory from the the string
-                        string sub_directory_name = repo_item.Substring(0, repo_item.IndexOf("\\"));
-                        string remaining_file_path = repo_item.Substring(repo_item.IndexOf("\\") + 1);
+                        string sub_directory_name = repo_item.Substring(0, repo_item.IndexOf(Path.DirectorySeparatorChar));
+                        string remaining_file_path = repo_item.Substring(repo_item.IndexOf(Path.DirectorySeparatorChar) + 1);
 
                         // if this directory name has already been added to the item list, find and add remaining string to directory list
                         if (folders_with_remaining_strings.ContainsKey(sub_directory_name))
@@ -76,7 +74,6 @@ namespace Playground.Lib
                 // recursively build up remaining directory structures
                 foreach (string key in folders_with_remaining_strings.Keys)
                 {
-                    Console.WriteLine(key);
                     var item = new DirectoryItem
                     {
                         Name = key,

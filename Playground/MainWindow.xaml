@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Playground"
         xmlns:lib="clr-namespace:Playground.Lib.FileSystem"
-        xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="800">
     <Window.Resources>
@@ -21,8 +20,26 @@
 
     </Window.Resources>
     <StackPanel x:Name="LayoutRoot">
-        <TreeView x:Name="Staged" Height="100" dd:DragDrop.IsDropTarget="True"/>
-        <TreeView x:Name="Unstaged" Height="100" dd:DragDrop.IsDropTarget="True" ItemsSource="{Binding}"/>
+        <TreeView 
+            x:Name="Staged" 
+            AllowDrop="True" 
+            Height="100" 
+            PreviewMouseLeftButtonDown="treeView2_MouseDown"
+            DragOver="Staged_DragOver"
+            Drop="Staged_Drop"/>
+
+        <TreeView x:Name="Unstaged" AllowDrop="True" Height="100" ItemsSource="{Binding}">
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <!-- We have to select the item which is right-clicked on -->
+                    <!--<EventSetter Event="TreeViewItem.PreviewMouseRightButtonDown" Handler="TreeViewItem_PreviewMouseRightButtonDown"/>-->
+                    <EventSetter Event="TreeViewItem.PreviewMouseLeftButtonDown" Handler="treeView_MouseDown"/>
+                    <EventSetter Event="TreeViewItem.DragOver" Handler="treeView_DragOver"/>
+                    <EventSetter Event="TreeViewItem.Drop" Handler="treeView_Drop"/>
+                    <EventSetter Event="TreeViewItem.MouseMove" Handler="treeView_MouseMove"/>
+                </Style>
+            </TreeView.ItemContainerStyle>
+        </TreeView>
 
     </StackPanel>
 </Window>

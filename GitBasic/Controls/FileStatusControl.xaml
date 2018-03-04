@@ -16,7 +16,19 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0" Margin="2">
-            <TextBlock Text="Staged Files" />
+            <TreeView Name="Staged" AllowDrop="True">
+
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="{x:Type TreeViewItem}">
+                        <!-- We have to select the item which is right-clicked on -->
+                        <!--<EventSetter Event="TreeViewItem.PreviewMouseRightButtonDown" Handler="TreeViewItem_PreviewMouseRightButtonDown"/>-->
+                        <EventSetter Event="TreeViewItem.DragOver" Handler="treeView_DragOver"/>
+                        <EventSetter Event="TreeViewItem.Drop" Handler="treeView_Drop"/>
+                        <EventSetter Event="TreeViewItem.MouseMove" Handler="treeView_MouseMove"/>
+                    </Style>
+
+                </TreeView.ItemContainerStyle>
+            </TreeView>
         </Grid>
 
         <GridSplitter
