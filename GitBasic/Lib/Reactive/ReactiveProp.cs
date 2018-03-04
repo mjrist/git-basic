@@ -3,21 +3,14 @@ using System.ComponentModel;
 
 namespace Reactive
 {
-    public class ReactiveProp<T> : Observable, IDisposable
+    public class ReactiveProp<T> : Prop<T>, IDisposable
     {
         public ReactiveProp(Func<T> evaluator, params INotifyPropertyChanged[] dependencies)
         {
             _evaluator = evaluator;
             _dependencies = dependencies;
             Subscribe();
-        }
-
-        public T Value
-        {
-            get => _value;
-            private set => SetAndNotify(ref _value, value);
-        }
-        private T _value;
+        }        
 
         public void Dispose()
         {
