@@ -52,10 +52,10 @@ namespace GitBasic.Controls
         {
             InitializeComponent();
 
-            var itemProvider = new ItemProvider();
+            //var itemProvider = new ItemProvider();
 
-            StagedItems = itemProvider.GetItems("C:\\Users\\shaama\\Desktop\\Test Directory", "Staged");
-            UnstagedItems = itemProvider.GetItems("C:\\Users\\shaama\\Desktop\\Test Directory", "Unstaged");
+            //StagedItems = itemProvider.GetItems("C:\\Users\\shaama\\Desktop\\Test Directory", "Staged");
+            //UnstagedItems = itemProvider.GetItems("C:\\Users\\shaama\\Desktop\\Test Directory", "Unstaged");
 
         }
 

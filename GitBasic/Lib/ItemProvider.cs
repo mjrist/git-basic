@@ -11,39 +11,37 @@ namespace GitBasic
 
         private StatusOptions statusOptions;
 
-        public List<Item> GetItems(string path, string status)
+        public List<Item> GetItems(Repository repo, string status)
         {
+
             var items = new List<Item>();
             List<string> repo_items = new List<string>();
-            
-            if (Repository.IsValid(path))
+
+
+            BuildTreeFromRepo file_tree = new BuildTreeFromRepo();
+
+            if (status == "Staged")
             {
-
-                var repo = new Repository(path);
-
-                BuildTreeFromRepo file_tree = new BuildTreeFromRepo();
-
-                if (status == "Staged")
+                statusOptions = new StatusOptions()
                 {
-                    statusOptions = new StatusOptions()
-                    {
-                        IncludeIgnored = false
-                    };
-                }
-                else if (status == "Unstaged") {
-                    statusOptions = new StatusOptions()
-                    {
-                        IncludeIgnored = false
-                    };
-                }
-
-                foreach (var repo_item in repo.RetrieveStatus(statusOptions))
-                {
-                    repo_items.Add(repo_item.FilePath);
-                }
-                items = file_tree.RecurseRepoItems(repo_items, path);
-
+                    Show = StatusShowOption.IndexOnly,
+                    IncludeIgnored = false
+                };
             }
+            else if (status == "Unstaged") {
+                statusOptions = new StatusOptions()
+                {
+                    Show = StatusShowOption.WorkDirOnly,
+                    IncludeIgnored = false
+                };
+            }
+
+            foreach (var repo_item in repo.RetrieveStatus(statusOptions))
+            {
+                repo_items.Add(repo_item.FilePath);
+            }
+            items = file_tree.RecurseRepoItems(repo_items, repo.Info.WorkingDirectory);
+
             return items;
         }
 
