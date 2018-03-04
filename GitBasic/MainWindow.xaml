@@ -34,7 +34,7 @@
         </Grid.RowDefinitions>
 
         <!--  Row 0  -->
-        <controls:DiffViewer Grid.Row="0" />
+        <controls:DiffViewer Grid.Row="0" FileName="{Binding SelectedFile.Value, Mode=OneWay}" />
 
         <!--  Row 1  -->
         <GridSplitter
@@ -93,8 +93,9 @@
         <!--  Row 3  -->
         <controls:StatusControl
             Grid.Row="3"
-            BranchName="{Binding BranchName.Value}"
+            BranchName="{Binding BranchName.Value}"            
             DockPanel.Dock="Bottom"
+            LeftButtonAction="{Binding SelectDirectoryCommand}"
             RepositoryName="{Binding RepositoryName.Value}" />
     </Grid>
 </controls:MetroWindow>

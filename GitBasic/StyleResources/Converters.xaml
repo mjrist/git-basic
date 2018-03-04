@@ -1,0 +1,9 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:GitBasic="clr-namespace:GitBasic"
+    xmlns:local="clr-namespace:GitBasic.StyleResources">
+
+    <GitBasic:StringEmptyToVisibilityConverter x:Key="StringEmptyToVisibilityConverter" />
+
+</ResourceDictionary>

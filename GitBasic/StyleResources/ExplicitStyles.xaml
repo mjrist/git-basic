@@ -5,6 +5,7 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/StyleResources/ControlStyles/MetroWindowStyle.xaml" />
+        <ResourceDictionary Source="/StyleResources/ControlStyles/TransparentButtonStyle.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>
