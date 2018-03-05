@@ -111,6 +111,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Lib\FileSystem\DirectoryItem.cs" />
+    <Compile Include="Lib\FileSystem\FileItem.cs" />
+    <Compile Include="Lib\FileSystem\Item.cs" />
+    <Compile Include="Lib\ItemProvider.cs" />
     <Compile Include="Lib\Converters\StringEmptyToVisibilityConverter.cs" />
     <Compile Include="ViewModels\CommandButtonVM.cs" />
     <Compile Include="Controls\CommandButtonPanel.xaml.cs">
