@@ -1,4 +1,5 @@
 ﻿using GitBasic.FileSystem;
+using LibGit2Sharp;
 using Reactive;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,9 +28,8 @@ namespace GitBasic
 
             if (_mainVM.Repo.Value != null)
             {
-                var itemProvider = new ItemProvider();
-                List<Item> stagedItems = itemProvider.GetItems(_mainVM.Repo.Value, "Staged");
-                List<Item> unstagedItems = itemProvider.GetItems(_mainVM.Repo.Value, "Unstaged");
+                List<Item> stagedItems = ItemProvider.GetItems(_mainVM.Repo.Value, StatusShowOption.IndexOnly);
+                List<Item> unstagedItems = ItemProvider.GetItems(_mainVM.Repo.Value, StatusShowOption.WorkDirOnly);
 
                 stagedItems.ForEach(StagedItems.Add);
                 unstagedItems.ForEach(UnstagedItems.Add);
