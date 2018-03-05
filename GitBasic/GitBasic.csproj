@@ -81,7 +81,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Lib\ExtensionMethods\IEnumerableExtensions.cs" />
+    <Compile Include="Lib\InputHelper.cs" />
     <Compile Include="Lib\Reactive\ThrottledAction.cs" />
+    <Compile Include="ViewModels\RepositoryStatusBarVM.cs" />
     <Compile Include="ViewModels\RepositoryWatcher.cs" />
     <Page Include="Controls\CommandButtonPanel.xaml">
       <SubType>Designer</SubType>
@@ -99,7 +101,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\StatusControl.xaml">
+    <Page Include="Controls\RepositoryStatusBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -133,8 +135,8 @@
       <DependentUpon>FileStatusControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\MetroWindow.cs" />
-    <Compile Include="Controls\StatusControl.xaml.cs">
-      <DependentUpon>StatusControl.xaml</DependentUpon>
+    <Compile Include="Controls\RepositoryStatusBar.xaml.cs">
+      <DependentUpon>RepositoryStatusBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Lib\BackgroundQueue.cs" />
     <Compile Include="Lib\Command.cs" />

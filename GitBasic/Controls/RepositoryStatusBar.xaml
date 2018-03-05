@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="GitBasic.Controls.StatusControl"
+    x:Class="GitBasic.Controls.RepositoryStatusBar"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,7 +8,7 @@
     d:DesignHeight="25"
     d:DesignWidth="1000"
     mc:Ignorable="d">
-    <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:StatusControl}}}">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:RepositoryStatusBar}}}">
         <StatusBar Background="{DynamicResource AccentBrush1}">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -23,8 +23,8 @@
             </StatusBar.ItemsPanel>
             <StatusBarItem Grid.Column="0">
                 <Button
-                    x:Name="LeftButton"
-                    Click="LeftButton_Click"
+                    x:Name="RepoButton"
+                    Click="RepoButton_Click"
                     Style="{StaticResource TransparentButtonStyle}">
                     <StackPanel Orientation="Horizontal">
                         <Image
@@ -40,7 +40,27 @@
                 </Button>
             </StatusBarItem>
             <StatusBarItem Grid.Column="2">
-                <TextBlock Margin="5,0,5,0" Text="{Binding BranchName, Mode=OneWay}" />
+                <Button
+                    x:Name="BranchButton"
+                    Click="BranchButton_Click"
+                    ContextMenuService.HorizontalOffset="{Binding RelativeSource={RelativeSource Self}, Path=ActualWidth}"
+                    ContextMenuService.Placement="Left"
+                    ContextMenuService.VerticalOffset="-23"
+                    PreviewMouseRightButtonUp="BypassRightClick"
+                    Style="{StaticResource TransparentButtonStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="2,0,2,0" Text="{Binding BranchName, Mode=OneWay}" />
+                    </StackPanel>
+                    <Button.ContextMenu>
+                        <ContextMenu MaxHeight="600" ItemsSource="{Binding BranchNames, Mode=OneWay}">
+                            <ContextMenu.Resources>
+                                <Style BasedOn="{StaticResource MenuItemStyle}" TargetType="{x:Type MenuItem}">
+                                    <EventSetter Event="Click" Handler="MenuItem_Click" />
+                                </Style>
+                            </ContextMenu.Resources>
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
             </StatusBarItem>
         </StatusBar>
     </Grid>
