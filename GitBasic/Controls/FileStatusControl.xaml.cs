@@ -2,6 +2,7 @@
 using LibGit2Sharp;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -29,23 +30,21 @@ namespace GitBasic.Controls
 
 
 
-        public List<Item> StagedItems
+        public ObservableCollection<Item> StagedItems
         {
-            get { return (List<Item>)GetValue(StagedItemsProperty); }
+            get { return (ObservableCollection<Item>)GetValue(StagedItemsProperty); }
             set { SetValue(StagedItemsProperty, value); }
         }
-
         public static readonly DependencyProperty StagedItemsProperty =
-            DependencyProperty.Register("StagedItems", typeof(List<Item>), typeof(FileStatusControl), new PropertyMetadata(new List<Item>()));
+            DependencyProperty.Register("StagedItems", typeof(ObservableCollection<Item>), typeof(FileStatusControl), new PropertyMetadata(new ObservableCollection<Item>()));
 
-        public List<Item> UnstagedItems
+        public ObservableCollection<Item> UnstagedItems
         {
-            get { return (List<Item>)GetValue(UnstagedItemsProperty); }
+            get { return (ObservableCollection<Item>)GetValue(UnstagedItemsProperty); }
             set { SetValue(UnstagedItemsProperty, value); }
         }
-
         public static readonly DependencyProperty UnstagedItemsProperty =
-            DependencyProperty.Register("UnstagedItems", typeof(List<Item>), typeof(FileStatusControl), new PropertyMetadata(new List<Item>()));
+            DependencyProperty.Register("UnstagedItems", typeof(ObservableCollection<Item>), typeof(FileStatusControl), new PropertyMetadata(new ObservableCollection<Item>()));
 
 
         public FileStatusControl()
