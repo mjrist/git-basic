@@ -41,6 +41,7 @@ namespace GitBasic
 
         private void Notify()
         {
+            Console.WriteLine("changed");
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RepositoryWatcher"));
         }
         public event PropertyChangedEventHandler PropertyChanged;
@@ -49,6 +50,6 @@ namespace GitBasic
 
         private Prop<Repository> _repo;
         private FileSystemWatcher _watcher;
-        private ThrottledAction _throttledChangeNotifier = new ThrottledAction();
+        private ThrottledAction _throttledChangeNotifier = new ThrottledAction(250);
     }
 }
