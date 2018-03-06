@@ -26,9 +26,9 @@ namespace GitBasic.Controls
             {
                 Process.Start("explorer.exe", $"/select, {fileItem.Path}");
             }
-            else // is Directory
+            else if (menuItem.DataContext is DirectoryItem directoryItem)
             {
-                Process.Start("explorer.exe", ((DirectoryItem)menuItem.DataContext).Path);
+                Process.Start("explorer.exe", directoryItem.Path);
             }
         }
 
