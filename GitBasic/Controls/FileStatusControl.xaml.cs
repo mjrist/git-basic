@@ -51,12 +51,6 @@ namespace GitBasic.Controls
         public FileStatusControl()
         {
             InitializeComponent();
-
-            //var itemProvider = new ItemProvider();
-
-            //StagedItems = itemProvider.GetItems("C:\\Users\\shaama\\Desktop\\Test Directory", "Staged");
-            //UnstagedItems = itemProvider.GetItems("C:\\Users\\shaama\\Desktop\\Test Directory", "Unstaged");
-
         }
 
         private void treeView_MouseMove(object sender, MouseEventArgs e)
@@ -134,17 +128,33 @@ namespace GitBasic.Controls
                     }
                     else
                     {
-                        //Commands.Stage(repo, dir_item.Path);
+                        StagedAction(dir_item);
                         Debug.Print(dir_item.Name + " file added to Staged TreeView");
                     }
                 }
             }
             else  // it's a FileItem, stage it
             {
-
-                //Commands.Stage(repo, item.Path);
+                StagedAction(item);
                 Debug.Print(item.Name + " file added to Staged TreeView");
             }
         }
+
+        public Action<Item> StagedAction
+        {
+            get { return (Action<Item>)GetValue(StagedActionProperty); }
+            set { SetValue(StagedActionProperty, value); }
+        }
+        public static readonly DependencyProperty StagedActionProperty =
+            DependencyProperty.Register("StagedAction", typeof(Action<Item>), typeof(FileStatusControl), new PropertyMetadata(new Action<Item>((item) => { })));
+
+        public Action<Item> UnstagedAction
+        {
+            get { return (Action<Item>)GetValue(UnstagedActionProperty); }
+            set { SetValue(UnstagedActionProperty, value); }
+        }
+        public static readonly DependencyProperty UnstagedActionProperty =
+            DependencyProperty.Register("UnstagedAction", typeof(Action<Item>), typeof(FileStatusControl), new PropertyMetadata(new Action<Item>((item) => { })));
+
     }
 }
