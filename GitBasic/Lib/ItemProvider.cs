@@ -1,53 +1,23 @@
-﻿using System.IO;
-using System.Collections.Generic;
-using GitBasic.FileSystem;
+﻿using GitBasic.FileSystem;
 using LibGit2Sharp;
-using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace GitBasic
 {
-    public class ItemProvider
+    public static class ItemProvider
     {
-
-        private StatusOptions statusOptions;
-
-        public List<Item> GetItems(Repository repo, string status)
+        public static List<Item> GetItems(Repository repo, StatusShowOption showOption)
         {
-
-            var items = new List<Item>();
-            List<string> repo_items = new List<string>();
-
-
-            BuildTreeFromRepo file_tree = new BuildTreeFromRepo();
-
-            if (status == "Staged")
-            {
-                statusOptions = new StatusOptions()
-                {
-                    Show = StatusShowOption.IndexOnly,
-                    IncludeIgnored = false
-                };
-            }
-            else if (status == "Unstaged") {
-                statusOptions = new StatusOptions()
-                {
-                    Show = StatusShowOption.WorkDirOnly,
-                    IncludeIgnored = false
-                };
-            }
-
-            foreach (var repo_item in repo.RetrieveStatus(statusOptions))
-            {
-                repo_items.Add(repo_item.FilePath);
-            }
-            items = file_tree.RecurseRepoItems(repo_items, repo.Info.WorkingDirectory);
-
-            return items;
+            StatusOptions stagedOptions = new StatusOptions() { Show = showOption, IncludeIgnored = false };
+            var fileNames = repo.RetrieveStatus(stagedOptions).Select(x => x.FilePath).ToList();
+            return BuildTreeFromRepo.RecurseRepoItems(fileNames, repo.Info.WorkingDirectory);
         }
 
-        class BuildTreeFromRepo
+        public static class BuildTreeFromRepo
         {
-            public List<Item> RecurseRepoItems(List<string> repo_file_list, string working_directory)
+            public static List<Item> RecurseRepoItems(List<string> repo_file_list, string working_directory)
             {
                 Dictionary<string, List<string>> folders_with_remaining_strings = new Dictionary<string, List<string>>();
                 var items = new List<Item>();
@@ -100,7 +70,6 @@ namespace GitBasic
                 }
 
                 return items;
-
             }
         }
     }

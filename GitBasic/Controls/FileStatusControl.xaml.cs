@@ -1,20 +1,11 @@
 ﻿using GitBasic.FileSystem;
-using LibGit2Sharp;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace GitBasic.Controls
 {
@@ -23,35 +14,13 @@ namespace GitBasic.Controls
     /// </summary>
     public partial class FileStatusControl : UserControl
     {
-        // variable used to hold the item we will be dragging between controls
-        Item dragged_item;
-
-
-
-
-        public List<Item> StagedItems
-        {
-            get { return (List<Item>)GetValue(StagedItemsProperty); }
-            set { SetValue(StagedItemsProperty, value); }
-        }
-
-        public static readonly DependencyProperty StagedItemsProperty =
-            DependencyProperty.Register("StagedItems", typeof(List<Item>), typeof(FileStatusControl), new PropertyMetadata(new List<Item>()));
-
-        public List<Item> UnstagedItems
-        {
-            get { return (List<Item>)GetValue(UnstagedItemsProperty); }
-            set { SetValue(UnstagedItemsProperty, value); }
-        }
-
-        public static readonly DependencyProperty UnstagedItemsProperty =
-            DependencyProperty.Register("UnstagedItems", typeof(List<Item>), typeof(FileStatusControl), new PropertyMetadata(new List<Item>()));
-
-
         public FileStatusControl()
         {
             InitializeComponent();
         }
+
+        // variable used to hold the item we will be dragging between controls
+        Item dragged_item;
 
         private void treeView_MouseMove(object sender, MouseEventArgs e)
         {
@@ -128,33 +97,49 @@ namespace GitBasic.Controls
                     }
                     else
                     {
-                        StagedAction(dir_item);
+                        //Commands.Stage(repo, dir_item.Path);
                         Debug.Print(dir_item.Name + " file added to Staged TreeView");
                     }
                 }
             }
             else  // it's a FileItem, stage it
             {
-                StagedAction(item);
+
+                //Commands.Stage(repo, item.Path);
                 Debug.Print(item.Name + " file added to Staged TreeView");
             }
         }
 
-        public Action<Item> StagedAction
+        private void FileStatus_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            get { return (Action<Item>)GetValue(StagedActionProperty); }
-            set { SetValue(StagedActionProperty, value); }
+            if (e.NewValue is FileItem file)
+            {
+                SelectedFile = file.Path;
+            }
         }
-        public static readonly DependencyProperty StagedActionProperty =
-            DependencyProperty.Register("StagedAction", typeof(Action<Item>), typeof(FileStatusControl), new PropertyMetadata(new Action<Item>((item) => { })));
 
-        public Action<Item> UnstagedAction
+        public string SelectedFile
         {
-            get { return (Action<Item>)GetValue(UnstagedActionProperty); }
-            set { SetValue(UnstagedActionProperty, value); }
+            get { return (string)GetValue(SelectedFileProperty); }
+            set { SetValue(SelectedFileProperty, value); }
         }
-        public static readonly DependencyProperty UnstagedActionProperty =
-            DependencyProperty.Register("UnstagedAction", typeof(Action<Item>), typeof(FileStatusControl), new PropertyMetadata(new Action<Item>((item) => { })));
+        public static readonly DependencyProperty SelectedFileProperty =
+            DependencyProperty.Register("SelectedFile", typeof(string), typeof(FileStatusControl), new PropertyMetadata(string.Empty));
 
+        public ObservableCollection<Item> StagedItems
+        {
+            get { return (ObservableCollection<Item>)GetValue(StagedItemsProperty); }
+            set { SetValue(StagedItemsProperty, value); }
+        }
+        public static readonly DependencyProperty StagedItemsProperty =
+            DependencyProperty.Register("StagedItems", typeof(ObservableCollection<Item>), typeof(FileStatusControl), new PropertyMetadata(new ObservableCollection<Item>()));
+
+        public ObservableCollection<Item> UnstagedItems
+        {
+            get { return (ObservableCollection<Item>)GetValue(UnstagedItemsProperty); }
+            set { SetValue(UnstagedItemsProperty, value); }
+        }
+        public static readonly DependencyProperty UnstagedItemsProperty =
+            DependencyProperty.Register("UnstagedItems", typeof(ObservableCollection<Item>), typeof(FileStatusControl), new PropertyMetadata(new ObservableCollection<Item>()));
     }
 }

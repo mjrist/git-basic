@@ -87,16 +87,17 @@
                 Width="5"
                 HorizontalAlignment="Stretch" />
 
-            <controls:FileStatusControl 
-                StagedItems="{Binding Path=FileStatusVM.StagedItems}" 
-                UnstagedItems="{Binding Path=FileStatusVM.UnstagedItems}" 
-                Grid.Column="3" />
+            <controls:FileStatusControl
+                Grid.Column="3"
+                SelectedFile="{Binding SelectedFile.Value, Mode=OneWayToSource}"
+                StagedItems="{Binding Path=FileStatusVM.StagedItems, Mode=OneWay}"
+                UnstagedItems="{Binding Path=FileStatusVM.UnstagedItems, Mode=OneWay}" />
         </Grid>
 
         <!--  Row 3  -->
         <controls:StatusControl
             Grid.Row="3"
-            BranchName="{Binding BranchName.Value}"            
+            BranchName="{Binding BranchName.Value}"
             DockPanel.Dock="Bottom"
             LeftButtonAction="{Binding SelectDirectoryCommand}"
             RepositoryName="{Binding RepositoryName.Value}" />
