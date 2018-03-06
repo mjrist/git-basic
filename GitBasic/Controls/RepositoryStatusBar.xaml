@@ -43,6 +43,7 @@
                 <Button
                     x:Name="BranchButton"
                     Click="BranchButton_Click"
+                    Visibility="{Binding BranchName, Mode=OneWay, Converter={StaticResource StringEmptyToVisibilityConverter}}"
                     ContextMenuService.Placement="Custom"
                     PreviewMouseRightButtonUp="BypassRightClick"
                     Style="{StaticResource TransparentButtonStyle}">
@@ -51,10 +52,9 @@
                     </StackPanel>
                     <Button.ContextMenu>
                         <ContextMenu
-                            x:Name="BranchNamesMenu"                            
-                            MaxHeight="600"                            
-                            ItemsSource="{Binding BranchNames, Mode=OneWay}"
-                            Visibility="{Binding BranchNames, Mode=OneWay, Converter={StaticResource CollectionEmptyToVisibilityConverter}}">
+                            x:Name="BranchNamesMenu"
+                            MaxHeight="600"
+                            ItemsSource="{Binding BranchNames, Mode=OneWay}">
                             <ContextMenu.Resources>
                                 <Style BasedOn="{StaticResource MenuItemStyle}" TargetType="{x:Type MenuItem}">
                                     <EventSetter Event="Click" Handler="MenuItem_Click" />

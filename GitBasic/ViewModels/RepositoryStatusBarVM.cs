@@ -34,9 +34,9 @@ namespace GitBasic
 
         private void UpdateBranchNames()
         {
+            BranchNames.Clear();
             if (_mainVM.Repo.Value != null)
             {
-                BranchNames.Clear();
                 var newBranchNames = _mainVM.Repo.Value.Branches.Where(b => !b.IsRemote).Select(b => b.FriendlyName);
                 newBranchNames.ForEach(BranchNames.Add);
             }

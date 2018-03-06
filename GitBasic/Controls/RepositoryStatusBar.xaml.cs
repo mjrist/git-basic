@@ -34,7 +34,10 @@ namespace GitBasic.Controls
         private void BranchButton_Click(object sender, RoutedEventArgs e)
         {
             e.Handled = true;
-            InputHelper.SendRightClick(sender);
+            if (BranchNames.Count > 0)
+            {
+                InputHelper.SendRightClick(sender);
+            }
         }
 
         private void BypassRightClick(object sender, MouseButtonEventArgs e) => e.Handled = true;
