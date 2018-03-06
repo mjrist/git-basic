@@ -19,6 +19,24 @@ namespace GitBasic.Controls
             InitializeComponent();
         }
 
+        private void ShowInExplorer_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem menuItem = (MenuItem)sender;
+            if (menuItem.DataContext is FileItem fileItem)
+            {
+                Process.Start("explorer.exe", $"/select, {fileItem.Path}");
+            }
+            else // is Directory
+            {
+                Process.Start("explorer.exe", ((DirectoryItem)menuItem.DataContext).Path);
+            }
+        }
+
+        private void TreeViewItem_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ((TreeViewItem)sender).IsSelected = true;
+        }
+
         // variable used to hold the item we will be dragging between controls
         Item dragged_item;
 
