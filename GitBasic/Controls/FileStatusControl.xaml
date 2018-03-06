@@ -40,6 +40,7 @@
                 SelectedItemChanged="FileStatus_SelectedItemChanged">
                 <TreeView.ItemContainerStyle>
                     <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
+                        <Setter Property="ContextMenu" Value="{StaticResource FileStatusItemContextMenu}" />
                         <Setter Property="IsExpanded" Value="True" />
                         <EventSetter Event="TreeViewItem.MouseMove" Handler="treeView_MouseMove" />
                         <EventSetter Event="PreviewMouseRightButtonDown" Handler="TreeViewItem_PreviewMouseRightButtonDown" />
