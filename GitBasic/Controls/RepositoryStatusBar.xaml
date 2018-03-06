@@ -52,7 +52,10 @@
                         <TextBlock Margin="2,0,2,0" Text="{Binding BranchName, Mode=OneWay}" />
                     </StackPanel>
                     <Button.ContextMenu>
-                        <ContextMenu MaxHeight="600" ItemsSource="{Binding BranchNames, Mode=OneWay}">
+                        <ContextMenu
+                            MaxHeight="600"
+                            ItemsSource="{Binding BranchNames, Mode=OneWay}"
+                            Visibility="{Binding BranchNames, Mode=OneWay, Converter={StaticResource CollectionEmptyToVisibilityConverter}}">
                             <ContextMenu.Resources>
                                 <Style BasedOn="{StaticResource MenuItemStyle}" TargetType="{x:Type MenuItem}">
                                     <EventSetter Event="Click" Handler="MenuItem_Click" />
