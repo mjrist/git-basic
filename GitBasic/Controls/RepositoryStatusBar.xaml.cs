@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace GitBasic.Controls
@@ -14,7 +15,16 @@ namespace GitBasic.Controls
         public RepositoryStatusBar()
         {
             InitializeComponent();
+            BranchNamesMenu.CustomPopupPlacementCallback = GetMenuPlacement;
         }
+
+        private static CustomPopupPlacement[] GetMenuPlacement(Size popupSize, Size targetSize, Point offset)
+        {
+            Point point = new Point();
+            point.X = - (popupSize.Width - targetSize.Width);
+            point.Y = - (popupSize.Height + 4);
+            return new[] { new CustomPopupPlacement(point, PopupPrimaryAxis.Horizontal) };
+        }       
 
         private void RepoButton_Click(object sender, RoutedEventArgs e)
         {

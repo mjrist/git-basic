@@ -43,9 +43,7 @@
                 <Button
                     x:Name="BranchButton"
                     Click="BranchButton_Click"
-                    ContextMenuService.HorizontalOffset="{Binding RelativeSource={RelativeSource Self}, Path=ActualWidth}"
-                    ContextMenuService.Placement="Left"
-                    ContextMenuService.VerticalOffset="-23"
+                    ContextMenuService.Placement="Custom"
                     PreviewMouseRightButtonUp="BypassRightClick"
                     Style="{StaticResource TransparentButtonStyle}">
                     <StackPanel Orientation="Horizontal">
@@ -53,7 +51,8 @@
                     </StackPanel>
                     <Button.ContextMenu>
                         <ContextMenu
-                            MaxHeight="600"
+                            x:Name="BranchNamesMenu"                            
+                            MaxHeight="600"                            
                             ItemsSource="{Binding BranchNames, Mode=OneWay}"
                             Visibility="{Binding BranchNames, Mode=OneWay, Converter={StaticResource CollectionEmptyToVisibilityConverter}}">
                             <ContextMenu.Resources>
