@@ -40,8 +40,7 @@ namespace GitBasic
         private void Changed(object sender, FileSystemEventArgs e) => _throttledChangeNotifier.Execute(() => Notify());
 
         private void Notify()
-        {
-            Console.WriteLine("changed");
+        {           
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RepositoryWatcher"));
         }
         public event PropertyChangedEventHandler PropertyChanged;
