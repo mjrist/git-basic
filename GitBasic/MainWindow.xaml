@@ -95,11 +95,13 @@
         </Grid>
 
         <!--  Row 3  -->
-        <controls:StatusControl
+        <controls:RepositoryStatusBar
             Grid.Row="3"
             BranchName="{Binding BranchName.Value}"
+            BranchNames="{Binding Path=RepositoryStatusBarVM.BranchNames, Mode=OneWay}"
+            CheckoutAction="{Binding Path=RepositoryStatusBarVM.Checkout}"
             DockPanel.Dock="Bottom"
-            LeftButtonAction="{Binding SelectDirectoryCommand}"
+            RepoButtonAction="{Binding Path=RepositoryStatusBarVM.SelectDirectoryCommand}"
             RepositoryName="{Binding RepositoryName.Value}" />
     </Grid>
 </controls:MetroWindow>

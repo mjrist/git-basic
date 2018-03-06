@@ -17,8 +17,6 @@ namespace GitBasic
             _mainVM = mainVM;
             // Call UpdateItems on the dispatcher to avoid threading issues.
             ReactiveAction itemUpdater = new ReactiveAction(() => Application.Current.Dispatcher.Invoke(UpdateItems), _mainVM.RepoNotifier, _mainVM.Repo);
-            // Run once on startup. After this the ReactiveAction itemUpdater will keep the lists up to date.
-            UpdateItems();
         }
 
         private void UpdateItems()
