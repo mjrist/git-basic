@@ -58,19 +58,30 @@ namespace GitBasic.Controls
         private void Reset()
         {
             _index = -1;
-            _matches = Directory.GetFileSystemEntries(_directory).Select(x => Path.GetFileName(x)).ToList();
+
+            string tokenPath = GetTokenPath();
+            string directory = GetSearchDirectory(tokenPath);
+            _matches = Directory.GetFileSystemEntries(directory).Select(x => tokenPath + Path.GetFileName(x)).ToList();
 
             if (!string.IsNullOrWhiteSpace(_token))
             {
                 _matches = _matches
                     .Where(x => x.ToLower().StartsWith(_token.ToLower()) ||
-                    x.ToLower().TrimStart('.').StartsWith(_token.ToLower())).ToList();                
+                    x.ToLower().TrimStart('.').StartsWith(_token.ToLower())).ToList();
             }
 
             if (_matches.Count == 0)
             {
                 _matches.Add(_token);
             }
+        }
+
+        private string GetTokenPath() => _token.Substring(0, _token.LastIndexOf('\\') + 1);
+
+        private string GetSearchDirectory(string tokenPath)
+        {
+            string directory = Path.Combine(_directory, tokenPath);
+            return (Directory.Exists(directory)) ? directory : _directory;            
         }
 
         private int _index = -1;
