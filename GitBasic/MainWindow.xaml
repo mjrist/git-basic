@@ -106,5 +106,10 @@
             DockPanel.Dock="Bottom"
             RepoButtonAction="{Binding Path=RepositoryStatusBarVM.SelectDirectoryCommand}"
             RepositoryName="{Binding RepositoryName.Value}" />
+
+        <controls:PanelHotKeyIndicator
+            x:Name="PanelHotKeyIndicator"
+            Grid.RowSpan="3"
+            Visibility="Collapsed" />
     </Grid>
 </controls:MetroWindow>

@@ -80,6 +80,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\PanelHotKeyIndicator.xaml.cs">
+      <DependentUpon>PanelHotKeyIndicator.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Lib\Converters\CollectionEmptyToVisibilityConverter.cs" />
     <Compile Include="Lib\ExtensionMethods\IEnumerableExtensions.cs" />
     <Compile Include="Lib\InputHelper.cs" />
@@ -99,6 +102,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\FileStatusControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PanelHotKeyIndicator.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -295,7 +302,6 @@
   <ItemGroup>
     <Resource Include="GitLogoIcon.ico" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

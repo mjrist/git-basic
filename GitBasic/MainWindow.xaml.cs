@@ -92,10 +92,12 @@ namespace GitBasic
             if (Keyboard.Modifiers == ModifierKeys.Control)
             {
                 CommandButtonPanel.ShowButtonNumbers = true;
+                PanelHotKeyIndicator.Visibility = Visibility.Visible;
             }
             else
             {
                 CommandButtonPanel.ShowButtonNumbers = false;
+                PanelHotKeyIndicator.Visibility = Visibility.Collapsed;
             }
         }
     }
