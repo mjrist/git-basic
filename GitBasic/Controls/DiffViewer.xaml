@@ -16,9 +16,9 @@
     <ScrollViewer DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:DiffViewer}}}">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition x:Name="LeftColumn" Width="*" />
                 <ColumnDefinition Width="5" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition x:Name="RightColumn" Width="*" />
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0" Margin="2">
                 <Grid.RowDefinitions>

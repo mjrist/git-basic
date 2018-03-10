@@ -27,14 +27,17 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
+            <RowDefinition x:Name="TopRow" Height="*" />
             <RowDefinition Height="5" />
-            <RowDefinition Height="*" />
+            <RowDefinition x:Name="BottomRow" Height="*" />
             <RowDefinition Height="25" />
         </Grid.RowDefinitions>
 
         <!--  Row 0  -->
-        <controls:DiffViewer Grid.Row="0" FileName="{Binding SelectedFile.Value, Mode=OneWay}" />
+        <controls:DiffViewer
+            x:Name="DiffViewer"
+            Grid.Row="0"
+            FileName="{Binding SelectedFile.Value, Mode=OneWay}" />
 
         <!--  Row 1  -->
         <GridSplitter
