@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -99,7 +100,7 @@ namespace GitBasic.Controls
             {
                 AutoComplete(Selection.Next);
                 e.Handled = true;
-            }            
+            }
             else if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.C)
             {
                 ProcessCtrlC();
@@ -276,6 +277,38 @@ namespace GitBasic.Controls
             StartWatchingSelectionChange();
         }
 
+        private void ConsoleControl_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            InputBox.Focus();
+            CopySelectedTextToClipboard();
+        }
+
+        private void CopySelectedTextToClipboard()
+        {
+            if (!OutputBox.Selection.IsEmpty)
+            {
+                Clipboard.SetText(OutputBox.Selection.Text);
+                OutputBox.DeselectAll();
+            }
+            else if (!string.IsNullOrEmpty(CurrentDirectory.SelectedText))
+            {
+                Clipboard.SetText(CurrentDirectory.SelectedText);
+                CurrentDirectory.Select(0, 0);
+            }
+        }
+
+        private void ConsoleControl_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            PasteClipboardText();
+            InputBox.Focus();
+        }
+
+        private void PasteClipboardText()
+        {
+            InputBox.SelectedText = Regex.Replace(Clipboard.GetText(), @"\r\n|\n\r|\n|\r", " ");
+            InputBox.Select(InputBox.SelectionStart + InputBox.SelectionLength, 0);
+        }
+
         private enum Selection { Next, Previous };
 
         private const string CD_COMMAND = "cd";
@@ -305,7 +338,7 @@ namespace GitBasic.Controls
             // Save the new working directory. This way it can be restored if the app is restarted.
             Properties.Settings.Default.WorkingDirectory = newWorkingDirectory;
             Properties.Settings.Default.Save();
-        }        
+        }
 
         public Action<string, int> SetInput
         {
@@ -321,7 +354,7 @@ namespace GitBasic.Controls
             set { SetValue(ExecuteProperty, value); }
         }
         public static readonly DependencyProperty ExecuteProperty =
-            DependencyProperty.Register("Execute", typeof(Action<string>), typeof(ConsoleControl), new PropertyMetadata(new Action<string>((input) => { } )));
+            DependencyProperty.Register("Execute", typeof(Action<string>), typeof(ConsoleControl), new PropertyMetadata(new Action<string>((input) => { })));
 
         #endregion
     }

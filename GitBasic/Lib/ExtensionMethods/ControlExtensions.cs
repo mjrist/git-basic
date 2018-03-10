@@ -27,5 +27,10 @@ namespace GitBasic
         {
             box.Append(text + Environment.NewLine, color);
         }
+
+        public static void DeselectAll(this RichTextBox box)
+        {
+            box.Selection.Select(box.Document.ContentStart, box.Document.ContentStart);
+        }
     }
 }
