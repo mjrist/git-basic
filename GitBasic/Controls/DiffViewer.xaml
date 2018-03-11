@@ -32,14 +32,12 @@
                 Grid.Column="0"
                 Margin="5,1,0,0"
                 HorizontalAlignment="Left"
-                FontWeight="Bold"
                 Foreground="{DynamicResource LightForegroundBrush}" />
             <TextBlock
                 Name="newTitle"
                 Grid.Column="1"
                 Margin="5,1,0,0"
                 HorizontalAlignment="Left"
-                FontWeight="Bold"
                 Foreground="{DynamicResource LightForegroundBrush}" />
         </Grid>
         <ScrollViewer

@@ -20,7 +20,8 @@ namespace GitBasic
             MainVM mainVM = new MainVM();
             mainVM.CommandButtonVM.HotKeyHelper.Value = new HotKeyHelper(this);
             AddPanelHotkeys(mainVM.CommandButtonVM.HotKeyHelper.Value);
-            DataContext = mainVM;
+            DiffViewer.SizeChanged += DiffViewer_SizeChanged;
+            DataContext = mainVM;            
         }
 
         private void AddPanelHotkeys(HotKeyHelper hotKeyHelper)
@@ -99,6 +100,14 @@ namespace GitBasic
                 CommandButtonPanel.ShowButtonNumbers = false;
                 PanelHotKeyIndicator.Visibility = Visibility.Collapsed;
             }
+        }
+
+        private void DiffViewer_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            // The top portion of the diff viewer integrates with the title bar - it functions
+            // as part of the caption. When the diffviewer is collapsed it covers up this portion.
+            // Therefore the caption needs to be adjusted based on the diffviewer height.
+            CaptionHeight = (DiffViewer.ActualHeight < 20) ? DiffViewer.ActualHeight + 28 : 48;
         }
     }
 }

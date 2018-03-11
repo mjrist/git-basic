@@ -11,6 +11,7 @@
     Height="680"
     MinWidth="300"
     MinHeight="150"
+    CaptionHeight="48"
     PreviewKeyDown="MainWindow_KeyUpOrDown"
     PreviewKeyUp="MainWindow_KeyUpOrDown"
     Style="{StaticResource MetroWindowStyle}"
