@@ -83,6 +83,7 @@
     <Compile Include="Controls\PanelHotKeyIndicator.xaml.cs">
       <DependentUpon>PanelHotKeyIndicator.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Lib\Converters\AdditionConverter.cs" />
     <Compile Include="Lib\Converters\CollectionEmptyToVisibilityConverter.cs" />
     <Compile Include="Lib\ExtensionMethods\IEnumerableExtensions.cs" />
     <Compile Include="Lib\InputHelper.cs" />

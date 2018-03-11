@@ -14,6 +14,7 @@
         </ContextMenu>
     </UserControl.Resources>
     <Grid>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
@@ -23,8 +24,8 @@
             VerticalAlignment="Top"
             Background="{DynamicResource AccentBrush1}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="{Binding ElementName=LeftPanel, Path=ActualWidth, Mode=OneWay}" />
-                <ColumnDefinition Width="{Binding ElementName=RightPanel, Path=ActualWidth, Mode=OneWay}" />
+                <ColumnDefinition Width="{Binding ElementName=LeftPanel, Path=ActualWidth, Mode=OneWay, Converter={StaticResource AdditionConverter}, ConverterParameter=5}" />
+                <ColumnDefinition Width="{Binding ElementName=RightPanel, Path=ActualWidth, Mode=OneWay, Converter={StaticResource AdditionConverter}, ConverterParameter=5}" />
             </Grid.ColumnDefinitions>
             <TextBlock
                 Name="oldTitle"
