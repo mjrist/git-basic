@@ -248,28 +248,45 @@ namespace GitBasic.Controls
         private void SetCurrentToken()
         {
             _token.Reset();
+                        
             int i = InputBox.CaretIndex - 1;
             while (i > -1 && !char.IsWhiteSpace(InputBox.Text[i]))
             {
-                _token.Text = InputBox.Text[i] + _token.Text;
+                char nextChar = InputBox.Text[i];
+                if (nextChar == '"' && TryGetQuotedToken(i))
+                {
+                    return;
+                }
+                _token.Text = nextChar + _token.Text;
                 i--;
             }
             _token.StartIndex = i + 1;
         }
 
+        private bool TryGetQuotedToken(int currentIndex)
+        {
+            int firstQuoteIndex = InputBox.Text.Substring(0, currentIndex).LastIndexOf('"');
+            if (firstQuoteIndex > -1)
+            {
+                _token.Text = InputBox.Text.Substring(firstQuoteIndex + 1, currentIndex - (firstQuoteIndex + 1)) + _token.Text;
+                _token.StartIndex = firstQuoteIndex;                
+                return true;
+            }
+            return false;            
+        }
+
         private void AutoComplete(Selection selection)
         {
-            string completionText;
-            if (selection == Selection.Next)
+            string completionText = (selection == Selection.Next) ?
+                _autoCompletion.GetNext(_token.Text, WorkingDirectory) :
+                _autoCompletion.GetPrevious(_token.Text, WorkingDirectory);
+
+            if (string.IsNullOrEmpty(completionText))
             {
-                completionText = _autoCompletion.GetNext(_token.Text, WorkingDirectory);
-            }
-            else
-            {
-                completionText = _autoCompletion.GetPrevious(_token.Text, WorkingDirectory);
+                return;
             }
 
-            StopWatchingSelectionChange();
+            StopWatchingSelectionChange();            
             int lengthToRemove = InputBox.CaretIndex - _token.StartIndex;
             InputBox.Text = InputBox.Text.Remove(_token.StartIndex, lengthToRemove);
             InputBox.Text = InputBox.Text.Insert(_token.StartIndex, completionText);
