@@ -78,14 +78,14 @@ namespace GitBasic
 
         private const string GIT_STATUS = "git status";
         private const string GIT_FETCH = "git fetch";
-        private const string GIT_CHECKOUT = "git checkout";
+        private const string GIT_CHECKOUT = "git checkout ";
         private const string GIT_COMMIT = "git commit -m \"\"";
         private const string GIT_ADD_ALL = "git add -A";
         private const string GIT_COMMIT_ALL = "git commit -a -m \"\"";
-        private const string GIT_PULL = "git pull";
-        private const string GIT_PUSH = "git push";
-        private const string GIT_BRANCH = "git branch";
-        private const string GIT_MERGE = "git merge";
+        private const string GIT_PULL = "git pull ";
+        private const string GIT_PUSH = "git push ";
+        private const string GIT_BRANCH = "git branch ";
+        private const string GIT_MERGE = "git merge ";
 
         private MainVM _mainVM;
     }
