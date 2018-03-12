@@ -3,9 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace GitBasic.Controls
 {
@@ -34,13 +36,59 @@ namespace GitBasic.Controls
 
         private void TreeViewItem_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            ((TreeViewItem)sender).IsSelected = true;
+                ((TreeViewItem)sender).IsSelected = true;
         }
 
         // variable used to hold the item we will be dragging between controls
         Item dragged_item;
+        String tree_view_source = "";
 
-        private void treeView_MouseMove(object sender, MouseEventArgs e)
+
+        private void Staged_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Staged.Focus();
+            tree_view_source = "Staged";
+            TreeViewItem unstaged_selected_item = Unstaged.SelectedItem as TreeViewItem;
+            if (unstaged_selected_item != null)
+            {
+                unstaged_selected_item.IsSelected = false;
+            }
+        }
+
+        private void Unstaged_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Unstaged.Focus();
+            tree_view_source = "Unstaged";
+            TreeViewItem staged_selected_item = Staged.SelectedItem as TreeViewItem;
+            if (staged_selected_item != null)
+            {
+                staged_selected_item.IsSelected = false;
+            }
+        }
+
+        private void Staged_MouseMove(object sender, MouseEventArgs e)
+        {
+
+            try
+            {
+                if (e.LeftButton == MouseButtonState.Pressed)
+                {
+                    dragged_item = (Item)Staged.SelectedItem;
+
+                    if (dragged_item != null)
+                    {
+                        DragDropEffects finalDropEffect = DragDrop.DoDragDrop(Staged, Staged.SelectedValue,
+                            DragDropEffects.Move);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.Print(ex.ToString());
+            }
+        }
+
+        private void Unstaged_MouseMove(object sender, MouseEventArgs e)
         {
 
             try
@@ -66,7 +114,15 @@ namespace GitBasic.Controls
         {
             try
             {
-                e.Effects = DragDropEffects.Move;
+                if (!tree_view_source.Equals(((TreeView)sender).Name))
+                {
+                    e.Effects = DragDropEffects.Move;
+                }
+                else
+                {
+                    e.Effects = DragDropEffects.None;
+                }
+                //Debug.Print(tree_view_source);
                 e.Handled = true;
             }
             catch (Exception ex)
@@ -85,6 +141,7 @@ namespace GitBasic.Controls
                 if (dragged_item != null)
                 {
                     // No need to modify control, the TreeView will refresh automagically upon repo change
+                    Debug.Print(((TreeView)sender).Name);
                     Stage_Items(dragged_item);
                 }
             }
@@ -122,18 +179,23 @@ namespace GitBasic.Controls
             }
             else  // it's a FileItem, stage it
             {
-
                 //Commands.Stage(repo, item.Path);
                 Debug.Print(item.Name + " file added to Staged TreeView");
             }
         }
 
-        private void FileStatus_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void Staged_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (e.NewValue is FileItem file)
             {
                 SelectedFile = file.Path;
+                tree_view_source = "Staged";
             }
+        }
+
+        private void Unstaged_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            tree_view_source = "Unstaged";
         }
 
         public string SelectedFile

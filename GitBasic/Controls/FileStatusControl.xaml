@@ -34,15 +34,16 @@
                 Padding="0,1,0,1"
                 AllowDrop="True"
                 BorderThickness="0"
+                PreviewMouseLeftButtonDown="Staged_PreviewMouseLeftButtonDown"
                 DragOver="treeView_DragOver"
                 Drop="treeView_Drop"
                 ItemsSource="{Binding Path=StagedItems, Mode=OneWay}"
-                SelectedItemChanged="FileStatus_SelectedItemChanged">
+                SelectedItemChanged="Staged_SelectedItemChanged">
                 <TreeView.ItemContainerStyle>
                     <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
                         <Setter Property="ContextMenu" Value="{StaticResource FileStatusItemContextMenu}" />
                         <Setter Property="IsExpanded" Value="True" />
-                        <EventSetter Event="TreeViewItem.MouseMove" Handler="treeView_MouseMove" />
+                        <EventSetter Event="TreeViewItem.MouseMove" Handler="Staged_MouseMove" />
                         <EventSetter Event="PreviewMouseRightButtonDown" Handler="TreeViewItem_PreviewMouseRightButtonDown" />
                     </Style>
                 </TreeView.ItemContainerStyle>
@@ -63,12 +64,12 @@
                 DragOver="treeView_DragOver"
                 Drop="treeView_Drop"
                 ItemsSource="{Binding Path=UnstagedItems, Mode=OneWay}"
-                SelectedItemChanged="FileStatus_SelectedItemChanged">
+                SelectedItemChanged="Unstaged_SelectedItemChanged">
                 <TreeView.ItemContainerStyle>
                     <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
                         <Setter Property="ContextMenu" Value="{StaticResource FileStatusItemContextMenu}" />
                         <Setter Property="IsExpanded" Value="True" />
-                        <EventSetter Event="TreeViewItem.MouseMove" Handler="treeView_MouseMove" />
+                        <EventSetter Event="TreeViewItem.MouseMove" Handler="Unstaged_MouseMove" />
                         <EventSetter Event="PreviewMouseRightButtonDown" Handler="TreeViewItem_PreviewMouseRightButtonDown" />
                     </Style>
                 </TreeView.ItemContainerStyle>
