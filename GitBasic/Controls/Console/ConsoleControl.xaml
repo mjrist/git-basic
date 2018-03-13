@@ -51,8 +51,7 @@
                     IsTabStop="False"
                     Text="{Binding WorkingDirectory, Mode=OneWay, StringFormat='{}{0}>'}" />
                 <TextBox
-                    Name="InputBox"
-                    Text="{Binding InputText, Mode=OneWay}"
+                    Name="InputBox"                    
                     Grid.Column="1"
                     VerticalAlignment="Stretch"
                     VerticalContentAlignment="Center"

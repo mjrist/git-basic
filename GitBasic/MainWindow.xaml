@@ -87,14 +87,21 @@
                 Width="5"
                 HorizontalAlignment="Stretch" />
 
-            <controls:FileStatusControl Grid.Column="3" />
+            <controls:FileStatusControl
+                Grid.Column="3"
+                SelectedFile="{Binding SelectedFile.Value, Mode=OneWayToSource}"
+                StagedItems="{Binding Path=FileStatusVM.StagedItems, Mode=OneWay}"
+                UnstagedItems="{Binding Path=FileStatusVM.UnstagedItems, Mode=OneWay}" />
         </Grid>
 
         <!--  Row 3  -->
-        <controls:StatusControl
+        <controls:RepositoryStatusBar
             Grid.Row="3"
             BranchName="{Binding BranchName.Value}"
+            BranchNames="{Binding Path=RepositoryStatusBarVM.BranchNames, Mode=OneWay}"
+            CheckoutAction="{Binding Path=RepositoryStatusBarVM.Checkout}"
             DockPanel.Dock="Bottom"
+            RepoButtonAction="{Binding Path=RepositoryStatusBarVM.SelectDirectoryCommand}"
             RepositoryName="{Binding RepositoryName.Value}" />
     </Grid>
 </controls:MetroWindow>

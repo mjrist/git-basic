@@ -1,10 +1,17 @@
 ﻿using LibGit2Sharp;
+using Playground.Lib;
+using Playground.Lib.FileSystem;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Playground
 {
@@ -13,18 +20,32 @@ namespace Playground
     /// </summary>
     public partial class MainWindow : Window
     {
+        //Point _lastMouseDown;
+        //TreeViewItem _target;
+        // variable used to hold the item we will be dragging between controls
+        Item dragged_item;
+        // our repo item used to stage and unstage Items
+        Repository repo;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            var itemProvider = new ItemProvider();
+
+            var items = itemProvider.GetItems("C:\\Users\\shaama\\Desktop\\Test Directory");
+
+            DataContext = items;
+
             Loaded += MainWindow_Loaded;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {             
-            Diff();
+            //Diff();
 
             // Comment out Diff() above and uncomment this for file status example.
-            //GetFileStatus();
+            GetFileStatus();
         }
 
         private void Diff()
@@ -92,9 +113,9 @@ namespace Playground
             // Didn't spend a lot of time on this yet. Still some to be explored here.
 
             // Modify this to point to your repo root dir.
-            string repoRoot = "C:\\source\\git-basic";            
+            string repoRoot = "C:\\Users\\shaama\\Desktop\\Test Directory";            
 
-            using (var repo = new Repository(repoRoot))
+            using (repo = new Repository(repoRoot))
             {
                 // Haven't tested these, but this should stage/unstage a file.
 
@@ -108,11 +129,111 @@ namespace Playground
                     {
                         TextBlock filePathTextBlock = new TextBlock();
                         filePathTextBlock.Text = item.FilePath;
-
+                        
                         LayoutRoot.Children.Add(filePathTextBlock);
                     }                    
                 }                
             }
+        }
+
+        private void Staged_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                // No code needed here, will delete
+                //_lastMouseDown = e.GetPosition(Unstaged);
+
+            }
+
+        }
+
+        private void treeView_MouseMove(object sender, MouseEventArgs e)
+        {
+
+            try
+            {
+                if (e.LeftButton == MouseButtonState.Pressed)   
+                {
+                    dragged_item = (Item)Unstaged.SelectedItem;
+                    //MessageBox.Show(draggedItem.Name);
+                    if (dragged_item != null)
+                    {
+                        DragDropEffects finalDropEffect = DragDrop.DoDragDrop(Unstaged, Unstaged.SelectedValue,
+                            DragDropEffects.Move);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
+
+        private void Staged_DragOver(object sender, DragEventArgs e)
+        {
+            try
+            {
+                e.Effects = DragDropEffects.Move;
+                e.Handled = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
+
+        private void Staged_Drop(object sender, DragEventArgs e)
+        {
+            try
+            {
+                e.Effects = DragDropEffects.None;
+                e.Handled = true;
+                
+                if (dragged_item != null)
+                {
+                    // No need to modify control, the TreeView will refresh automagically upon repo change
+                    Stage_Items(dragged_item);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.Print(ex.ToString());
+            }
+        }
+
+        private void Stage_Items(Item item)
+        {
+            List<Item> directory_items;
+
+            // if a DirectoryItem
+            if (item is DirectoryItem)
+            {
+                directory_items = ((DirectoryItem)item).Items;
+
+                Debug.Print(item.Name + " directory added to Staged TreeView");
+                // Iterate directory Items
+                foreach (Item dir_item in directory_items)
+                {
+                    // if DirectoryItem, recurse. else stage FileItem
+                    if (dir_item is DirectoryItem)
+                    {
+                        Debug.Print(dir_item.Name + " directory added to Staged TreeView");
+                        Stage_Items(dir_item);
+                    }
+                    else
+                    {
+                        // Commands.Stage(repo, dir_item.Path);
+                        Debug.Print(dir_item.Name + " file added to Staged TreeView");
+                    }
+                }
+            }
+            else  // it's a FileItem, stage it
+            {
+
+                //Commands.Stage(repo, item.Path);
+                Debug.Print(item.Name + " file added to Staged TreeView");
+            }
+
         }
     }
 }
