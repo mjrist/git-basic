@@ -71,12 +71,65 @@ namespace GitBasic.Controls
             oldTitle.Text = $"{fileName} - HEAD";
             newTitle.Text = $"{fileName} - MODIFIED";
 
-            Color changed = Color.FromArgb(100,255,255,200);
 
             foreach (var section in diff.Sections)
             {
-                OldDiff.Document.Blocks.Add(new Paragraph(new Run(section.TextA.TrimEnd('\r', '\n'))));
-                NewDiff.Document.Blocks.Add(new Paragraph(new Run(section.TextB.TrimEnd('\r', '\n'))));
+                if (section.Status.Equals(GitSharp.Diff.SectionStatus.Unchanged))
+                {
+                    OldDiff.Document.Blocks.Add(new Paragraph(new Run(section.TextA.TrimEnd('\r', '\n'))));
+                    NewDiff.Document.Blocks.Add(new Paragraph(new Run(section.TextB.TrimEnd('\r', '\n'))));
+                }
+                else if (section.EditWithRespectToA.Equals(GitSharp.Diff.EditType.Replaced))
+                {
+                    int sectionASize = section.EndA - section.BeginA;
+                    Run oldRun = new Run(section.TextA.TrimEnd('\r', '\n'));
+
+                    if (sectionASize != (section.EndB - section.BeginB))
+                    {
+
+                        for (int i = 0; i < (section.EndB - section.BeginB - 1); i++)
+                        {
+                            oldRun.Text += Environment.NewLine;
+                        }
+                    }
+
+                    Paragraph oldD = new Paragraph(oldRun);
+                    oldD.Background = Brushes.Red;
+                    Paragraph newD = new Paragraph(new Run(section.TextB.TrimEnd('\r', '\n')));
+                    newD.Background = Brushes.Green;
+
+                    OldDiff.Document.Blocks.Add(oldD);
+                    NewDiff.Document.Blocks.Add(newD);
+                }
+                else if (section.EditWithRespectToA.Equals(GitSharp.Diff.EditType.Inserted))
+                {
+                    Run emptySpaces = new Run();
+                    for (int i = 0; i < (section.EndB - section.BeginB - 1); i++)
+                    {
+                        emptySpaces.Text += Environment.NewLine;
+                    }
+                    OldDiff.Document.Blocks.Add(new Paragraph(emptySpaces));
+
+                    Paragraph newD = new Paragraph(new Run(section.TextB.TrimEnd('\r', '\n')));
+                    newD.Background = Brushes.Green;
+                    NewDiff.Document.Blocks.Add(newD);
+                }
+                else if (section.EditWithRespectToB.Equals(GitSharp.Diff.EditType.Inserted))
+                {
+                    Run emptySpaces = new Run();
+                    for (int i = 0; i < (section.EndA - section.BeginA - 1); i++)
+                    {
+                        emptySpaces.Text += Environment.NewLine;
+                    }
+                    OldDiff.Document.Blocks.Add(new Paragraph(new Run(section.TextA.TrimEnd('\r', '\n'))));
+
+                    Paragraph newD = new Paragraph(emptySpaces);
+                    newD.Background = Brushes.Red;
+                    NewDiff.Document.Blocks.Add(newD);
+                }
+                else
+                {
+                }
             }
         }
 
