@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -99,7 +100,7 @@ namespace GitBasic.Controls
             {
                 AutoComplete(Selection.Next);
                 e.Handled = true;
-            }            
+            }
             else if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.C)
             {
                 ProcessCtrlC();
@@ -247,33 +248,82 @@ namespace GitBasic.Controls
         private void SetCurrentToken()
         {
             _token.Reset();
+                        
             int i = InputBox.CaretIndex - 1;
             while (i > -1 && !char.IsWhiteSpace(InputBox.Text[i]))
             {
-                _token.Text = InputBox.Text[i] + _token.Text;
+                char nextChar = InputBox.Text[i];
+                if (nextChar == '"' && TryGetQuotedToken(i))
+                {
+                    return;
+                }
+                _token.Text = nextChar + _token.Text;
                 i--;
             }
             _token.StartIndex = i + 1;
         }
 
+        private bool TryGetQuotedToken(int currentIndex)
+        {
+            int firstQuoteIndex = InputBox.Text.Substring(0, currentIndex).LastIndexOf('"');
+            if (firstQuoteIndex > -1)
+            {
+                _token.Text = InputBox.Text.Substring(firstQuoteIndex + 1, currentIndex - (firstQuoteIndex + 1)) + _token.Text;
+                _token.StartIndex = firstQuoteIndex;                
+                return true;
+            }
+            return false;            
+        }
+
         private void AutoComplete(Selection selection)
         {
-            string completionText;
-            if (selection == Selection.Next)
+            string completionText = (selection == Selection.Next) ?
+                _autoCompletion.GetNext(_token.Text, WorkingDirectory) :
+                _autoCompletion.GetPrevious(_token.Text, WorkingDirectory);
+
+            if (string.IsNullOrEmpty(completionText))
             {
-                completionText = _autoCompletion.GetNext(_token.Text, WorkingDirectory);
-            }
-            else
-            {
-                completionText = _autoCompletion.GetPrevious(_token.Text, WorkingDirectory);
+                return;
             }
 
-            StopWatchingSelectionChange();
+            StopWatchingSelectionChange();            
             int lengthToRemove = InputBox.CaretIndex - _token.StartIndex;
             InputBox.Text = InputBox.Text.Remove(_token.StartIndex, lengthToRemove);
             InputBox.Text = InputBox.Text.Insert(_token.StartIndex, completionText);
             InputBox.CaretIndex = _token.StartIndex + completionText.Length;
             StartWatchingSelectionChange();
+        }
+
+        private void ConsoleControl_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            InputBox.Focus();
+            CopySelectedTextToClipboard();
+        }
+
+        private void CopySelectedTextToClipboard()
+        {
+            if (!OutputBox.Selection.IsEmpty)
+            {
+                Clipboard.SetText(OutputBox.Selection.Text);
+                OutputBox.DeselectAll();
+            }
+            else if (!string.IsNullOrEmpty(CurrentDirectory.SelectedText))
+            {
+                Clipboard.SetText(CurrentDirectory.SelectedText);
+                CurrentDirectory.Select(0, 0);
+            }
+        }
+
+        private void ConsoleControl_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            PasteClipboardText();
+            InputBox.Focus();
+        }
+
+        private void PasteClipboardText()
+        {
+            InputBox.SelectedText = Regex.Replace(Clipboard.GetText(), @"\r\n|\n\r|\n|\r", " ");
+            InputBox.Select(InputBox.SelectionStart + InputBox.SelectionLength, 0);
         }
 
         private enum Selection { Next, Previous };
@@ -305,7 +355,7 @@ namespace GitBasic.Controls
             // Save the new working directory. This way it can be restored if the app is restarted.
             Properties.Settings.Default.WorkingDirectory = newWorkingDirectory;
             Properties.Settings.Default.Save();
-        }        
+        }
 
         public Action<string, int> SetInput
         {
@@ -321,7 +371,7 @@ namespace GitBasic.Controls
             set { SetValue(ExecuteProperty, value); }
         }
         public static readonly DependencyProperty ExecuteProperty =
-            DependencyProperty.Register("Execute", typeof(Action<string>), typeof(ConsoleControl), new PropertyMetadata(new Action<string>((input) => { } )));
+            DependencyProperty.Register("Execute", typeof(Action<string>), typeof(ConsoleControl), new PropertyMetadata(new Action<string>((input) => { })));
 
         #endregion
     }

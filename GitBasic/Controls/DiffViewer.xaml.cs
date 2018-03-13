@@ -33,6 +33,7 @@ namespace GitBasic.Controls
             // Feel free to rewrite this function and clean this up.
             if (string.IsNullOrWhiteSpace(fileName))
             {
+                ClearDiffViewer();
                 return;
             }
 
@@ -69,9 +70,8 @@ namespace GitBasic.Controls
         private void ShowDiff(string oldText, string newText)
         {
             GitSharp.Diff diff = new GitSharp.Diff(oldText, newText);
-            
-            OldDiff.Document.Blocks.Clear();
-            NewDiff.Document.Blocks.Clear();
+
+            ClearDiffViewer();
 
             //File name at top of document
             string fileName = Path.GetFileName(FileName);
@@ -85,6 +85,14 @@ namespace GitBasic.Controls
                 OldDiff.Document.Blocks.Add(new Paragraph(new Run(section.TextA.TrimEnd('\r', '\n'))));
                 NewDiff.Document.Blocks.Add(new Paragraph(new Run(section.TextB.TrimEnd('\r', '\n'))));
             }
+        }
+
+        private void ClearDiffViewer()
+        {
+            OldDiff.Document.Blocks.Clear();
+            oldTitle.Text = string.Empty;
+            NewDiff.Document.Blocks.Clear();
+            newTitle.Text = string.Empty;
         }
 
         #region Dependency Properties

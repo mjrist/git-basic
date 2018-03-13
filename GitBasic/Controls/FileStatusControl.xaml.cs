@@ -130,10 +130,7 @@ namespace GitBasic.Controls
 
         private void FileStatus_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (e.NewValue is FileItem file)
-            {
-                SelectedFile = file.Path;
-            }
+            SelectedFile = (e.NewValue is FileItem file) ? file.Path : string.Empty;            
         }
 
         public string SelectedFile
