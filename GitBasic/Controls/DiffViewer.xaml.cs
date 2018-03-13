@@ -108,6 +108,8 @@ namespace GitBasic.Controls
         {
             _oldDiff.Clear();
             _newDiff.Clear();
+            oldTitle.Text = string.Empty;
+            newTitle.Text = string.Empty;
         }
 
         private void SetDiffTitles()
