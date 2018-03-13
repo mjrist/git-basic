@@ -3,11 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace GitBasic.Controls
 {
@@ -20,6 +18,10 @@ namespace GitBasic.Controls
         {
             InitializeComponent();
         }
+
+        // variables used to hold the item we will be dragging between controls
+        private Item dragged_item;
+        private String tree_view_source = "";
 
         private void ShowInExplorer_Click(object sender, RoutedEventArgs e)
         {
@@ -39,14 +41,8 @@ namespace GitBasic.Controls
                 ((TreeViewItem)sender).IsSelected = true;
         }
 
-        // variable used to hold the item we will be dragging between controls
-        Item dragged_item;
-        String tree_view_source = "";
-
-
         private void Staged_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Staged.Focus();
             tree_view_source = "Staged";
             TreeViewItem unstaged_selected_item = Unstaged.SelectedItem as TreeViewItem;
             if (unstaged_selected_item != null)
@@ -57,7 +53,6 @@ namespace GitBasic.Controls
 
         private void Unstaged_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Unstaged.Focus();
             tree_view_source = "Unstaged";
             TreeViewItem staged_selected_item = Staged.SelectedItem as TreeViewItem;
             if (staged_selected_item != null)
@@ -66,11 +61,12 @@ namespace GitBasic.Controls
             }
         }
 
-        private void Staged_MouseMove(object sender, MouseEventArgs e)
+        private void Staged_PreviewMouseMove(object sender, MouseEventArgs e)
         {
 
             try
             {
+                tree_view_source = "Staged";
                 if (e.LeftButton == MouseButtonState.Pressed)
                 {
                     dragged_item = (Item)Staged.SelectedItem;
@@ -88,11 +84,12 @@ namespace GitBasic.Controls
             }
         }
 
-        private void Unstaged_MouseMove(object sender, MouseEventArgs e)
+        private void Unstaged_PreviewMouseMove(object sender, MouseEventArgs e)
         {
 
             try
             {
+                tree_view_source = "Unstaged";
                 if (e.LeftButton == MouseButtonState.Pressed)
                 {
                     dragged_item = (Item)Unstaged.SelectedItem;
@@ -122,7 +119,6 @@ namespace GitBasic.Controls
                 {
                     e.Effects = DragDropEffects.None;
                 }
-                //Debug.Print(tree_view_source);
                 e.Handled = true;
             }
             catch (Exception ex)
@@ -141,8 +137,7 @@ namespace GitBasic.Controls
                 if (dragged_item != null)
                 {
                     // No need to modify control, the TreeView will refresh automagically upon repo change
-                    Debug.Print(((TreeView)sender).Name);
-                    Stage_Items(dragged_item);
+                    Stage_Unstage_Items(dragged_item, ((TreeView)sender).Name);
                 }
             }
             catch (Exception ex)
@@ -151,7 +146,7 @@ namespace GitBasic.Controls
             }
         }
 
-        private void Stage_Items(Item item)
+        private void Stage_Unstage_Items(Item item, String tree_view_name)
         {
             List<Item> directory_items;
 
@@ -160,27 +155,27 @@ namespace GitBasic.Controls
             {
                 directory_items = ((DirectoryItem)item).Items;
 
-                Debug.Print(item.Name + " directory added to Staged TreeView");
+                Debug.Print(item.Name + " directory added to " + tree_view_name + " TreeView");
                 // Iterate directory Items
                 foreach (Item dir_item in directory_items)
                 {
                     // if DirectoryItem, recurse. else stage FileItem
                     if (dir_item is DirectoryItem)
                     {
-                        Debug.Print(dir_item.Name + " directory added to Staged TreeView");
-                        Stage_Items(dir_item);
+                        Debug.Print(dir_item.Name + " directory added to " + tree_view_name + " TreeView");
+                        Stage_Unstage_Items(dir_item, tree_view_name);
                     }
                     else
                     {
-                        //Commands.Stage(repo, dir_item.Path);
-                        Debug.Print(dir_item.Name + " file added to Staged TreeView");
+                        // *** NEED GIT ADD/REMOVE COMMAND HERE ***
+                        Debug.Print(dir_item.Name + " file added to " + tree_view_name + " TreeView");
                     }
                 }
             }
-            else  // it's a FileItem, stage it
+            else  // it's a FileItem, stage/unstage it
             {
-                //Commands.Stage(repo, item.Path);
-                Debug.Print(item.Name + " file added to Staged TreeView");
+                // *** NEED GIT ADD/REMOVE COMMAND HERE ***
+                Debug.Print(item.Name + " file added to " + tree_view_name + " TreeView");
             }
         }
 
@@ -188,14 +183,8 @@ namespace GitBasic.Controls
         {
             if (e.NewValue is FileItem file)
             {
-                SelectedFile = file.Path;
-                tree_view_source = "Staged";
+                SelectedFile = file.Path;;
             }
-        }
-
-        private void Unstaged_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            tree_view_source = "Unstaged";
         }
 
         public string SelectedFile

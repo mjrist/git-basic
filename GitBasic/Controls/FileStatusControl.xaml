@@ -43,7 +43,7 @@
                     <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
                         <Setter Property="ContextMenu" Value="{StaticResource FileStatusItemContextMenu}" />
                         <Setter Property="IsExpanded" Value="True" />
-                        <EventSetter Event="TreeViewItem.MouseMove" Handler="Staged_MouseMove" />
+                        <EventSetter Event="PreviewMouseMove" Handler="Staged_PreviewMouseMove" />
                         <EventSetter Event="PreviewMouseRightButtonDown" Handler="TreeViewItem_PreviewMouseRightButtonDown" />
                     </Style>
                 </TreeView.ItemContainerStyle>
@@ -63,13 +63,12 @@
                 BorderThickness="0"
                 DragOver="treeView_DragOver"
                 Drop="treeView_Drop"
-                ItemsSource="{Binding Path=UnstagedItems, Mode=OneWay}"
-                SelectedItemChanged="Unstaged_SelectedItemChanged">
+                ItemsSource="{Binding Path=UnstagedItems, Mode=OneWay}">
                 <TreeView.ItemContainerStyle>
                     <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
                         <Setter Property="ContextMenu" Value="{StaticResource FileStatusItemContextMenu}" />
                         <Setter Property="IsExpanded" Value="True" />
-                        <EventSetter Event="TreeViewItem.MouseMove" Handler="Unstaged_MouseMove" />
+                        <EventSetter Event="PreviewMouseMove" Handler="Unstaged_PreviewMouseMove" />
                         <EventSetter Event="PreviewMouseRightButtonDown" Handler="TreeViewItem_PreviewMouseRightButtonDown" />
                     </Style>
                 </TreeView.ItemContainerStyle>
