@@ -22,6 +22,7 @@ namespace GitBasic.Controls
         {
             if (string.IsNullOrWhiteSpace(fileName))
             {
+                ClearDiffViewer();
                 return;
             }
 
@@ -58,13 +59,8 @@ namespace GitBasic.Controls
         {
             GitSharp.Diff diff = new GitSharp.Diff(oldText, newText);
 
-            _oldDiff.Clear();
-            _newDiff.Clear();
-
-            //File name at top of document
-            string fileName = System.IO.Path.GetFileName(FileName);
-            oldTitle.Text = $"{fileName} - HEAD";
-            newTitle.Text = $"{fileName} - MODIFIED";
+            ClearDiffViewer();
+            SetDiffTitles();
 
             foreach (var section in diff.Sections)
             {
@@ -106,6 +102,19 @@ namespace GitBasic.Controls
                     _oldDiff.AddSection(section.TextA, DiffSectionType.Removed);
                 }
             }
+        }
+
+        private void ClearDiffViewer()
+        {
+            _oldDiff.Clear();
+            _newDiff.Clear();
+        }
+
+        private void SetDiffTitles()
+        {
+            string fileName = System.IO.Path.GetFileName(FileName);
+            oldTitle.Text = $"{fileName} - HEAD";
+            newTitle.Text = $"{fileName} - MODIFIED";
         }
 
         private DiffFormatter _oldDiff;

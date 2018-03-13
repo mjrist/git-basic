@@ -9,7 +9,7 @@
 
     <Style
         x:Key="TreeViewStyle"
-        BasedOn="{StaticResource BaseControlStyle}"
+        BasedOn="{StaticResource BaseControlStyle}"        
         TargetType="{x:Type TreeView}" />
 
 </ResourceDictionary>

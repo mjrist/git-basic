@@ -29,15 +29,19 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
+            <TextBlock Margin="4,2,0,0" Text="Staged Changes" />
             <TreeView
                 Name="Staged"
-                Padding="0,1,0,1"
+                Grid.Row="1"
+                Padding="0,19,0,1"
                 AllowDrop="True"
                 BorderThickness="0"
                 DragOver="treeView_DragOver"
                 Drop="treeView_Drop"
                 ItemsSource="{Binding Path=StagedItems, Mode=OneWay}"
-                SelectedItemChanged="FileStatus_SelectedItemChanged">
+                SelectedItemChanged="FileStatus_SelectedItemChanged"
+                VirtualizingPanel.IsVirtualizing="True"
+                VirtualizingPanel.ScrollUnit="Item">
                 <TreeView.ItemContainerStyle>
                     <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
                         <Setter Property="ContextMenu" Value="{StaticResource FileStatusItemContextMenu}" />
@@ -55,15 +59,19 @@
             HorizontalAlignment="Stretch" />
 
         <Grid Grid.Row="2">
+            <TextBlock Margin="4,2,0,0" Text="Unstaged Changes" />
             <TreeView
                 Name="Unstaged"
-                Padding="0,1,0,1"
+                Grid.Row="1"
+                Padding="0,20,0,1"
                 AllowDrop="True"
                 BorderThickness="0"
                 DragOver="treeView_DragOver"
                 Drop="treeView_Drop"
                 ItemsSource="{Binding Path=UnstagedItems, Mode=OneWay}"
-                SelectedItemChanged="FileStatus_SelectedItemChanged">
+                SelectedItemChanged="FileStatus_SelectedItemChanged"
+                VirtualizingPanel.IsVirtualizing="True"
+                VirtualizingPanel.ScrollUnit="Item">
                 <TreeView.ItemContainerStyle>
                     <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
                         <Setter Property="ContextMenu" Value="{StaticResource FileStatusItemContextMenu}" />

@@ -6,5 +6,6 @@
 
     <GitBasic:StringEmptyToVisibilityConverter x:Key="StringEmptyToVisibilityConverter" />
     <GitBasic:CollectionEmptyToVisibilityConverter x:Key="CollectionEmptyToVisibilityConverter" />
+    <GitBasic:AdditionConverter x:Key="AdditionConverter" />
 
 </ResourceDictionary>

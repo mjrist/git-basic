@@ -5,6 +5,7 @@
     xmlns:local="clr-namespace:GitBasic">
 
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    <local:AdditionConverter x:Key="AdditionConverter" />
 
     <Style x:Key="WindowButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="Foreground" Value="{DynamicResource LightForegroundBrush}" />
@@ -230,7 +231,7 @@
                             <Setter Property="WindowChrome.WindowChrome">
                                 <Setter.Value>
                                     <WindowChrome
-                                        CaptionHeight="35"
+                                        CaptionHeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:MetroWindow}}, Path=CaptionHeight, Converter={StaticResource AdditionConverter}, ConverterParameter=7}"
                                         CornerRadius="0"
                                         GlassFrameThickness="0"
                                         UseAeroCaptionButtons="False" />
@@ -255,7 +256,7 @@
         <Setter Property="WindowChrome.WindowChrome">
             <Setter.Value>
                 <WindowChrome
-                    CaptionHeight="28"
+                    CaptionHeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:MetroWindow}}, Path=CaptionHeight}"
                     CornerRadius="0"
                     GlassFrameThickness="0"
                     UseAeroCaptionButtons="False" />
