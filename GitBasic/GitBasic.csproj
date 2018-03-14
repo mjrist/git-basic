@@ -266,7 +266,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ViewModels\ConsoleControlVM.cs" />
-    <Compile Include="ViewModels\DiffViewerVM.cs" />
     <Compile Include="ViewModels\FileStatusVM.cs" />
     <Compile Include="ViewModels\MainVM.cs" />
     <Compile Include="Lib\Reactive\Observable.cs" />

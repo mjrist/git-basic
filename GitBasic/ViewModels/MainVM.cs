@@ -36,7 +36,6 @@ namespace GitBasic
         public CommandButtonVM CommandButtonVM { get; set; }
         public ConsoleControlVM ConsoleControlVM { get; set; }
         public FileStatusVM FileStatusVM { get; set; }
-        public DiffViewerVM DiffViewerVM { get; set; }
         public RepositoryStatusBarVM RepositoryStatusBarVM { get; set; }
 
         private void CreateSubViewModels()
@@ -44,7 +43,6 @@ namespace GitBasic
             CommandButtonVM = new CommandButtonVM(this);
             ConsoleControlVM = new ConsoleControlVM(this);
             FileStatusVM = new FileStatusVM(this);
-            DiffViewerVM = new DiffViewerVM(this);
             RepositoryStatusBarVM = new RepositoryStatusBarVM(this);
         }
     }
