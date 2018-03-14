@@ -34,25 +34,7 @@ namespace GitBasic.Controls
         private void TreeViewItem_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             ((TreeViewItem)sender).IsSelected = true;
-        }
-
-        private void Staged_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            _treeViewSource = "Staged";
-            if (Unstaged.SelectedItem is TreeViewItem unstaged_selected_item)
-            {
-                unstaged_selected_item.IsSelected = false;
-            }
-        }
-
-        private void Unstaged_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            _treeViewSource = "Unstaged";
-            if (Staged.SelectedItem is TreeViewItem staged_selected_item)
-            {
-                staged_selected_item.IsSelected = false;
-            }
-        }
+        }       
 
         private void Staged_PreviewMouseMove(object sender, MouseEventArgs e)
         {
@@ -94,6 +76,7 @@ namespace GitBasic.Controls
             {
                 e.Effects = DragDropEffects.None;
             }
+            e.Handled = true;
         }
 
         private void Staged_Drop(object sender, DragEventArgs e)
