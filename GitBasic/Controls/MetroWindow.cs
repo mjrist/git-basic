@@ -85,14 +85,6 @@ namespace GitBasic.Controls
         }
         public static readonly DependencyProperty TitleBarContentProperty =
             DependencyProperty.Register("TitleBarContent", typeof(object), typeof(MetroWindow), new PropertyMetadata(null));
-                
-        public double CaptionHeight
-        {
-            get { return (double)GetValue(CaptionHeightProperty); }
-            set { SetValue(CaptionHeightProperty, value); }
-        }        
-        public static readonly DependencyProperty CaptionHeightProperty =
-            DependencyProperty.Register("CaptionHeight", typeof(double), typeof(MetroWindow), new PropertyMetadata(30.0));
         
         #endregion
     }
