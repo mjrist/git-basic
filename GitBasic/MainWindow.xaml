@@ -94,7 +94,9 @@
             <controls:FileStatusControl
                 Grid.Column="3"
                 SelectedFile="{Binding SelectedFile.Value, Mode=OneWayToSource}"
+                StageAction="{Binding Path=FileStatusVM.Stage, Mode=OneWay}"
                 StagedItems="{Binding Path=FileStatusVM.StagedItems, Mode=OneWay}"
+                UnstageAction="{Binding Path=FileStatusVM.Unstage, Mode=OneWay}"
                 UnstagedItems="{Binding Path=FileStatusVM.UnstagedItems, Mode=OneWay}" />
         </Grid>
 

@@ -41,6 +41,12 @@ namespace GitBasic.Controls
                 if (change != null)
                 {
                     Blob oldBlob = repo.Lookup<Blob>(change.OldOid);
+
+                    if (oldBlob == null)
+                    {
+                        return;
+                    }
+
                     //Blob newBlob = repo.Lookup<Blob>(change.Oid);
                     string localFile = oldBlob.GetContentText();
                     //string newText = newBlob.GetContentText();
