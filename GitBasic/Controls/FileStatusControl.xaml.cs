@@ -19,10 +19,6 @@ namespace GitBasic.Controls
             InitializeComponent();
         }
 
-        // variables used to hold the item we will be dragging between controls
-        private Item dragged_item;
-        private String tree_view_source = "";
-
         private void ShowInExplorer_Click(object sender, RoutedEventArgs e)
         {
             MenuItem menuItem = (MenuItem)sender;
@@ -43,9 +39,8 @@ namespace GitBasic.Controls
 
         private void Staged_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            tree_view_source = "Staged";
-            TreeViewItem unstaged_selected_item = Unstaged.SelectedItem as TreeViewItem;
-            if (unstaged_selected_item != null)
+            _treeViewSource = "Staged";
+            if (Unstaged.SelectedItem is TreeViewItem unstaged_selected_item)
             {
                 unstaged_selected_item.IsSelected = false;
             }
@@ -53,7 +48,7 @@ namespace GitBasic.Controls
 
         private void Unstaged_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            tree_view_source = "Unstaged";
+            _treeViewSource = "Unstaged";
             TreeViewItem staged_selected_item = Staged.SelectedItem as TreeViewItem;
             if (staged_selected_item != null)
             {
@@ -66,12 +61,12 @@ namespace GitBasic.Controls
 
             try
             {
-                tree_view_source = "Staged";
+                _treeViewSource = "Staged";
                 if (e.LeftButton == MouseButtonState.Pressed)
                 {
-                    dragged_item = (Item)Staged.SelectedItem;
+                    _draggedItem = (Item)Staged.SelectedItem;
 
-                    if (dragged_item != null)
+                    if (_draggedItem != null)
                     {
                         DragDropEffects finalDropEffect = DragDrop.DoDragDrop(Staged, Staged.SelectedValue,
                             DragDropEffects.Move);
@@ -89,12 +84,12 @@ namespace GitBasic.Controls
 
             try
             {
-                tree_view_source = "Unstaged";
+                _treeViewSource = "Unstaged";
                 if (e.LeftButton == MouseButtonState.Pressed)
                 {
-                    dragged_item = (Item)Unstaged.SelectedItem;
+                    _draggedItem = (Item)Unstaged.SelectedItem;
 
-                    if (dragged_item != null)
+                    if (_draggedItem != null)
                     {
                         DragDropEffects finalDropEffect = DragDrop.DoDragDrop(Unstaged, Unstaged.SelectedValue,
                             DragDropEffects.Move);
@@ -111,7 +106,7 @@ namespace GitBasic.Controls
         {
             try
             {
-                if (!tree_view_source.Equals(((TreeView)sender).Name))
+                if (!_treeViewSource.Equals(((TreeView)sender).Name))
                 {
                     e.Effects = DragDropEffects.Move;
                 }
@@ -134,10 +129,10 @@ namespace GitBasic.Controls
                 e.Effects = DragDropEffects.None;
                 e.Handled = true;
 
-                if (dragged_item != null)
+                if (_draggedItem != null)
                 {
                     // No need to modify control, the TreeView will refresh automagically upon repo change
-                    Stage_Unstage_Items(dragged_item, ((TreeView)sender).Name);
+                    Stage_Unstage_Items(_draggedItem, ((TreeView)sender).Name);
                 }
             }
             catch (Exception ex)
@@ -145,6 +140,10 @@ namespace GitBasic.Controls
                 Debug.Print(ex.ToString());
             }
         }
+
+        // variables used to hold the item we will be dragging between controls
+        private Item _draggedItem;
+        private string _treeViewSource = string.Empty;
 
         private void Stage_Unstage_Items(Item item, String tree_view_name)
         {
