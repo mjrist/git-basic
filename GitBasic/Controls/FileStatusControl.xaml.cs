@@ -1,6 +1,5 @@
 ﻿using GitBasic.FileSystem;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
@@ -37,101 +36,106 @@ namespace GitBasic.Controls
             ((TreeViewItem)sender).IsSelected = true;
         }
 
-        // variable used to hold the item we will be dragging between controls
-        Item dragged_item;
-
-        private void treeView_MouseMove(object sender, MouseEventArgs e)
+        private void Staged_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-
-            try
+            _treeViewSource = "Staged";
+            if (Unstaged.SelectedItem is TreeViewItem unstaged_selected_item)
             {
-                if (e.LeftButton == MouseButtonState.Pressed)
-                {
-                    dragged_item = (Item)Unstaged.SelectedItem;
+                unstaged_selected_item.IsSelected = false;
+            }
+        }
 
-                    if (dragged_item != null)
-                    {
-                        DragDropEffects finalDropEffect = DragDrop.DoDragDrop(Unstaged, Unstaged.SelectedValue,
-                            DragDropEffects.Move);
-                    }
+        private void Unstaged_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _treeViewSource = "Unstaged";
+            if (Staged.SelectedItem is TreeViewItem staged_selected_item)
+            {
+                staged_selected_item.IsSelected = false;
+            }
+        }
+
+        private void Staged_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            _treeViewSource = "Staged";
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                _draggedItem = (Item)Staged.SelectedItem;
+
+                if (_draggedItem != null)
+                {
+                    DragDropEffects finalDropEffect = DragDrop.DoDragDrop(Staged, Staged.SelectedValue,
+                        DragDropEffects.Move);
                 }
             }
-            catch (Exception ex)
+        }
+
+        private void Unstaged_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            _treeViewSource = "Unstaged";
+            if (e.LeftButton == MouseButtonState.Pressed)
             {
-                Debug.Print(ex.ToString());
+                _draggedItem = (Item)Unstaged.SelectedItem;
+
+                if (_draggedItem != null)
+                {
+                    DragDropEffects finalDropEffect = DragDrop.DoDragDrop(Unstaged, Unstaged.SelectedValue,
+                        DragDropEffects.Move);
+                }
             }
         }
 
         private void treeView_DragOver(object sender, DragEventArgs e)
         {
-            try
+            if (_treeViewSource != ((TreeView)sender).Name)
             {
                 e.Effects = DragDropEffects.Move;
-                e.Handled = true;
             }
-            catch (Exception ex)
-            {
-                Debug.Print(ex.ToString());
-            }
-        }
-
-        private void treeView_Drop(object sender, DragEventArgs e)
-        {
-            try
+            else
             {
                 e.Effects = DragDropEffects.None;
-                e.Handled = true;
-
-                if (dragged_item != null)
-                {
-                    // No need to modify control, the TreeView will refresh automagically upon repo change
-                    Stage_Items(dragged_item);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.Print(ex.ToString());
             }
         }
 
-        private void Stage_Items(Item item)
+        private void Staged_Drop(object sender, DragEventArgs e)
         {
-            List<Item> directory_items;
-
-            // if a DirectoryItem
-            if (item is DirectoryItem)
+            if (_draggedItem != null)
             {
-                directory_items = ((DirectoryItem)item).Items;
-
-                Debug.Print(item.Name + " directory added to Staged TreeView");
-                // Iterate directory Items
-                foreach (Item dir_item in directory_items)
-                {
-                    // if DirectoryItem, recurse. else stage FileItem
-                    if (dir_item is DirectoryItem)
-                    {
-                        Debug.Print(dir_item.Name + " directory added to Staged TreeView");
-                        Stage_Items(dir_item);
-                    }
-                    else
-                    {
-                        //Commands.Stage(repo, dir_item.Path);
-                        Debug.Print(dir_item.Name + " file added to Staged TreeView");
-                    }
-                }
-            }
-            else  // it's a FileItem, stage it
-            {
-
-                //Commands.Stage(repo, item.Path);
-                Debug.Print(item.Name + " file added to Staged TreeView");
+                string path = GetPathForCommand(_draggedItem);
+                StageAction(path);
             }
         }
+
+        private void Unstaged_Drop(object sender, DragEventArgs e)
+        {
+            if (_draggedItem != null)
+            {
+                string path = GetPathForCommand(_draggedItem);
+                UnstageAction(path);
+            }
+        }
+
+        private string GetPathForCommand(Item item)
+        {
+            if (item is FileItem fileItem)
+            {
+                return fileItem.Path;
+            }
+            else // Directory item
+            {
+                return $"{((DirectoryItem)item).Path}\\*";
+            }
+        }
+
+        // variables used to hold the item we will be dragging between controls
+        private Item _draggedItem;
+        private string _treeViewSource = string.Empty;
 
         private void FileStatus_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            SelectedFile = (e.NewValue is FileItem file) ? file.Path : string.Empty;            
+            SelectedFile = (e.NewValue is FileItem file) ? file.Path : string.Empty;
         }
+
+        #region Dependency Properties
 
         public string SelectedFile
         {
@@ -156,5 +160,23 @@ namespace GitBasic.Controls
         }
         public static readonly DependencyProperty UnstagedItemsProperty =
             DependencyProperty.Register("UnstagedItems", typeof(ObservableCollection<Item>), typeof(FileStatusControl), new PropertyMetadata(new ObservableCollection<Item>()));
+
+        public Action<string> StageAction
+        {
+            get { return (Action<string>)GetValue(StageActionProperty); }
+            set { SetValue(StageActionProperty, value); }
+        }
+        public static readonly DependencyProperty StageActionProperty =
+            DependencyProperty.Register("StageAction", typeof(Action<string>), typeof(FileStatusControl), new PropertyMetadata(new Action<string>((filePath) => { })));
+
+        public Action<string> UnstageAction
+        {
+            get { return (Action<string>)GetValue(UnstageActionProperty); }
+            set { SetValue(UnstageActionProperty, value); }
+        }
+        public static readonly DependencyProperty UnstageActionProperty =
+            DependencyProperty.Register("UnstageAction", typeof(Action<string>), typeof(FileStatusControl), new PropertyMetadata(new Action<string>((filePath) => { })));
+
+        #endregion
     }
 }
