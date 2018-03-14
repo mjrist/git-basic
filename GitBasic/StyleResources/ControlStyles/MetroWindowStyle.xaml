@@ -231,7 +231,7 @@
                             <Setter Property="WindowChrome.WindowChrome">
                                 <Setter.Value>
                                     <WindowChrome
-                                        CaptionHeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:MetroWindow}}, Path=CaptionHeight, Converter={StaticResource AdditionConverter}, ConverterParameter=7}"
+                                        CaptionHeight="37"
                                         CornerRadius="0"
                                         GlassFrameThickness="0"
                                         UseAeroCaptionButtons="False" />
@@ -256,7 +256,7 @@
         <Setter Property="WindowChrome.WindowChrome">
             <Setter.Value>
                 <WindowChrome
-                    CaptionHeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:MetroWindow}}, Path=CaptionHeight}"
+                    CaptionHeight="30"
                     CornerRadius="0"
                     GlassFrameThickness="0"
                     UseAeroCaptionButtons="False" />

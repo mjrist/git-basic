@@ -14,32 +14,32 @@
         </ContextMenu>
     </UserControl.Resources>
     <Grid>
-
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid
-            Height="20"
-            VerticalAlignment="Top"
-            Background="{DynamicResource AccentBrush1}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="{Binding ElementName=LeftPanel, Path=ActualWidth, Mode=OneWay, Converter={StaticResource AdditionConverter}, ConverterParameter=5}" />
-                <ColumnDefinition Width="{Binding ElementName=RightPanel, Path=ActualWidth, Mode=OneWay, Converter={StaticResource AdditionConverter}, ConverterParameter=5}" />
-            </Grid.ColumnDefinitions>
-            <TextBlock
-                Name="oldTitle"
-                Grid.Column="0"
-                Margin="5,1,0,0"
-                HorizontalAlignment="Left"
-                Foreground="{DynamicResource LightForegroundBrush}" />
-            <TextBlock
-                Name="newTitle"
-                Grid.Column="1"
-                Margin="5,1,0,0"
-                HorizontalAlignment="Left"
-                Foreground="{DynamicResource LightForegroundBrush}" />
-        </Grid>
+        <Border BorderBrush="#565656" BorderThickness="0,0,0,2">
+            <Grid Height="20" Background="#3E3E42">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{Binding ElementName=LeftPanel, Path=ActualWidth, Mode=OneWay, Converter={StaticResource AdditionConverter}, ConverterParameter=5}" />
+                    <ColumnDefinition Width="{Binding ElementName=RightPanel, Path=ActualWidth, Mode=OneWay, Converter={StaticResource AdditionConverter}, ConverterParameter=5}" />
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    Name="oldTitle"
+                    Grid.Column="0"
+                    Margin="5,1,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Foreground="{DynamicResource LightForegroundBrush}" />
+                <TextBlock
+                    Name="newTitle"
+                    Grid.Column="1"
+                    Margin="5,1,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Foreground="{DynamicResource LightForegroundBrush}" />
+            </Grid>
+        </Border>
         <ScrollViewer
             x:Name="ScrollViewer"
             Grid.Row="1"
