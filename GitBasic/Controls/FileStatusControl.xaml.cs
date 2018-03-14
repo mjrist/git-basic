@@ -36,104 +36,80 @@ namespace GitBasic.Controls
             ((TreeViewItem)sender).IsSelected = true;
         }
 
-        private void Staged_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void FileStatus_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            _treeViewSource = "Staged";
-            if (Unstaged.SelectedItem is TreeViewItem unstaged_selected_item)
+            SelectedFile = (e.NewValue is FileItem file) ? file.Path : string.Empty;
+        }
+
+        private void FileStatus_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _dragStartPoint = e.GetPosition(null);
+        }
+
+        private Point _dragStartPoint;
+
+        private void Staged_MouseMove(object sender, MouseEventArgs e) => StartDrag(sender as TreeView, e, DATA_FROM_STAGED);
+
+        private void Unstaged_MouseMove(object sender, MouseEventArgs e) => StartDrag(sender as TreeView, e, DATA_FROM_UNSTAGED);
+
+        private void StartDrag(TreeView sender, MouseEventArgs e, string dragDataId)
+        {
+            TreeViewItem itemToDrag = ((DependencyObject)e.OriginalSource).FindAnchestor<TreeViewItem>();
+            if (itemToDrag != null && IsReadyToDrag(e))
             {
-                unstaged_selected_item.IsSelected = false;
+                DataObject dragData = new DataObject(dragDataId, itemToDrag.Header);
+                DragDrop.DoDragDrop(sender, dragData, DragDropEffects.Move);
             }
         }
 
-        private void Unstaged_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private bool IsReadyToDrag(MouseEventArgs e)
         {
-            _treeViewSource = "Unstaged";
-            if (Staged.SelectedItem is TreeViewItem staged_selected_item)
-            {
-                staged_selected_item.IsSelected = false;
-            }
+            Vector diff = _dragStartPoint - e.GetPosition(null);
+            return e.LeftButton == MouseButtonState.Pressed &&
+                (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
+                Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance);
         }
 
-        private void Staged_PreviewMouseMove(object sender, MouseEventArgs e)
+        private void Staged_DragOver(object sender, DragEventArgs e) => ProcessDragOver(e, DATA_FROM_UNSTAGED);
+
+        private void Unstaged_DragOver(object sender, DragEventArgs e) => ProcessDragOver(e, DATA_FROM_STAGED);
+
+        private void ProcessDragOver(DragEventArgs e, string dragDataId)
         {
-            _treeViewSource = "Staged";
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                _draggedItem = (Item)Staged.SelectedItem;
-
-                if (_draggedItem != null)
-                {
-                    DragDropEffects finalDropEffect = DragDrop.DoDragDrop(Staged, Staged.SelectedValue,
-                        DragDropEffects.Move);
-                }
-            }
-        }
-
-        private void Unstaged_PreviewMouseMove(object sender, MouseEventArgs e)
-        {
-            _treeViewSource = "Unstaged";
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                _draggedItem = (Item)Unstaged.SelectedItem;
-
-                if (_draggedItem != null)
-                {
-                    DragDropEffects finalDropEffect = DragDrop.DoDragDrop(Unstaged, Unstaged.SelectedValue,
-                        DragDropEffects.Move);
-                }
-            }
-        }
-
-        private void treeView_DragOver(object sender, DragEventArgs e)
-        {
-            if (_treeViewSource != ((TreeView)sender).Name)
-            {
-                e.Effects = DragDropEffects.Move;
-            }
-            else
+            if (!e.Data.GetDataPresent(dragDataId))
             {
                 e.Effects = DragDropEffects.None;
             }
+            e.Handled = true;
         }
 
         private void Staged_Drop(object sender, DragEventArgs e)
         {
-            if (_draggedItem != null)
+            if (e.Data.GetDataPresent(DATA_FROM_UNSTAGED))
             {
-                string path = GetPathForCommand(_draggedItem);
+                Item item = (Item)e.Data.GetData(DATA_FROM_UNSTAGED);
+                string path = GetPathForCommand(item);
                 StageAction(path);
             }
         }
 
         private void Unstaged_Drop(object sender, DragEventArgs e)
         {
-            if (_draggedItem != null)
+            if (e.Data.GetDataPresent(DATA_FROM_STAGED))
             {
-                string path = GetPathForCommand(_draggedItem);
+                Item item = (Item)e.Data.GetData(DATA_FROM_STAGED);
+                string path = GetPathForCommand(item);
                 UnstageAction(path);
             }
         }
 
         private string GetPathForCommand(Item item)
         {
-            if (item is FileItem fileItem)
-            {
-                return fileItem.Path;
-            }
-            else // Directory item
-            {
-                return $"{((DirectoryItem)item).Path}\\*";
-            }
+            return (item is FileItem fileItem) ? fileItem.Path : $"{((DirectoryItem)item).Path}\\*";
         }
 
-        // variables used to hold the item we will be dragging between controls
-        private Item _draggedItem;
-        private string _treeViewSource = string.Empty;
-
-        private void FileStatus_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            SelectedFile = (e.NewValue is FileItem file) ? file.Path : string.Empty;
-        }
+        private const string DATA_FROM_STAGED = "Staged";
+        private const string DATA_FROM_UNSTAGED = "Unstaged";
 
         #region Dependency Properties
 
