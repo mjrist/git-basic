@@ -80,6 +80,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\DiffFormatter.cs" />
     <Compile Include="Controls\PanelHotKeyIndicator.xaml.cs">
       <DependentUpon>PanelHotKeyIndicator.xaml</DependentUpon>
     </Compile>
