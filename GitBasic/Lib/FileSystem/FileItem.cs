@@ -1,6 +1,6 @@
 ﻿namespace GitBasic.FileSystem
 {
-    class FileItem : Item
+    public class FileItem : Item
     {
 
     }

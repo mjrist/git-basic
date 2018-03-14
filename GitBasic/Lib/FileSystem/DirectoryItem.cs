@@ -2,7 +2,7 @@
 
 namespace GitBasic.FileSystem
 {
-    class DirectoryItem : Item
+    public class DirectoryItem : Item
     {
         public List<Item> Items { get; set; }
 
