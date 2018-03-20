@@ -44,9 +44,11 @@ namespace GitBasic.Controls
         private void FileStatus_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             _dragStartPoint = e.GetPosition(null);
+            _itemToDrag = ((DependencyObject)e.OriginalSource).FindAnchestor<TreeViewItem>();
         }
 
         private Point _dragStartPoint;
+        private TreeViewItem _itemToDrag;
 
         private void Staged_MouseMove(object sender, MouseEventArgs e) => StartDrag(sender as TreeView, e, DATA_FROM_STAGED);
 
@@ -54,20 +56,19 @@ namespace GitBasic.Controls
 
         private void StartDrag(TreeView sender, MouseEventArgs e, string dragDataId)
         {
-            TreeViewItem itemToDrag = ((DependencyObject)e.OriginalSource).FindAnchestor<TreeViewItem>();
-            if (itemToDrag != null && IsReadyToDrag(e))
+            if (_itemToDrag != null && IsReadyToDrag(e))
             {
-                DataObject dragData = new DataObject(dragDataId, itemToDrag.Header);
+                DataObject dragData = new DataObject(dragDataId, _itemToDrag.Header);
                 DragDrop.DoDragDrop(sender, dragData, DragDropEffects.Move);
             }
         }
 
         private bool IsReadyToDrag(MouseEventArgs e)
         {
-            Vector diff = _dragStartPoint - e.GetPosition(null);
+            Vector delta = _dragStartPoint - e.GetPosition(null);
             return e.LeftButton == MouseButtonState.Pressed &&
-                (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
-                Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance);
+                (Math.Abs(delta.X) > SystemParameters.MinimumHorizontalDragDistance ||
+                Math.Abs(delta.Y) > SystemParameters.MinimumVerticalDragDistance);
         }
 
         private void Staged_DragOver(object sender, DragEventArgs e) => ProcessDragOver(e, DATA_FROM_UNSTAGED);
