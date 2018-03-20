@@ -89,7 +89,7 @@ namespace GitBasic.Controls
             {
                 Item item = (Item)e.Data.GetData(DATA_FROM_UNSTAGED);
                 string path = GetPathForCommand(item);
-                StageAction(path);
+                StageAction($"\"{path}\"");
             }
         }
 
@@ -99,7 +99,7 @@ namespace GitBasic.Controls
             {
                 Item item = (Item)e.Data.GetData(DATA_FROM_STAGED);
                 string path = GetPathForCommand(item);
-                UnstageAction(path);
+                UnstageAction($"\"{path}\"");
             }
         }
 

@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitBasic", "GitBasic\GitBasic.csproj", "{8BD43B87-26FB-4B04-BF6F-1FBA3AA3B907}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Playground", "Playground\Playground.csproj", "{2E2D1FF9-C13B-48C4-9DEF-6E5266B73246}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "GitBasicInstaller", "GitBasicInstaller\GitBasicInstaller.vdproj", "{B86FA63B-E299-4F33-85B9-2D2297E0AF62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,8 @@ Global
 		{8BD43B87-26FB-4B04-BF6F-1FBA3AA3B907}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8BD43B87-26FB-4B04-BF6F-1FBA3AA3B907}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8BD43B87-26FB-4B04-BF6F-1FBA3AA3B907}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2E2D1FF9-C13B-48C4-9DEF-6E5266B73246}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2E2D1FF9-C13B-48C4-9DEF-6E5266B73246}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2E2D1FF9-C13B-48C4-9DEF-6E5266B73246}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2E2D1FF9-C13B-48C4-9DEF-6E5266B73246}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B86FA63B-E299-4F33-85B9-2D2297E0AF62}.Debug|Any CPU.ActiveCfg = Debug
+		{B86FA63B-E299-4F33-85B9-2D2297E0AF62}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
