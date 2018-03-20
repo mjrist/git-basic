@@ -87,6 +87,7 @@
     <Compile Include="Lib\Converters\AdditionConverter.cs" />
     <Compile Include="Lib\Converters\CollectionEmptyToVisibilityConverter.cs" />
     <Compile Include="Lib\ExtensionMethods\IEnumerableExtensions.cs" />
+    <Compile Include="Lib\ExtensionMethods\UiExtensions.cs" />
     <Compile Include="Lib\InputHelper.cs" />
     <Compile Include="Lib\Reactive\ThrottledAction.cs" />
     <Compile Include="ViewModels\RepositoryStatusBarVM.cs" />
@@ -265,7 +266,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ViewModels\ConsoleControlVM.cs" />
-    <Compile Include="ViewModels\DiffViewerVM.cs" />
     <Compile Include="ViewModels\FileStatusVM.cs" />
     <Compile Include="ViewModels\MainVM.cs" />
     <Compile Include="Lib\Reactive\Observable.cs" />

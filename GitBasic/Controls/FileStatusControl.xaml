@@ -36,10 +36,12 @@
                 Padding="0,19,0,1"
                 AllowDrop="True"
                 BorderThickness="0"
-                DragEnter="treeView_DragOver"
-                DragOver="treeView_DragOver"
+                DragEnter="Unstaged_DragOver"
+                DragOver="Staged_DragOver"
                 Drop="Staged_Drop"
                 ItemsSource="{Binding Path=StagedItems, Mode=OneWay}"
+                MouseMove="Staged_MouseMove"
+                PreviewMouseLeftButtonDown="FileStatus_PreviewMouseLeftButtonDown"
                 SelectedItemChanged="FileStatus_SelectedItemChanged"
                 VirtualizingPanel.IsVirtualizing="True"
                 VirtualizingPanel.ScrollUnit="Item">
@@ -47,7 +49,6 @@
                     <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
                         <Setter Property="ContextMenu" Value="{StaticResource FileStatusItemContextMenu}" />
                         <Setter Property="IsExpanded" Value="True" />
-                        <EventSetter Event="PreviewMouseMove" Handler="Staged_PreviewMouseMove" />
                         <EventSetter Event="PreviewMouseRightButtonDown" Handler="TreeViewItem_PreviewMouseRightButtonDown" />
                     </Style>
                 </TreeView.ItemContainerStyle>
@@ -67,10 +68,12 @@
                 Padding="0,20,0,1"
                 AllowDrop="True"
                 BorderThickness="0"
-                DragEnter="treeView_DragOver"
-                DragOver="treeView_DragOver"
+                DragEnter="Unstaged_DragOver"
+                DragOver="Unstaged_DragOver"
                 Drop="Unstaged_Drop"
                 ItemsSource="{Binding Path=UnstagedItems, Mode=OneWay}"
+                MouseMove="Unstaged_MouseMove"
+                PreviewMouseLeftButtonDown="FileStatus_PreviewMouseLeftButtonDown"
                 SelectedItemChanged="FileStatus_SelectedItemChanged"
                 VirtualizingPanel.IsVirtualizing="True"
                 VirtualizingPanel.ScrollUnit="Item">
@@ -78,7 +81,6 @@
                     <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
                         <Setter Property="ContextMenu" Value="{StaticResource FileStatusItemContextMenu}" />
                         <Setter Property="IsExpanded" Value="True" />
-                        <EventSetter Event="PreviewMouseMove" Handler="Unstaged_PreviewMouseMove" />
                         <EventSetter Event="PreviewMouseRightButtonDown" Handler="TreeViewItem_PreviewMouseRightButtonDown" />
                     </Style>
                 </TreeView.ItemContainerStyle>
