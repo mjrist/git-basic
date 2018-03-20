@@ -84,7 +84,7 @@ namespace GitBasic.Controls
             if (_draggedItem != null)
             {
                 string path = GetPathForCommand(_draggedItem);
-                StageAction(path);
+                StageAction($"\"{path}\"");
             }
         }
 
@@ -93,7 +93,7 @@ namespace GitBasic.Controls
             if (_draggedItem != null)
             {
                 string path = GetPathForCommand(_draggedItem);
-                UnstageAction(path);
+                UnstageAction($"\"{path}\"");
             }
         }
 
