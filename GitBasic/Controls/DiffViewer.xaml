@@ -13,7 +13,7 @@
             <MenuItem Command="ApplicationCommands.Copy" />
         </ContextMenu>
     </UserControl.Resources>
-    <Grid>
+    <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:DiffViewer}}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
@@ -21,8 +21,8 @@
         <Border BorderBrush="#565656" BorderThickness="0,0,0,2">
             <Grid Height="20" Background="#3E3E42">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{Binding ElementName=LeftPanel, Path=ActualWidth, Mode=OneWay, Converter={StaticResource AdditionConverter}, ConverterParameter=5}" />
-                    <ColumnDefinition Width="{Binding ElementName=RightPanel, Path=ActualWidth, Mode=OneWay, Converter={StaticResource AdditionConverter}, ConverterParameter=5}" />
+                    <ColumnDefinition Width="{Binding ElementName=LeftScrollViewer, Path=ActualWidth, Mode=OneWay}" />
+                    <ColumnDefinition Width="{Binding ElementName=RightScrollViewer, Path=ActualWidth, Mode=OneWay, Converter={StaticResource AdditionConverter}, ConverterParameter=5}" />
                 </Grid.ColumnDefinitions>
                 <TextBlock
                     Name="oldTitle"
@@ -31,72 +31,78 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Foreground="{DynamicResource LightForegroundBrush}" />
-                <TextBlock
-                    Name="newTitle"
-                    Grid.Column="1"
-                    Margin="5,1,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Foreground="{DynamicResource LightForegroundBrush}" />
+                <Grid Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="20" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Name="newTitle"
+                        Margin="5,1,0,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Foreground="{DynamicResource LightForegroundBrush}" />
+                    <!--  This Grid exists to hide the new diff title when the grid splitter is collapsed to the right against the scrollbar.  -->
+                    <Grid Grid.Column="1" />
+                </Grid>
             </Grid>
         </Border>
-        <ScrollViewer
-            x:Name="ScrollViewer"
-            Grid.Row="1"
-            DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:DiffViewer}}}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition x:Name="LeftColumn" Width="0.5*" />
-                    <ColumnDefinition Width="5" />
-                    <ColumnDefinition x:Name="RightColumn" Width="0.5*" />
-                </Grid.ColumnDefinitions>
-                <Grid
-                    x:Name="LeftPanel"
-                    Grid.Column="0"
-                    Margin="2">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <RichTextBox
-                        x:Name="OldDiff"
-                        Grid.Row="1"
-                        BorderThickness="0"
-                        ContextMenu="{StaticResource DiffViewerContextMenu}"
-                        IsReadOnly="True">
-                        <RichTextBox.Resources>
-                            <Style TargetType="{x:Type Paragraph}">
-                                <Setter Property="Margin" Value="0" />
-                            </Style>
-                        </RichTextBox.Resources>
-                    </RichTextBox>
-                </Grid>
-                <GridSplitter
-                    Grid.Column="1"
-                    Width="5"
-                    HorizontalAlignment="Stretch" />
-                <Grid
-                    x:Name="RightPanel"
-                    Grid.Column="2"
-                    Margin="2">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <RichTextBox
-                        x:Name="NewDiff"
-                        Grid.Row="1"
-                        BorderThickness="0"
-                        ContextMenu="{StaticResource DiffViewerContextMenu}"
-                        IsReadOnly="True">
-                        <RichTextBox.Resources>
-                            <Style TargetType="{x:Type Paragraph}">
-                                <Setter Property="Margin" Value="0" />
-                            </Style>
-                        </RichTextBox.Resources>
-                    </RichTextBox>
-                </Grid>
-            </Grid>
-        </ScrollViewer>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="LeftColumn" Width="0.5*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition
+                    x:Name="RightColumn"
+                    Width="0.5*"
+                    MinWidth="20" />
+            </Grid.ColumnDefinitions>
+            <ScrollViewer
+                x:Name="LeftScrollViewer"
+                Grid.Column="0"
+                HorizontalScrollBarVisibility="Visible"
+                ScrollChanged="ScrollChanged"
+                SizeChanged="LeftScrollViewer_SizeChanged"
+                VerticalScrollBarVisibility="Hidden">
+                <RichTextBox
+                    x:Name="OldDiff"
+                    MinWidth="1000"
+                    Margin="2"
+                    BorderThickness="0"
+                    ContextMenu="{StaticResource DiffViewerContextMenu}"
+                    IsReadOnly="True">
+                    <RichTextBox.Resources>
+                        <Style TargetType="{x:Type Paragraph}">
+                            <Setter Property="Margin" Value="0" />
+                        </Style>
+                    </RichTextBox.Resources>
+                </RichTextBox>
+            </ScrollViewer>
+            <GridSplitter
+                Grid.RowSpan="2"
+                Grid.Column="1"
+                Width="5"
+                HorizontalAlignment="Stretch" />
+            <ScrollViewer
+                x:Name="RightScrollViewer"
+                Grid.Column="2"
+                HorizontalScrollBarVisibility="Visible"
+                ScrollChanged="ScrollChanged"
+                SizeChanged="RightScrollViewer_SizeChanged"
+                VerticalScrollBarVisibility="Visible">
+                <RichTextBox
+                    x:Name="NewDiff"
+                    MinWidth="1000"
+                    Margin="2"
+                    BorderThickness="0"
+                    ContextMenu="{StaticResource DiffViewerContextMenu}"
+                    IsReadOnly="True">
+                    <RichTextBox.Resources>
+                        <Style TargetType="{x:Type Paragraph}">
+                            <Setter Property="Margin" Value="0" />
+                        </Style>
+                    </RichTextBox.Resources>
+                </RichTextBox>
+            </ScrollViewer>
+        </Grid>
     </Grid>
 </UserControl>
