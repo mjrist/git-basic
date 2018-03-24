@@ -15,6 +15,7 @@
         <Setter Property="Padding" Value="0,2,0,2" />
         <Setter Property="ContextMenu" Value="{StaticResource TextBoxContextMenu}" />
         <Setter Property="SelectionBrush" Value="{DynamicResource AccentBrush1}" />
+        <Setter Property="FontFamily" Value="Consolas" />
     </Style>
 
 </ResourceDictionary>
