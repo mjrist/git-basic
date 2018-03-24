@@ -42,8 +42,6 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
                         Foreground="{DynamicResource LightForegroundBrush}" />
-                    <!--  This Grid exists to hide the new diff title when the grid splitter is collapsed to the right against the scrollbar.  -->
-                    <Grid Grid.Column="1" />
                 </Grid>
             </Grid>
         </Border>
