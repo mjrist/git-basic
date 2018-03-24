@@ -166,7 +166,7 @@ namespace GitBasic.Controls
                 new Typeface("Consolas"),
                 13, Brushes.WhiteSmoke);
             
-            return formattedText.WidthIncludingTrailingWhitespace;
+            return formattedText.WidthIncludingTrailingWhitespace + 10;
         }
 
         private void SetupTextWidthWatchers()
