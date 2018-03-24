@@ -158,15 +158,16 @@ namespace GitBasic.Controls
 
         private double GetTextWidth(string text)
         {
-            // Even though the diff viewer font size is 12, I have to use
-            // font size 13 here to get the width right. Also, I have to add a small margin of 10.
+            // Even though the diff viewer font size is 12, I have
+            // to use font size 13 here to get the width right.            
             FormattedText formattedText = new FormattedText(text,
                 CultureInfo.GetCultureInfo("en-us"),
                 FlowDirection.LeftToRight,
                 new Typeface("Consolas"),
-                12, Brushes.WhiteSmoke);            
-            
-            return formattedText.WidthIncludingTrailingWhitespace + 75;
+                13, Brushes.WhiteSmoke);
+
+            // Also, I have to add a small margin of 10.
+            return formattedText.WidthIncludingTrailingWhitespace + 10;
         }
 
         private void SetupTextWidthWatchers()
