@@ -127,38 +127,6 @@ namespace GitBasic.Controls
             newTitle.Text = string.Empty;
         }
 
-        private double GetTextWidth(string text)
-        {
-            FormattedText formattedText = new FormattedText(text,
-                CultureInfo.GetCultureInfo("en-us"),
-                FlowDirection.LeftToRight,
-                new Typeface("Segoe UI"),
-                12,
-                Brushes.WhiteSmoke);
-
-            return formattedText.WidthIncludingTrailingWhitespace + 20;
-        }
-
-        private void LeftScrollViewer_SizeChanged(object sender, SizeChangedEventArgs e) => SetMinWidth(OldDiff, e.NewSize.Width - 4, _oldDiffTextWidth.Value);
-
-        private void RightScrollViewer_SizeChanged(object sender, SizeChangedEventArgs e) => SetMinWidth(NewDiff, e.NewSize.Width - 24, _newDiffTextWidth.Value);
-
-        private void SetMinWidth(RichTextBox textBox, double controlWidth, double textWidth)
-        {
-            textBox.MinWidth = (controlWidth > textWidth) ? controlWidth : textWidth;
-        }
-
-        private void SetupWidthWatchers()
-        {
-            new ReactiveAction(() => SetMinWidth(OldDiff, LeftScrollViewer.ActualWidth - 4, _oldDiffTextWidth.Value), _oldDiffTextWidth);
-            new ReactiveAction(() => SetMinWidth(NewDiff, RightScrollViewer.ActualWidth - 24, _newDiffTextWidth.Value), _newDiffTextWidth);
-        }
-
-        private Prop<double> _oldDiffTextWidth = new Prop<double>(0);
-        private Prop<double> _newDiffTextWidth = new Prop<double>(0);
-        private DiffFormatter _oldDiff;
-        private DiffFormatter _newDiff;
-
         private void ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             if (sender == LeftScrollViewer)
@@ -183,6 +151,47 @@ namespace GitBasic.Controls
                 scrollViewer.ScrollToHorizontalOffset(e.HorizontalOffset);
             }
         }
+
+        private double GetTextWidth(string text)
+        {
+            FormattedText formattedText = new FormattedText(text,
+                CultureInfo.GetCultureInfo("en-us"),
+                FlowDirection.LeftToRight,
+                new Typeface("Segoe UI"),
+                12, Brushes.WhiteSmoke);
+
+            return formattedText.WidthIncludingTrailingWhitespace + 20;
+        }
+
+        private void SetupWidthWatchers()
+        {
+            new ReactiveAction(UpdateOldDiffMinWidth, _oldDiffTextWidth);
+            new ReactiveAction(UpdateNewDiffMinWidth, _newDiffTextWidth);
+        }
+
+        private void LeftScrollViewer_SizeChanged(object sender, SizeChangedEventArgs e) => UpdateOldDiffMinWidth();
+
+        private void RightScrollViewer_SizeChanged(object sender, SizeChangedEventArgs e) => UpdateNewDiffMinWidth();
+
+        private void UpdateOldDiffMinWidth()
+        {
+            OldDiff.MinWidth = (_oldDiffVisibleWidth > _oldDiffTextWidth.Value) ? _oldDiffVisibleWidth : _oldDiffTextWidth.Value;
+        }
+
+        private void UpdateNewDiffMinWidth()
+        {
+            NewDiff.MinWidth = (_newDiffVisibleWidth > _newDiffTextWidth.Value) ? _newDiffVisibleWidth : _newDiffTextWidth.Value;
+        }
+
+        private Prop<double> _oldDiffTextWidth = new Prop<double>(0);
+        private Prop<double> _newDiffTextWidth = new Prop<double>(0);
+        private double _oldDiffVisibleWidth => LeftScrollViewer.ActualWidth - DIFF_SIDE_MARGINS;
+        private double _newDiffVisibleWidth => RightScrollViewer.ActualWidth - (SCROLLBAR_WIDTH + DIFF_SIDE_MARGINS);
+        private const int DIFF_SIDE_MARGINS = 4;
+        private const int SCROLLBAR_WIDTH = 20;
+
+        private DiffFormatter _oldDiff;
+        private DiffFormatter _newDiff;
 
         #region Dependency Properties
 

@@ -56,14 +56,13 @@
             </Grid.ColumnDefinitions>
             <ScrollViewer
                 x:Name="LeftScrollViewer"
-                Grid.Column="0"
+                Grid.Column="0"                
                 HorizontalScrollBarVisibility="Visible"
                 ScrollChanged="ScrollChanged"
                 SizeChanged="LeftScrollViewer_SizeChanged"
                 VerticalScrollBarVisibility="Hidden">
                 <RichTextBox
                     x:Name="OldDiff"
-                    MinWidth="1000"
                     Margin="2"
                     BorderThickness="0"
                     ContextMenu="{StaticResource DiffViewerContextMenu}"
@@ -89,7 +88,6 @@
                 VerticalScrollBarVisibility="Visible">
                 <RichTextBox
                     x:Name="NewDiff"
-                    MinWidth="1000"
                     Margin="2"
                     BorderThickness="0"
                     ContextMenu="{StaticResource DiffViewerContextMenu}"
