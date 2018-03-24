@@ -7,7 +7,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="400"
     d:DesignWidth="800"
-    PreviewMouseLeftButtonUp="ConsoleControl_PreviewMouseLeftButtonUp"
     mc:Ignorable="d">
     <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ConsoleControl}}}">
         <Grid.RowDefinitions>
@@ -21,8 +20,9 @@
             AutoWordSelection="False"
             BorderThickness="0"
             ContextMenu="{x:Null}"
-            FontFamily="Consolas"
+            IsInactiveSelectionHighlightEnabled="True"
             IsReadOnly="True"
+            PreviewMouseLeftButtonUp="ConsoleControl_PreviewMouseLeftButtonUp"
             PreviewMouseRightButtonUp="ConsoleControl_PreviewMouseRightButtonUp">
             <RichTextBox.Resources>
                 <Style TargetType="{x:Type Paragraph}">
@@ -44,16 +44,19 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <TextBox
-                    Name="CurrentDirectory"
+                    Name="CurrentDirectoryIndicator"
                     Grid.Column="0"
                     Margin="2,0,1,0"
                     VerticalAlignment="Stretch"
                     VerticalContentAlignment="Center"
                     BorderThickness="0"
                     ContextMenu="{x:Null}"
+                    FontFamily="Consolas"
                     Foreground="LimeGreen"
+                    IsInactiveSelectionHighlightEnabled="True"
                     IsReadOnly="True"
                     IsTabStop="False"
+                    PreviewMouseLeftButtonUp="ConsoleControl_PreviewMouseLeftButtonUp"
                     PreviewMouseRightButtonUp="ConsoleControl_PreviewMouseRightButtonUp"
                     Text="{Binding WorkingDirectory, Mode=OneWay, StringFormat='{}{0}>'}" />
                 <TextBox

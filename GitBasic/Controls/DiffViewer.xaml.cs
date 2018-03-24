@@ -1,8 +1,11 @@
 ﻿using LibGit2Sharp;
+using Reactive;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace GitBasic.Controls
 {
@@ -16,6 +19,7 @@ namespace GitBasic.Controls
             InitializeComponent();
             _oldDiff = new DiffFormatter(OldDiff);
             _newDiff = new DiffFormatter(NewDiff);
+            SetupTextWidthWatchers();
         }
 
         private void Diff(string fileName)
@@ -62,6 +66,9 @@ namespace GitBasic.Controls
             ClearDiffViewer();
             SetDiffTitles();
 
+            _oldDiffTextWidth.Value = GetTextWidth(oldText);
+            _newDiffTextWidth.Value = GetTextWidth(newText);
+
             foreach (var section in diff.Sections)
             {
                 if (section.Status == GitSharp.Diff.SectionStatus.Unchanged)
@@ -104,20 +111,91 @@ namespace GitBasic.Controls
             }
         }
 
-        private void ClearDiffViewer()
-        {
-            _oldDiff.Clear();
-            _newDiff.Clear();
-            oldTitle.Text = string.Empty;
-            newTitle.Text = string.Empty;
-        }
-
         private void SetDiffTitles()
         {
             string fileName = System.IO.Path.GetFileName(FileName);
             oldTitle.Text = $"{fileName} - HEAD";
             newTitle.Text = $"{fileName} - MODIFIED";
         }
+
+        private void ClearDiffViewer()
+        {
+            // Clear the diff viewer text.
+            _oldDiff.Clear();
+            _newDiff.Clear();
+            // Reset the text width to 0.
+            _oldDiffTextWidth.Value = 0;
+            _newDiffTextWidth.Value = 0;
+            // Clear the titles.
+            oldTitle.Text = string.Empty;
+            newTitle.Text = string.Empty;
+        }
+
+        private void ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            if (sender == LeftScrollViewer)
+            {
+                SyncScrollViewer(RightScrollViewer, e);
+            }
+            else // RightScrollViewer
+            {
+                SyncScrollViewer(LeftScrollViewer, e);
+            }
+        }
+
+        private void SyncScrollViewer(ScrollViewer scrollViewer, ScrollChangedEventArgs e)
+        {
+            if (e.VerticalChange != 0)
+            {
+                scrollViewer.ScrollToVerticalOffset(e.VerticalOffset);
+            }
+
+            if (e.HorizontalChange != 0)
+            {
+                scrollViewer.ScrollToHorizontalOffset(e.HorizontalOffset);
+            }
+        }
+
+        private double GetTextWidth(string text)
+        {
+            // Even though the diff viewer font size is 12, I have
+            // to use font size 13 here to get the width right.            
+            FormattedText formattedText = new FormattedText(text,
+                CultureInfo.GetCultureInfo("en-us"),
+                FlowDirection.LeftToRight,
+                new Typeface("Consolas"),
+                13, Brushes.WhiteSmoke);
+
+            // Also, I have to add a small margin of 10.
+            return formattedText.WidthIncludingTrailingWhitespace + 10;
+        }
+
+        private void SetupTextWidthWatchers()
+        {
+            new ReactiveAction(UpdateOldDiffMinWidth, _oldDiffTextWidth);
+            new ReactiveAction(UpdateNewDiffMinWidth, _newDiffTextWidth);
+        }
+
+        private void LeftScrollViewer_SizeChanged(object sender, SizeChangedEventArgs e) => UpdateOldDiffMinWidth();
+
+        private void RightScrollViewer_SizeChanged(object sender, SizeChangedEventArgs e) => UpdateNewDiffMinWidth();
+
+        private void UpdateOldDiffMinWidth()
+        {
+            OldDiff.MinWidth = (_oldDiffVisibleWidth > _oldDiffTextWidth.Value) ? _oldDiffVisibleWidth : _oldDiffTextWidth.Value;
+        }
+
+        private void UpdateNewDiffMinWidth()
+        {
+            NewDiff.MinWidth = (_newDiffVisibleWidth > _newDiffTextWidth.Value) ? _newDiffVisibleWidth : _newDiffTextWidth.Value;
+        }
+
+        private Prop<double> _oldDiffTextWidth = new Prop<double>(0);
+        private Prop<double> _newDiffTextWidth = new Prop<double>(0);
+        private double _oldDiffVisibleWidth => LeftScrollViewer.ActualWidth - DIFF_SIDE_MARGINS;
+        private double _newDiffVisibleWidth => RightScrollViewer.ActualWidth - (SCROLLBAR_WIDTH + DIFF_SIDE_MARGINS);
+        private const int DIFF_SIDE_MARGINS = 4;
+        private const int SCROLLBAR_WIDTH = 20;
 
         private DiffFormatter _oldDiff;
         private DiffFormatter _newDiff;

@@ -248,7 +248,7 @@ namespace GitBasic.Controls
         private void SetCurrentToken()
         {
             _token.Reset();
-                        
+
             int i = InputBox.CaretIndex - 1;
             while (i > -1 && !char.IsWhiteSpace(InputBox.Text[i]))
             {
@@ -269,10 +269,10 @@ namespace GitBasic.Controls
             if (firstQuoteIndex > -1)
             {
                 _token.Text = InputBox.Text.Substring(firstQuoteIndex + 1, currentIndex - (firstQuoteIndex + 1)) + _token.Text;
-                _token.StartIndex = firstQuoteIndex;                
+                _token.StartIndex = firstQuoteIndex;
                 return true;
             }
-            return false;            
+            return false;
         }
 
         private void AutoComplete(Selection selection)
@@ -286,7 +286,7 @@ namespace GitBasic.Controls
                 return;
             }
 
-            StopWatchingSelectionChange();            
+            StopWatchingSelectionChange();
             int lengthToRemove = InputBox.CaretIndex - _token.StartIndex;
             InputBox.Text = InputBox.Text.Remove(_token.StartIndex, lengthToRemove);
             InputBox.Text = InputBox.Text.Insert(_token.StartIndex, completionText);
@@ -297,21 +297,33 @@ namespace GitBasic.Controls
         private void ConsoleControl_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             InputBox.Focus();
-            CopySelectedTextToClipboard();
+
+            if (sender == OutputBox)
+            {
+                CopyOutputBoxSelection();
+            }
+            else if (sender == CurrentDirectoryIndicator)
+            {
+                CopyCurrentDirectoryIndicatorSelection();
+            }
         }
 
-        private void CopySelectedTextToClipboard()
+        private void CopyOutputBoxSelection()
         {
             if (!OutputBox.Selection.IsEmpty)
             {
                 Clipboard.SetText(OutputBox.Selection.Text);
-                OutputBox.DeselectAll();
             }
-            else if (!string.IsNullOrEmpty(CurrentDirectory.SelectedText))
+            CurrentDirectoryIndicator.Select(0, 0);
+        }
+
+        private void CopyCurrentDirectoryIndicatorSelection()
+        {
+            if (!string.IsNullOrEmpty(CurrentDirectoryIndicator.SelectedText))
             {
-                Clipboard.SetText(CurrentDirectory.SelectedText);
-                CurrentDirectory.Select(0, 0);
+                Clipboard.SetText(CurrentDirectoryIndicator.SelectedText);
             }
+            OutputBox.DeselectAll();
         }
 
         private void ConsoleControl_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)

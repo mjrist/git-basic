@@ -42,6 +42,7 @@
                 ItemsSource="{Binding Path=StagedItems, Mode=OneWay}"
                 MouseMove="Staged_MouseMove"
                 PreviewMouseLeftButtonDown="FileStatus_PreviewMouseLeftButtonDown"
+                ScrollViewer.VerticalScrollBarVisibility="Visible"
                 SelectedItemChanged="FileStatus_SelectedItemChanged"
                 VirtualizingPanel.IsVirtualizing="True"
                 VirtualizingPanel.ScrollUnit="Item">
@@ -74,6 +75,7 @@
                 ItemsSource="{Binding Path=UnstagedItems, Mode=OneWay}"
                 MouseMove="Unstaged_MouseMove"
                 PreviewMouseLeftButtonDown="FileStatus_PreviewMouseLeftButtonDown"
+                ScrollViewer.VerticalScrollBarVisibility="Visible"
                 SelectedItemChanged="FileStatus_SelectedItemChanged"
                 VirtualizingPanel.IsVirtualizing="True"
                 VirtualizingPanel.ScrollUnit="Item">

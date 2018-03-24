@@ -14,6 +14,7 @@
         TargetType="{x:Type TextBox}">
         <Setter Property="ContextMenu" Value="{StaticResource TextBoxContextMenu}" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="SelectionBrush" Value="{DynamicResource AccentBrush1}" />
     </Style>
 
 </ResourceDictionary>
