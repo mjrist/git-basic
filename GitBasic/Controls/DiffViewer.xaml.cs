@@ -19,7 +19,7 @@ namespace GitBasic.Controls
             InitializeComponent();
             _oldDiff = new DiffFormatter(OldDiff);
             _newDiff = new DiffFormatter(NewDiff);
-            SetupWidthWatchers();
+            SetupTextWidthWatchers();
         }
 
         private void Diff(string fileName)
@@ -117,12 +117,16 @@ namespace GitBasic.Controls
             oldTitle.Text = $"{fileName} - HEAD";
             newTitle.Text = $"{fileName} - MODIFIED";
         }
+
         private void ClearDiffViewer()
         {
+            // Clear the diff viewer text.
             _oldDiff.Clear();
             _newDiff.Clear();
+            // Reset the text width to 0.
             _oldDiffTextWidth.Value = 0;
             _newDiffTextWidth.Value = 0;
+            // Clear the titles.
             oldTitle.Text = string.Empty;
             newTitle.Text = string.Empty;
         }
@@ -163,7 +167,7 @@ namespace GitBasic.Controls
             return formattedText.WidthIncludingTrailingWhitespace + 20;
         }
 
-        private void SetupWidthWatchers()
+        private void SetupTextWidthWatchers()
         {
             new ReactiveAction(UpdateOldDiffMinWidth, _oldDiffTextWidth);
             new ReactiveAction(UpdateNewDiffMinWidth, _newDiffTextWidth);
