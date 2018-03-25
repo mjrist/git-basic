@@ -1,6 +1,7 @@
 ﻿using LibGit2Sharp;
 using Reactive;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -46,15 +47,25 @@ namespace GitBasic.Controls
                 {
                     Blob oldBlob = repo.Lookup<Blob>(change.OldOid);
                     //Blob newBlob = repo.Lookup<Blob>(change.Oid);
-                    string localFile = oldBlob.GetContentText();
-                    //string newText = newBlob.GetContentText();
-                    string headFile = System.IO.File.ReadAllText(fileName);
 
-                    // Have to normalize the line endings because LibGit2Sharp is using '\n' but Windows in '\r\n'.
-                    localFile = Regex.Replace(localFile, @"\r\n|\n\r|\n|\r", "\r\n");
-                    headFile = Regex.Replace(headFile, @"\r\n|\n\r|\n|\r", "\r\n");
+                    if (oldBlob != null)
+                    {
+                        string localFile = oldBlob.GetContentText();
+                        //string newText = newBlob.GetContentText();
+                        string headFile = System.IO.File.ReadAllText(fileName);
 
-                    ShowDiff(localFile, headFile);
+                        // Have to normalize the line endings because LibGit2Sharp is using '\n' but Windows in '\r\n'.
+                        headFile = Regex.Replace(headFile, @"\r\n|\n\r|\n|\r", "\r\n");
+                        localFile = Regex.Replace(localFile, @"\r\n|\n\r|\n|\r", "\r\n");
+                        ShowDiff(localFile, headFile);
+                    }
+                    else
+                    {
+                        ClearDiffViewer();
+                        string newFileName = System.IO.Path.GetFileName(FileName);
+                        newTitle.Text = $"{newFileName} - NEW";
+                        _newDiff.AddSection(File.ReadAllText(fileName));
+                    }
                 }
             }
         }
