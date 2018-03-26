@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections;
+using System;
 
 namespace GitBasic.FileSystem
 {
@@ -22,5 +23,14 @@ namespace GitBasic.FileSystem
             return Items.GetEnumerator();
         }
 
+        public Boolean Contains(Item item)
+        {
+            return Items.Contains(item);
+        }
+
+        public int IndexOf(Item item)
+        {
+            return Items.IndexOf(item);
+        }
     }
 }
