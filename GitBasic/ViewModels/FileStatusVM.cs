@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Windows;
 
 namespace GitBasic
@@ -39,8 +38,8 @@ namespace GitBasic
                 List<Item> unstagedItems = ItemProvider.GetItems(_mainVM.Repo.Value, StatusShowOption.WorkDirOnly);
 
                 // compare previous lists with updated lists; add changed files to observable collection
-                updateChangedItems(ref StagedItems, stagedItems);
-                updateChangedItems(ref UnstagedItems, unstagedItems);
+                updateChangedItems(StagedItems, stagedItems);
+                updateChangedItems(UnstagedItems, unstagedItems);
 
                 // repopulate all stagedItems to observable collection
                 //stagedItems.ForEach(StagedItems.Add);
@@ -53,7 +52,7 @@ namespace GitBasic
         // @param previousDirectoryItems our mirror list holding the previous directory structure, before changes
         // @param newDirectoryItem our new directory structure we need to step through to find changes
         // @param ocDir the Observed List to make changes on so our TreeView updates
-        private void updateChangedItems(ref ObservableCollection<Item> previousFileSystemItems, List<Item> newFileSystemItems)
+        private void updateChangedItems(ObservableCollection<Item> previousFileSystemItems, List<Item> newFileSystemItems)
         {
             foreach (Item item in newFileSystemItems)
             {
@@ -74,14 +73,14 @@ namespace GitBasic
                     {
                         Debug.Print(item.Path + "\\" + item.Name + ": deleted");
                         previousFileSystemItems.Remove(item);
-                        //ocDir.Remove(item); or Staged.Remove(item) ???
+                        //Staged.Remove(item) ???
                     }
                     // if DirectoryItem in new, but not previous file system (added)
                     if (!inPrevious && inNew)
                     {
                         Debug.Print(item.Path + "\\" + item.Name + " added");
                         previousFileSystemItems.Add(item);
-                        //ocDir.Add(item); or Staged.Add(item) ???
+                        //Staged.Add(item) ???
                     }
                 }
                 else  // FileItem
@@ -98,14 +97,14 @@ namespace GitBasic
                     {
                         Debug.Print(item.Path + "\\" + item.Name + ": deleted");
                         previousFileSystemItems.Remove(item);
-                        //ocDir.Remove(item); or Staged.Remove(item) ???
+                        //Staged.Remove(item) ???
                     }
                     // if FileItem in new, but not previous file system (added)
                     if (!inPrevious && inNew)
                     {
                         Debug.Print(item.Path + "\\" + item.Name + " added");
                         previousFileSystemItems.Add(item);
-                        //ocDir.Add(item); or Staged.Add(item) ???
+                        //Staged.Add(item) ???
                     }
                 }
             }
