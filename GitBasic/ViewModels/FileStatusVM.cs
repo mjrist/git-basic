@@ -16,9 +16,6 @@ namespace GitBasic
         public Action<string> Unstage { get; set; }
         public ObservableCollection<Item> StagedItems { get; set; } = new ObservableCollection<Item>();
         public ObservableCollection<Item> UnstagedItems { get; set; } = new ObservableCollection<Item>();
-        // lists to hold current copy of displayed Items; use this to detect changes in new updates
-        private List<Item> _mirroredStagedList { get; set; } = new List<Item>();
-        private List<Item> _mirroredUnstagedList { get; set; } = new List<Item>();
 
         public FileStatusVM(MainVM mainVM)
         {
@@ -33,9 +30,6 @@ namespace GitBasic
 
         private void UpdateItems()
         {
-            List<Item> itemsToAdd;
-            List<Item> itemsToRemove;
-
             //StagedItems.Clear();
             //UnstagedItems.Clear();
 
@@ -45,13 +39,13 @@ namespace GitBasic
                 List<Item> unstagedItems = ItemProvider.GetItems(_mainVM.Repo.Value, StatusShowOption.WorkDirOnly);
 
                 // compare previous lists with updated lists; add changed files to observable collection
-                updateChangedItems(_mirroredStagedList, stagedItems, StagedItems);
-                updateChangedItems(_mirroredUnstagedList, unstagedItems, UnstagedItems);
+                updateChangedItems(ref StagedItems, stagedItems);
+                updateChangedItems(ref UnstagedItems, unstagedItems);
 
                 // repopulate all stagedItems to observable collection
-                stagedItems.ForEach(StagedItems.Add);
+                //stagedItems.ForEach(StagedItems.Add);
                 // repopulate all unstagedItems to observable collection
-                unstagedItems.ForEach(UnstagedItems.Add);
+                //unstagedItems.ForEach(UnstagedItems.Add);
             }
         }
 
@@ -59,16 +53,60 @@ namespace GitBasic
         // @param previousDirectoryItems our mirror list holding the previous directory structure, before changes
         // @param newDirectoryItem our new directory structure we need to step through to find changes
         // @param ocDir the Observed List to make changes on so our TreeView updates
-        private void updateChangedItems(List<Item> previousDirectoryItems, List<Item> newDirectoryItems, ObservableCollection<Item> ocDir)
+        private void updateChangedItems(ref ObservableCollection<Item> previousFileSystemItems, List<Item> newFileSystemItems)
         {
-            Debug.Print("made it");
-            foreach (Item item in previousDirectoryItems)
+            foreach (Item item in newFileSystemItems)
             {
-                Debug.Print(item.GetType().ToString());
+                Boolean inPrevious = previousFileSystemItems.Contains(item);
+                Boolean inNew = newFileSystemItems.Contains(item);
+
                 // evaluate each item and compare to previous list, recurse directories
-                if (item.GetType() is DirectoryItem)
+                if (item.GetType().ToString().Equals("GitBasic.FileSystem.DirectoryItem"))
                 {
-                    Debug.Print(item.GetType().ToString());
+                    // if DirectoryItem in both file systems (no change)
+                    // REMOVE -- NOT NEEDED
+                    if (inPrevious && inNew)
+                    {
+                        Debug.Print(item.Path + "\\" + item.Name + ": no change");
+                    }
+                    // if DirectoryItem in previous, but not new file system (deleted)
+                    if (inPrevious && !inNew)
+                    {
+                        Debug.Print(item.Path + "\\" + item.Name + ": deleted");
+                        previousFileSystemItems.Remove(item);
+                        //ocDir.Remove(item); or Staged.Remove(item) ???
+                    }
+                    // if DirectoryItem in new, but not previous file system (added)
+                    if (!inPrevious && inNew)
+                    {
+                        Debug.Print(item.Path + "\\" + item.Name + " added");
+                        previousFileSystemItems.Add(item);
+                        //ocDir.Add(item); or Staged.Add(item) ???
+                    }
+                }
+                else  // FileItem
+                {
+
+                    // if FileItem in both file systems (no change)
+                    // REMOVE -- NOT NEEDED
+                    if (inPrevious && inNew)
+                    {
+                        Debug.Print(item.Path + "\\" + item.Name + ": no change");
+                    }
+                    // if FileItem in previous, but not new file system (deleted)
+                    if (inPrevious && !inNew)
+                    {
+                        Debug.Print(item.Path + "\\" + item.Name + ": deleted");
+                        previousFileSystemItems.Remove(item);
+                        //ocDir.Remove(item); or Staged.Remove(item) ???
+                    }
+                    // if FileItem in new, but not previous file system (added)
+                    if (!inPrevious && inNew)
+                    {
+                        Debug.Print(item.Path + "\\" + item.Name + " added");
+                        previousFileSystemItems.Add(item);
+                        //ocDir.Add(item); or Staged.Add(item) ???
+                    }
                 }
             }
             List<Item> list = new List<Item>();
