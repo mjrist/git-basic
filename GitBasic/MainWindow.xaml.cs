@@ -33,7 +33,7 @@ namespace GitBasic
 
         private void MoveSplitterUp()
         {
-            if (BottomRow.ActualHeight == 0)
+            if (BottomRow.ActualHeight == BottomRow.MinHeight)
             {
                 TopRow.Height = new GridLength(0.5, GridUnitType.Star);
                 BottomRow.Height = new GridLength(0.5, GridUnitType.Star);
@@ -47,7 +47,7 @@ namespace GitBasic
 
         private void MoveSplitterDown()
         {
-            if (TopRow.ActualHeight == 0)
+            if (TopRow.ActualHeight == TopRow.MinHeight)
             {
                 TopRow.Height = new GridLength(0.5, GridUnitType.Star);
                 BottomRow.Height = new GridLength(0.5, GridUnitType.Star);
@@ -61,7 +61,7 @@ namespace GitBasic
 
         private void MoveSplitterLeft()
         {
-            if (DiffViewer.RightColumn.ActualWidth == 0)
+            if (DiffViewer.RightColumn.ActualWidth == DiffViewer.RightColumn.MinWidth)
             {
                 DiffViewer.LeftColumn.Width = new GridLength(0.5, GridUnitType.Star);
                 DiffViewer.RightColumn.Width = new GridLength(0.5, GridUnitType.Star);
@@ -75,7 +75,7 @@ namespace GitBasic
 
         private void MoveSplitterRight()
         {
-            if (DiffViewer.LeftColumn.ActualWidth == 0)
+            if (DiffViewer.LeftColumn.ActualWidth == DiffViewer.LeftColumn.MinWidth)
             {
                 DiffViewer.LeftColumn.Width = new GridLength(0.5, GridUnitType.Star);
                 DiffViewer.RightColumn.Width = new GridLength(0.5, GridUnitType.Star);
