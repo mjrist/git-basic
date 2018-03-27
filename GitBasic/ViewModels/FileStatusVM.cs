@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
+using System.Linq;
 
 namespace GitBasic
 {
@@ -33,13 +34,24 @@ namespace GitBasic
             {
                 List<Item> stagedItems = ItemProvider.GetItems(_mainVM.Repo.Value, StatusShowOption.IndexOnly);
                 List<Item> unstagedItems = ItemProvider.GetItems(_mainVM.Repo.Value, StatusShowOption.WorkDirOnly);
+                
+                var stagedItemsToAdd = stagedItems.Except(StagedItems).ToList();
+                var stagedItemsToRemove = StagedItems.Except(stagedItems).ToList();
+                stagedItemsToAdd.ForEach(i => StagedItems.Add(i));
+                stagedItemsToRemove.ForEach(i => StagedItems.Remove(i));
 
-                Debug.Print(stagedItems.Count.ToString());
-                Debug.Print(unstagedItems.Count.ToString());
+                var unstagedItemsToAdd = unstagedItems.Except(UnstagedItems).ToList();
+                var unstagedItemsToRemove = UnstagedItems.Except(unstagedItems).ToList();
+                unstagedItemsToAdd.ForEach(i => UnstagedItems.Add(i));
+                unstagedItemsToRemove.ForEach(i => UnstagedItems.Remove(i));
 
-                // compare previous lists with updated lists; add changed files to observable collection
-                updateObservableCollection(StagedItems, stagedItems);
-                updateObservableCollection(UnstagedItems, unstagedItems);
+
+                //Debug.Print(stagedItems.Count.ToString());
+                //Debug.Print(unstagedItems.Count.ToString());
+
+                //// compare previous lists with updated lists; add changed files to observable collection
+                //updateObservableCollection(StagedItems, stagedItems);
+                //updateObservableCollection(UnstagedItems, unstagedItems);
 
                 // repopulate all stagedItems to observable collection
                 //stagedItems.ForEach(StagedItems.Add);
