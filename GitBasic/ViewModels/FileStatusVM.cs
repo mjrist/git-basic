@@ -156,16 +156,15 @@ namespace GitBasic
                         updateChangedItems(ref item, new DirectoryItem());
                         ocDirectory.Items.Remove(item);
                     }
-                    else  // FileItem
+                }
+                else  // FileItem
+                {
+                    // if FileItem deleted 
+                    if (!inNew)
                     {
-                        // if FileItem deleted 
-                        if (!inNew)
-                        {
-                            Debug.Print(item.Path + System.IO.Path.DirectorySeparatorChar + item.Name + ": deleted");
-                            ocDirectory.Items.Remove(item);
-                        }
+                        Debug.Print(item.Path + System.IO.Path.DirectorySeparatorChar + item.Name + ": deleted");
+                        ocDirectory.Items.Remove(item);
                     }
-
                 }
             }
             // iterate items in updatedDirectory, adding to ocDirectory as needed
