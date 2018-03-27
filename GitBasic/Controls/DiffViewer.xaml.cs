@@ -1,5 +1,6 @@
 ﻿using LibGit2Sharp;
 using Reactive;
+using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -18,13 +19,22 @@ namespace GitBasic.Controls
         public DiffViewer()
         {
             InitializeComponent();
+            Loaded += DiffViewer_Loaded;
             _oldDiff = new DiffFormatter(OldDiff);
             _newDiff = new DiffFormatter(NewDiff);
             SetupTextWidthWatchers();
         }
 
+        private void DiffViewer_Loaded(object sender, RoutedEventArgs e)
+        {
+            RefreshAction = () => { Diff(FileName); };
+        }
+
         private void Diff(string fileName)
         {
+            // Future: These File.ReadAllText calls can throw IOExceptions.
+            // This code should handle those cases.
+
             ClearDiffViewer();
 
             if (string.IsNullOrWhiteSpace(fileName) || Repository == null)
@@ -64,6 +74,7 @@ namespace GitBasic.Controls
         {
             string fileNameWithoutPath = Path.GetFileName(FileName);
             oldTitle.Text = $"{fileNameWithoutPath} - DELETED";
+            _oldDiffTextWidth.Value = GetTextWidth(oldContent);
             _oldDiff.AddSection(oldContent);
         }
 
@@ -71,6 +82,7 @@ namespace GitBasic.Controls
         {
             string fileNameWithoutPath = Path.GetFileName(FileName);
             newTitle.Text = $"{fileNameWithoutPath} - NEW";
+            _newDiffTextWidth.Value = GetTextWidth(newContent);
             _newDiff.AddSection(newContent);
         }
 
@@ -234,6 +246,14 @@ namespace GitBasic.Controls
         }
         public static readonly DependencyProperty RepositoryProperty =
             DependencyProperty.Register("Repository", typeof(Repository), typeof(DiffViewer), new PropertyMetadata(null));
+
+        public Action RefreshAction
+        {
+            get { return (Action)GetValue(RefreshActionProperty); }
+            set { SetValue(RefreshActionProperty, value); }
+        }
+        public static readonly DependencyProperty RefreshActionProperty =
+            DependencyProperty.Register("RefreshAction", typeof(Action), typeof(DiffViewer), new PropertyMetadata(new Action(() => { })));
 
         #endregion
     }
