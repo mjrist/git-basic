@@ -38,6 +38,7 @@
             x:Name="DiffViewer"
             Grid.Row="0"
             FileName="{Binding SelectedFile.Value, Mode=OneWay}"
+            RefreshAction="{Binding Path=DiffViewerVM.RefreshDiffViewer, Mode=OneWayToSource}"
             Repository="{Binding Repo.Value, Mode=OneWay}" />
 
         <!--  Row 1  -->
