@@ -32,5 +32,18 @@ namespace GitBasic.FileSystem
         {
             return Items.IndexOf(item);
         }
+
+        public Item this[int index]
+        {
+            get
+            {
+                return Items[index];
+            }
+            set
+            {
+                Items[index] = value;
+            }
+        }
+
     }
 }
