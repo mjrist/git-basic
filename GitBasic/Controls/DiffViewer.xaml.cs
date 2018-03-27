@@ -1,8 +1,12 @@
 ﻿using LibGit2Sharp;
+using Reactive;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace GitBasic.Controls
 {
@@ -16,51 +20,66 @@ namespace GitBasic.Controls
             InitializeComponent();
             _oldDiff = new DiffFormatter(OldDiff);
             _newDiff = new DiffFormatter(NewDiff);
+            SetupTextWidthWatchers();
         }
 
         private void Diff(string fileName)
         {
-            if (string.IsNullOrWhiteSpace(fileName))
-            {
-                ClearDiffViewer();
-                return;
-            }
+            ClearDiffViewer();
 
-            string repoPath = Repository.Discover(fileName);
-
-            if (string.IsNullOrEmpty(repoPath))
+            if (string.IsNullOrWhiteSpace(fileName) || Repository == null)
             {
                 return;
             }
 
-            using (var repo = new Repository(repoPath))
+            var change = Repository.Diff.Compare<TreeChanges>(new string[] { fileName }, true).FirstOrDefault();
+            if (change != null)
             {
-
-                var change = repo.Diff.Compare<TreeChanges>(new string[] { fileName }, true).FirstOrDefault();
-
-                if (change != null)
+                if (change.Status == ChangeKind.Deleted)
                 {
-                    Blob oldBlob = repo.Lookup<Blob>(change.OldOid);
-                    //Blob newBlob = repo.Lookup<Blob>(change.Oid);
-                    string localFile = oldBlob.GetContentText();
-                    //string newText = newBlob.GetContentText();
-                    string headFile = System.IO.File.ReadAllText(fileName);
+                    Blob oldBlob = Repository.Lookup<Blob>(change.OldOid);
+                    string oldContent = oldBlob.GetContentText();
+                    DisplayDeletedFile(oldContent);
+                }
+                else if (change.Status == ChangeKind.Added)
+                {
+                    string newContent = File.ReadAllText(fileName);
+                    DisplayAddedFile(newContent);
+                }
+                else
+                {
+                    Blob oldBlob = Repository.Lookup<Blob>(change.OldOid);
+                    string oldContent = oldBlob.GetContentText();
+                    string newContent = File.ReadAllText(fileName);
 
-                    // Have to normalize the line endings because LibGit2Sharp is using '\n' but Windows in '\r\n'.
-                    localFile = Regex.Replace(localFile, @"\r\n|\n\r|\n|\r", "\r\n");
-                    headFile = Regex.Replace(headFile, @"\r\n|\n\r|\n|\r", "\r\n");
-
-                    ShowDiff(localFile, headFile);
+                    // Have to normalize the line endings because LibGit2Sharp is using '\n' but Windows in '\r\n'.                        
+                    oldContent = Regex.Replace(oldContent, @"\r\n|\n\r|\n|\r", "\r\n");
+                    newContent = Regex.Replace(newContent, @"\r\n|\n\r|\n|\r", "\r\n");
+                    DisplayDiff(oldContent, newContent);
                 }
             }
         }
 
-        private void ShowDiff(string oldText, string newText)
+        private void DisplayDeletedFile(string oldContent)
         {
-            GitSharp.Diff diff = new GitSharp.Diff(oldText, newText);
+            string fileNameWithoutPath = Path.GetFileName(FileName);
+            oldTitle.Text = $"{fileNameWithoutPath} - DELETED";
+            _oldDiff.AddSection(oldContent);
+        }
 
-            ClearDiffViewer();
+        private void DisplayAddedFile(string newContent)
+        {
+            string fileNameWithoutPath = Path.GetFileName(FileName);
+            newTitle.Text = $"{fileNameWithoutPath} - NEW";
+            _newDiff.AddSection(newContent);
+        }
+
+        private void DisplayDiff(string oldContent, string newContent)
+        {
+            GitSharp.Diff diff = new GitSharp.Diff(oldContent, newContent);
             SetDiffTitles();
+            _oldDiffTextWidth.Value = GetTextWidth(oldContent);
+            _newDiffTextWidth.Value = GetTextWidth(newContent);
 
             foreach (var section in diff.Sections)
             {
@@ -104,20 +123,91 @@ namespace GitBasic.Controls
             }
         }
 
+        private void SetDiffTitles()
+        {
+            string fileName = Path.GetFileName(FileName);
+            oldTitle.Text = $"{fileName} - HEAD";
+            newTitle.Text = $"{fileName} - MODIFIED";
+        }
+
         private void ClearDiffViewer()
         {
+            // Clear the diff viewer text.
             _oldDiff.Clear();
             _newDiff.Clear();
+            // Reset the text width to 0.
+            _oldDiffTextWidth.Value = 0;
+            _newDiffTextWidth.Value = 0;
+            // Clear the titles.
             oldTitle.Text = string.Empty;
             newTitle.Text = string.Empty;
         }
 
-        private void SetDiffTitles()
+        private void ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
-            string fileName = System.IO.Path.GetFileName(FileName);
-            oldTitle.Text = $"{fileName} - HEAD";
-            newTitle.Text = $"{fileName} - MODIFIED";
+            if (sender == LeftScrollViewer)
+            {
+                SyncScrollViewer(RightScrollViewer, e);
+            }
+            else // RightScrollViewer
+            {
+                SyncScrollViewer(LeftScrollViewer, e);
+            }
         }
+
+        private void SyncScrollViewer(ScrollViewer scrollViewer, ScrollChangedEventArgs e)
+        {
+            if (e.VerticalChange != 0)
+            {
+                scrollViewer.ScrollToVerticalOffset(e.VerticalOffset);
+            }
+
+            if (e.HorizontalChange != 0)
+            {
+                scrollViewer.ScrollToHorizontalOffset(e.HorizontalOffset);
+            }
+        }
+
+        private double GetTextWidth(string text)
+        {
+            // Even though the diff viewer font size is 12, I have
+            // to use font size 13 here to get the width right.            
+            FormattedText formattedText = new FormattedText(text,
+                CultureInfo.GetCultureInfo("en-us"),
+                FlowDirection.LeftToRight,
+                new Typeface("Consolas"),
+                13, Brushes.WhiteSmoke);
+
+            // Also, I have to add a small margin of 10.
+            return formattedText.WidthIncludingTrailingWhitespace + 10;
+        }
+
+        private void SetupTextWidthWatchers()
+        {
+            new ReactiveAction(UpdateOldDiffMinWidth, _oldDiffTextWidth);
+            new ReactiveAction(UpdateNewDiffMinWidth, _newDiffTextWidth);
+        }
+
+        private void LeftScrollViewer_SizeChanged(object sender, SizeChangedEventArgs e) => UpdateOldDiffMinWidth();
+
+        private void RightScrollViewer_SizeChanged(object sender, SizeChangedEventArgs e) => UpdateNewDiffMinWidth();
+
+        private void UpdateOldDiffMinWidth()
+        {
+            OldDiff.MinWidth = (_oldDiffVisibleWidth > _oldDiffTextWidth.Value) ? _oldDiffVisibleWidth : _oldDiffTextWidth.Value;
+        }
+
+        private void UpdateNewDiffMinWidth()
+        {
+            NewDiff.MinWidth = (_newDiffVisibleWidth > _newDiffTextWidth.Value) ? _newDiffVisibleWidth : _newDiffTextWidth.Value;
+        }
+
+        private Prop<double> _oldDiffTextWidth = new Prop<double>(0);
+        private Prop<double> _newDiffTextWidth = new Prop<double>(0);
+        private double _oldDiffVisibleWidth => LeftScrollViewer.ActualWidth - DIFF_SIDE_MARGINS;
+        private double _newDiffVisibleWidth => RightScrollViewer.ActualWidth - (SCROLLBAR_WIDTH + DIFF_SIDE_MARGINS);
+        private const int DIFF_SIDE_MARGINS = 4;
+        private const int SCROLLBAR_WIDTH = 20;
 
         private DiffFormatter _oldDiff;
         private DiffFormatter _newDiff;
@@ -129,7 +219,6 @@ namespace GitBasic.Controls
             get { return (string)GetValue(FileNameProperty); }
             set { SetValue(FileNameProperty, value); }
         }
-
         public static readonly DependencyProperty FileNameProperty =
             DependencyProperty.Register("FileName", typeof(string), typeof(DiffViewer), new PropertyMetadata(string.Empty, OnFileNameChanged));
 
@@ -137,6 +226,14 @@ namespace GitBasic.Controls
         {
             ((DiffViewer)d).Diff((string)e.NewValue);
         }
+
+        public Repository Repository
+        {
+            get { return (Repository)GetValue(RepositoryProperty); }
+            set { SetValue(RepositoryProperty, value); }
+        }
+        public static readonly DependencyProperty RepositoryProperty =
+            DependencyProperty.Register("Repository", typeof(Repository), typeof(DiffViewer), new PropertyMetadata(null));
 
         #endregion
     }

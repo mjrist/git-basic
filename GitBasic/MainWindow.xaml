@@ -10,7 +10,7 @@
     Width="1100"
     Height="680"
     MinWidth="300"
-    MinHeight="150"    
+    MinHeight="150"
     PreviewKeyDown="MainWindow_KeyUpOrDown"
     PreviewKeyUp="MainWindow_KeyUpOrDown"
     Style="{StaticResource MetroWindowStyle}"
@@ -37,7 +37,8 @@
         <controls:DiffViewer
             x:Name="DiffViewer"
             Grid.Row="0"
-            FileName="{Binding SelectedFile.Value, Mode=OneWay}" />
+            FileName="{Binding SelectedFile.Value, Mode=OneWay}"
+            Repository="{Binding Repo.Value, Mode=OneWay}" />
 
         <!--  Row 1  -->
         <GridSplitter
