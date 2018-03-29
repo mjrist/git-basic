@@ -9,16 +9,16 @@ namespace GitBasic.FileSystem
 
         public override bool Equals(Object obj)
         {
-            if (obj.GetType().ToString().Equals(this.GetType().ToString()))
+            if (obj is Item otherItem)
             {
-                return (this.Path.Equals(((Item)obj).Path) && this.Name.Equals(((Item)obj).Name));
+                return Path == otherItem.Path;
             }
             return false;
         }
 
         public override int GetHashCode()
         {
-            return (this.Path + System.IO.Path.DirectorySeparatorChar + this.Name).GetHashCode();
+            return Path.GetHashCode();
         }
     }
 }

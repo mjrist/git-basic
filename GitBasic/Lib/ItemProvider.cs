@@ -1,6 +1,7 @@
 ﻿using GitBasic.FileSystem;
 using LibGit2Sharp;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 
@@ -8,7 +9,7 @@ namespace GitBasic
 {
     public static class ItemProvider
     {
-        public static List<Item> GetItems(Repository repo, StatusShowOption showOption)
+        public static ICollection<Item> GetItems(Repository repo, StatusShowOption showOption)
         {
             StatusOptions stagedOptions = new StatusOptions() { Show = showOption, IncludeIgnored = false };
             var fileNames = repo.RetrieveStatus(stagedOptions).Select(x => x.FilePath).ToList();
@@ -17,10 +18,10 @@ namespace GitBasic
 
         public static class BuildTreeFromRepo
         {
-            public static List<Item> RecurseRepoItems(List<string> repo_file_list, string working_directory)
+            public static ObservableCollection<Item> RecurseRepoItems(List<string> repo_file_list, string working_directory)
             {
                 Dictionary<string, List<string>> folders_with_remaining_strings = new Dictionary<string, List<string>>();
-                var items = new List<Item>();
+                var items = new ObservableCollection<Item>();
 
                 foreach (var repo_item in repo_file_list)
                 {

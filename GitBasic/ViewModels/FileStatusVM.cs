@@ -4,8 +4,8 @@ using Reactive;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows;
 using System.Linq;
+using System.Windows;
 
 namespace GitBasic
 {
@@ -31,18 +31,10 @@ namespace GitBasic
         {
             if (_mainVM.Repo.Value != null)
             {
-                List<Item> stagedItems = ItemProvider.GetItems(_mainVM.Repo.Value, StatusShowOption.IndexOnly);
-                List<Item> unstagedItems = ItemProvider.GetItems(_mainVM.Repo.Value, StatusShowOption.WorkDirOnly);
-                
-                var stagedItemsToAdd = stagedItems.Except(StagedItems).ToList();
-                var stagedItemsToRemove = StagedItems.Except(stagedItems).ToList();
-                stagedItemsToAdd.ForEach(i => StagedItems.Add(i));
-                stagedItemsToRemove.ForEach(i => StagedItems.Remove(i));
-
-                var unstagedItemsToAdd = unstagedItems.Except(UnstagedItems).ToList();
-                var unstagedItemsToRemove = UnstagedItems.Except(unstagedItems).ToList();
-                unstagedItemsToAdd.ForEach(i => UnstagedItems.Add(i));
-                unstagedItemsToRemove.ForEach(i => UnstagedItems.Remove(i));
+                ICollection<Item> stagedItems = ItemProvider.GetItems(_mainVM.Repo.Value, StatusShowOption.IndexOnly);
+                ICollection<Item> unstagedItems = ItemProvider.GetItems(_mainVM.Repo.Value, StatusShowOption.WorkDirOnly);
+                SyncItems(StagedItems, stagedItems);
+                SyncItems(UnstagedItems, unstagedItems);
             }
             else
             {
@@ -51,6 +43,33 @@ namespace GitBasic
             }
         }
         
+        /// <summary>
+        /// This function adds and removes items from the oldItems list so that it matches
+        /// the newItems list. We don't want to simply reset the oldItems list because we
+        /// need to keep the old objects for the items which haven't changed.
+        /// </summary>       
+        private void SyncItems(ICollection<Item> oldItems, ICollection<Item> newItems)
+        {
+            var itemsToRemove = oldItems.Except(newItems).ToList();
+            itemsToRemove.ForEach(i => oldItems.Remove(i));
+
+            foreach (var item in newItems)
+            {
+                if (oldItems.Contains(item))
+                {
+                    if (item is DirectoryItem dirItem)
+                    {
+                        DirectoryItem oldItem = (DirectoryItem)oldItems.First((i) => i.Equals(item));
+                        SyncItems(oldItem.Items, dirItem.Items);
+                    }
+                }
+                else
+                {
+                    oldItems.Add(item);
+                }
+            }
+        }
+
         private const string GIT_ADD = "git add";
         private const string GIT_RESET_HEAD = "git reset HEAD";
         private MainVM _mainVM;
