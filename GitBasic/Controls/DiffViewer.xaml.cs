@@ -53,14 +53,22 @@ namespace GitBasic.Controls
                 }
                 else if (change.Status == ChangeKind.Added)
                 {
-                    string newContent = File.ReadAllText(fileName);
+                    if (!IOHelper.TryRepeatIOAction(() => { return File.ReadAllText(fileName); }, out string newContent))
+                    {
+                        MessageBox.Show($"The diff viewer could not read this file:\n\"{fileName}\"\nIt might be locked by another process.", "Unable to Display Diff");
+                        return;
+                    }                   
                     DisplayAddedFile(newContent);
                 }
                 else
                 {
                     Blob oldBlob = Repository.Lookup<Blob>(change.OldOid);
                     string oldContent = oldBlob.GetContentText();
-                    string newContent = File.ReadAllText(fileName);
+                    if (!IOHelper.TryRepeatIOAction(() => { return File.ReadAllText(fileName); }, out string newContent))
+                    {
+                        MessageBox.Show($"The diff viewer could not read this file:\n\"{fileName}\"\nIt might be locked by another process.", "Unable to Display Diff");
+                        return;
+                    }
 
                     // Have to normalize the line endings because LibGit2Sharp is using '\n' but Windows in '\r\n'.                        
                     oldContent = Regex.Replace(oldContent, @"\r\n|\n\r|\n|\r", "\r\n");
