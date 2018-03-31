@@ -5,14 +5,17 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="BaseControlStyle.xaml" />
+        <ResourceDictionary Source="TextBoxContextMenu.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style
         x:Key="RichTextBoxStyle"
         BasedOn="{StaticResource BaseControlStyle}"
         TargetType="{x:Type RichTextBox}">
-        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="0,2,0,2" />
+        <Setter Property="ContextMenu" Value="{StaticResource TextBoxContextMenu}" />
+        <Setter Property="SelectionBrush" Value="{DynamicResource AccentBrush1}" />
+        <Setter Property="FontFamily" Value="Consolas" />
     </Style>
 
 </ResourceDictionary>

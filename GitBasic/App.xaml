@@ -12,6 +12,8 @@
                 <ResourceDictionary Source="pack://application:,,,/StyleResources/Themes/DarkThemeIcons.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/StyleResources/ImplicitStyles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/StyleResources/ExplicitStyles.xaml" />
+                <!--  Converters  -->
+                <ResourceDictionary Source="pack://application:,,,/StyleResources/Converters.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

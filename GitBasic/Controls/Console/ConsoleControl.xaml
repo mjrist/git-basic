@@ -1,0 +1,75 @@
+﻿<UserControl
+    x:Class="GitBasic.Controls.ConsoleControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:GitBasic.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="400"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ConsoleControl}}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="1" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+        <RichTextBox
+            Name="OutputBox"
+            Grid.Row="0"
+            AutoWordSelection="False"
+            BorderThickness="0"
+            ContextMenu="{x:Null}"
+            IsInactiveSelectionHighlightEnabled="True"
+            IsReadOnly="True"
+            PreviewMouseLeftButtonUp="ConsoleControl_PreviewMouseLeftButtonUp"
+            PreviewMouseRightButtonUp="ConsoleControl_PreviewMouseRightButtonUp">
+            <RichTextBox.Resources>
+                <Style TargetType="{x:Type Paragraph}">
+                    <Setter Property="Margin" Value="0" />
+                </Style>
+            </RichTextBox.Resources>
+        </RichTextBox>
+
+        <Rectangle
+            Grid.Row="1"
+            Height="1"
+            HorizontalAlignment="Stretch"
+            Fill="{DynamicResource BorderBrush}" />
+
+        <Border Grid.Row="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBox
+                    Name="CurrentDirectoryIndicator"
+                    Grid.Column="0"
+                    Margin="2,0,1,0"
+                    VerticalAlignment="Stretch"
+                    VerticalContentAlignment="Center"
+                    BorderThickness="0"
+                    ContextMenu="{x:Null}"
+                    FontFamily="Consolas"
+                    Foreground="LimeGreen"
+                    IsInactiveSelectionHighlightEnabled="True"
+                    IsReadOnly="True"
+                    IsTabStop="False"
+                    PreviewMouseLeftButtonUp="ConsoleControl_PreviewMouseLeftButtonUp"
+                    PreviewMouseRightButtonUp="ConsoleControl_PreviewMouseRightButtonUp"
+                    Text="{Binding WorkingDirectory, Mode=OneWay, StringFormat='{}{0}>'}" />
+                <TextBox
+                    Name="InputBox"
+                    Grid.Column="1"
+                    VerticalAlignment="Stretch"
+                    VerticalContentAlignment="Center"
+                    AllowDrop="False"
+                    BorderThickness="0"
+                    FontFamily="Consolas"
+                    MinLines="2"
+                    PreviewKeyDown="InputBox_PreviewKeyDown" />
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

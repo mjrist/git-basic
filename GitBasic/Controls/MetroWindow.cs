@@ -85,7 +85,7 @@ namespace GitBasic.Controls
         }
         public static readonly DependencyProperty TitleBarContentProperty =
             DependencyProperty.Register("TitleBarContent", typeof(object), typeof(MetroWindow), new PropertyMetadata(null));
-
+        
         #endregion
     }
 }

@@ -3,26 +3,40 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:GitBasic.StyleResources.Themes">
 
-    <!-- ******************** Darks ******************** -->
-    <Color x:Key="Color_001">#FF252525</Color>
-    <Color x:Key="Color_002">#FF454545</Color>
+    <!--  ******************** Darks ********************  -->
+    <Color x:Key="DarkColor1">#FF252525</Color>
+    <Color x:Key="DarkColor2">#FF3E3E42</Color>
+    <Color x:Key="DarkColor3">#FF454545</Color>
+    <Color x:Key="DarkColor4">#FF686868</Color>
+    <Color x:Key="DarkColor6">#FF9E9E9E</Color>
 
-    <!-- ******************** Lights ******************** -->
-    <!-- WhiteSomke -->
-    <Color x:Key="Color_003">#FFF5F5F5</Color>
-    <!-- White 100%  -->
-    <Color x:Key="Color_004">#FFFFFFFF</Color>
-    <!-- White 80%  -->
-    <Color x:Key="Color_005">#CCFFFFFF</Color>
-    <!-- White 60%  -->
-    <Color x:Key="Color_006">#99FFFFFF</Color>
-    <!-- White 40%  -->
-    <Color x:Key="Color_007">#66FFFFFF</Color>
-    <!-- White 20%  -->
-    <Color x:Key="Color_008">#33FFFFFF</Color>
+    <!--  Dark 60%  -->
+    <Color x:Key="DarkColor7">#99252525</Color>
 
-    <!-- ******************** Accents ******************** -->
-    <!--  100%  --> <!-- Can be used as highlight color. -->
+
+    <!--  ******************** Lights ********************  -->
+    <!--  WhiteSomke  -->
+    <Color x:Key="LightColor1">#FFF5F5F5</Color>
+
+
+    <!--  ******************** Whites ********************  -->
+    <!--  White 100%  -->
+    <Color x:Key="White1">#FFFFFFFF</Color>
+    <!--  White 80%  -->
+    <Color x:Key="White2">#CCFFFFFF</Color>
+    <!--  White 60%  -->
+    <Color x:Key="White3">#99FFFFFF</Color>
+    <!--  White 40%  -->
+    <Color x:Key="White4">#66FFFFFF</Color>
+    <!--  White 20%  -->
+    <Color x:Key="White5">#33FFFFFF</Color>
+    <!--  White 10%  -->
+    <Color x:Key="White6">#19FFFFFF</Color>
+
+
+    <!--  ******************** Accents ********************  -->
+    <!--  100%  -->
+    <!--  Can be used as highlight color.  -->
     <Color x:Key="AccentColor1">#FF007ACC</Color>
     <!--  80%  -->
     <Color x:Key="AccentColor2">#CC007ACC</Color>
