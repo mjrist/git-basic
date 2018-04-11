@@ -8,7 +8,9 @@ Git Basic is easy to use. It’s not bloated with features. In fact, that’s wh
 
 ### Integrated Terminal
 <img align="left" src="https://github.com/MattTheMan/git-basic/blob/develop/Documentation/Screenshots/Terminal.png">
+<p>
 Type Git commands here. This is a cmd.exe terminal control, so you can enter more than just Git commands here.
+</p>
 
 ### Status Bar
 ![Status Bar](Documentation/Screenshots/StatusBar.png?raw=true "Status Bar")
