@@ -3,7 +3,7 @@ A Git client for Windows desktop. You can download the installer for version 1.0
 
 ![Git Basic Screenshot](Documentation/Screenshots/GitBasicScreenshot.png?raw=true "Git Basic")
 
-## Feature Guide
+## User Guide
 Git Basic is easy to use. It’s not bloated with features. In fact, that’s why it’s called Git Basic. Here is a brief overview of the primary features of Git Basic.
 
 ### Integrated Terminal
