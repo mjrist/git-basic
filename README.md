@@ -11,7 +11,7 @@ Git Basic is easy to use. It’s not bloated with features. In fact, that’s wh
 <p>Type Git commands here. This is a cmd.exe terminal control, so you can enter more than just Git commands here.</p>
 </div>
 
-<div>
+<div style="clear:both;">
 <h3>Status Bar</h3>
 <img align="left" src="https://github.com/MattTheMan/git-basic/blob/develop/Documentation/Screenshots/StatusBar.png">
 <p>
