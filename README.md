@@ -12,9 +12,8 @@ Type Git commands here. This is a cmd.exe terminal control, so you can enter mor
 <br clear="right">
 
 ### Status Bar
-Click the repository name (on the left side of the status bar) to reveal a directory selector. You can navigate to a different    repository from here. Click the branch name (on the right side of the status bar) to reveal a list of all local branches in this repository. You can switch branches by selecting one.
-<br>
 <img src="https://github.com/MattTheMan/git-basic/blob/develop/Documentation/Screenshots/StatusBar.png">
+Click the repository name (on the left side of the status bar) to reveal a directory selector. You can navigate to a different    repository from here. Click the branch name (on the right side of the status bar) to reveal a list of all local branches in this repository. You can switch branches by selecting one.
  
 ### Command Buttons
 <img align="right" src="https://github.com/MattTheMan/git-basic/blob/develop/Documentation/Screenshots/CommandButtons.png">
@@ -27,6 +26,5 @@ The file status control shows you which files are staged or unstaged. If you sel
 <br clear="right">
 
 ### Diff Viewer
-This is the diff viewer for the file which is currently selected in the file status control. The left side shows you the old state of the file and the right side shows you the new state.
-<br>
 <img src="https://github.com/MattTheMan/git-basic/blob/develop/Documentation/Screenshots/DiffViewer.png">
+This is the diff viewer for the file which is currently selected in the file status control. The left side shows you the old state of the file and the right side shows you the new state.
