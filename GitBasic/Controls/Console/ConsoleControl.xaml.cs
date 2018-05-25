@@ -126,15 +126,15 @@ namespace GitBasic.Controls
 
         public void RunCommand(string input)
         {
-            _cmd.StandardInput.WriteLine(input);
-            // A delimiter must be input to determine when to stop
-            // reading standard output and standard error.
-            _cmd.StandardInput.WriteLine(DELIMITER);
-
             _backgroundQueue.QueueTask(() =>
             {
                 try
                 {
+                    _cmd.StandardInput.WriteLine(input);
+                    // A delimiter must be input to determine when to stop
+                    // reading standard output and standard error.
+                    _cmd.StandardInput.WriteLine(DELIMITER);
+
                     PrintStandardOutput();
                     PrintStandardError();
                     Dispatcher.Invoke(() => WriteLine());
