@@ -7,6 +7,8 @@ namespace GitBasic.FileSystem
         public string Name { get; set; }
         public string Path { get; set; }
 
+        public bool IsLeaf => this is FileItem;
+
         public override bool Equals(Object obj)
         {
             if (obj is Item otherItem)

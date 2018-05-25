@@ -18,6 +18,15 @@ namespace GitBasic.Controls
             InitializeComponent();
         }
 
+        private void OpenFile_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem menuItem = (MenuItem)sender;
+            if (menuItem.DataContext is FileItem fileItem)
+            {
+                Process.Start(fileItem.Path);
+            }
+        }
+
         private void ShowInExplorer_Click(object sender, RoutedEventArgs e)
         {
             MenuItem menuItem = (MenuItem)sender;
@@ -154,6 +163,6 @@ namespace GitBasic.Controls
         public static readonly DependencyProperty UnstageActionProperty =
             DependencyProperty.Register("UnstageAction", typeof(Action<string>), typeof(FileStatusControl), new PropertyMetadata(new Action<string>((filePath) => { })));
 
-        #endregion
+        #endregion               
     }
 }

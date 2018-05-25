@@ -17,6 +17,7 @@
             <TextBlock Text="{Binding Path=Name}" ToolTip="{Binding Path=Path}" />
         </DataTemplate>
         <ContextMenu x:Key="FileStatusItemContextMenu">
+            <MenuItem Visibility="{Binding Path=IsLeaf, Converter={StaticResource BooleanToVisibilityConverter}}" Click="OpenFile_Click"  Header="Open File" />
             <MenuItem Click="ShowInExplorer_Click" Header="Show in Explorer" />
         </ContextMenu>
     </UserControl.Resources>
