@@ -2,22 +2,27 @@
     x:Class="GitBasic.Controls.FileStatusControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:fs="clr-namespace:GitBasic.FileSystem"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"    
     xmlns:local="clr-namespace:GitBasic.Controls"
+    xmlns:gb="clr-namespace:GitBasic"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="300"
     d:DesignWidth="300"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <HierarchicalDataTemplate DataType="{x:Type fs:DirectoryItem}" ItemsSource="{Binding Items}">
+        <HierarchicalDataTemplate DataType="{x:Type gb:FileSystemNode}" ItemsSource="{Binding Children}">
             <TextBlock Text="{Binding Path=Name}" ToolTip="{Binding Path=Path}" />
         </HierarchicalDataTemplate>
-        <DataTemplate DataType="{x:Type fs:FileItem}">
-            <TextBlock Text="{Binding Path=Name}" ToolTip="{Binding Path=Path}" />
-        </DataTemplate>
-        <ContextMenu x:Key="FileStatusItemContextMenu">
-            <MenuItem Click="ShowInExplorer_Click" Header="Show in Explorer" />
+        <ContextMenu x:Key="StagedItemContextMenu">
+            <MenuItem Click="Unstage_Click" Header="Unstage" />
+            <MenuItem Visibility="{Binding Path=IsFileAndExists, Converter={StaticResource BooleanToVisibilityConverter}}" Click="OpenFile_Click"  Header="Open File" />
+            <MenuItem Visibility="{Binding Path=Exists, Converter={StaticResource BooleanToVisibilityConverter}}" Click="ShowInExplorer_Click" Header="Show in Explorer" />            
+        </ContextMenu>        
+        <ContextMenu x:Key="UnstagedItemContextMenu">
+            <MenuItem Click="Stage_Click" Header="Stage" />
+            <MenuItem Visibility="{Binding Path=IsFileAndExists, Converter={StaticResource BooleanToVisibilityConverter}}" Click="OpenFile_Click"  Header="Open File" />
+            <MenuItem Visibility="{Binding Path=Exists, Converter={StaticResource BooleanToVisibilityConverter}}" Click="ShowInExplorer_Click" Header="Show in Explorer" />
+            <MenuItem Click="UndoChanges_Click" Header="Undo Changes" />
         </ContextMenu>
     </UserControl.Resources>
 
@@ -48,7 +53,7 @@
                 VirtualizingPanel.ScrollUnit="Item">
                 <TreeView.ItemContainerStyle>
                     <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
-                        <Setter Property="ContextMenu" Value="{StaticResource FileStatusItemContextMenu}" />
+                        <Setter Property="ContextMenu" Value="{StaticResource StagedItemContextMenu}" />
                         <Setter Property="IsExpanded" Value="True" />
                         <EventSetter Event="PreviewMouseRightButtonDown" Handler="TreeViewItem_PreviewMouseRightButtonDown" />
                     </Style>
@@ -81,7 +86,7 @@
                 VirtualizingPanel.ScrollUnit="Item">
                 <TreeView.ItemContainerStyle>
                     <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="{x:Type TreeViewItem}">
-                        <Setter Property="ContextMenu" Value="{StaticResource FileStatusItemContextMenu}" />
+                        <Setter Property="ContextMenu" Value="{StaticResource UnstagedItemContextMenu}" />
                         <Setter Property="IsExpanded" Value="True" />
                         <EventSetter Event="PreviewMouseRightButtonDown" Handler="TreeViewItem_PreviewMouseRightButtonDown" />
                     </Style>
