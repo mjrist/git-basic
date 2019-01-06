@@ -1,5 +1,4 @@
-﻿using GitBasic.FileSystem;
-using LibGit2Sharp;
+﻿using LibGit2Sharp;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -9,68 +8,48 @@ namespace GitBasic
 {
     public static class ItemProvider
     {
-        public static ICollection<Item> GetItems(Repository repo, StatusShowOption showOption)
+        public static ICollection<FileSystemNode> GetItems(Repository repo, StatusShowOption showOption)
         {
-            StatusOptions stagedOptions = new StatusOptions() { Show = showOption, IncludeIgnored = false };
-            var fileNames = repo.RetrieveStatus(stagedOptions).Select(x => x.FilePath).ToList();
-            return BuildTreeFromRepo.RecurseRepoItems(fileNames, repo.Info.WorkingDirectory);
+            StatusOptions options = new StatusOptions() { Show = showOption, IncludeIgnored = false };
+            var fileNames = repo.RetrieveStatus(options).Select(x => x.FilePath).ToList();
+
+            string repoRootDirectory = repo.Info.WorkingDirectory.TrimEnd('/', '\\');
+            FileSystemNode repoRoot = new FileSystemNode()
+            {
+                Name = repoRootDirectory,
+                Path = repoRootDirectory
+            };
+            BuildDirectoryTree(repoRoot, fileNames);
+
+            var items = new ObservableCollection<FileSystemNode>();
+            if (repoRoot.Children.Count > 0)
+            {
+                items.Add(repoRoot);
+            }
+            return items;
         }
 
-        public static class BuildTreeFromRepo
+        private static void BuildDirectoryTree(FileSystemNode root, List<string> relativePaths)
         {
-            public static ObservableCollection<Item> RecurseRepoItems(List<string> repo_file_list, string working_directory)
+            foreach (string path in relativePaths)
             {
-                Dictionary<string, List<string>> folders_with_remaining_strings = new Dictionary<string, List<string>>();
-                var items = new ObservableCollection<Item>();
+                FileSystemNode parentNode = root;
 
-                foreach (var repo_item in repo_file_list)
+                string[] tokens = path.Split('/', '\\');
+                foreach (string part in tokens)
                 {
-                    // if file in a directory
-                    if (repo_item.IndexOf(Path.DirectorySeparatorChar) > 0)
+                    var matchingNode = parentNode.Children.FirstOrDefault(x => x.Name == part);
+                    if (matchingNode == null)
                     {
-                        // split the next level directory from the the string
-                        string sub_directory_name = repo_item.Substring(0, repo_item.IndexOf(Path.DirectorySeparatorChar));
-                        string remaining_file_path = repo_item.Substring(repo_item.IndexOf(Path.DirectorySeparatorChar) + 1);
-
-                        // if this directory name has already been added to the item list, find and add remaining string to directory list
-                        if (folders_with_remaining_strings.ContainsKey(sub_directory_name))
-                        {
-                            folders_with_remaining_strings[sub_directory_name].Add(remaining_file_path);
-                        }
-                        else  // else create a new directory item and add remaining string to item list
-                        {
-                            List<string> sub_directory_file_list = new List<string>();
-                            sub_directory_file_list.Add(remaining_file_path);
-                            folders_with_remaining_strings.Add(sub_directory_name, sub_directory_file_list);
-                        }
-
+                        var newNode = new FileSystemNode() { Name = part, Path = Path.Combine(parentNode.Path, part) };
+                        parentNode.Children.Add(newNode);
+                        parentNode = newNode;
                     }
-                    else  // just a file
+                    else
                     {
-                        var item = new FileItem
-                        {
-                            Name = repo_item.ToString(),
-                            Path = Path.Combine(working_directory, repo_item.ToString())
-                        };
-
-                        items.Add(item);
+                        parentNode = matchingNode;
                     }
                 }
-
-                // recursively build up remaining directory structures
-                foreach (string key in folders_with_remaining_strings.Keys)
-                {
-                    var item = new DirectoryItem
-                    {
-                        Name = key,
-                        Path = Path.Combine(working_directory, key),
-                        Items = RecurseRepoItems(folders_with_remaining_strings[key], Path.Combine(working_directory, key))
-                    };
-
-                    items.Add(item);
-                }
-
-                return items;
             }
         }
     }

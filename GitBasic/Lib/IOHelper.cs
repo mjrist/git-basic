@@ -6,6 +6,11 @@ namespace GitBasic
 {
     public class IOHelper
     {
+        public static bool TryRepeatIOAction(Action ioAction)
+        {
+            return TryRepeatIOAction(() => { ioAction(); return string.Empty; }, out string placeholder);
+        }
+
         public static bool TryRepeatIOAction<T>(Func<T> ioAction, out T returnValue)
         {
             for (int tries = 10; tries > 0; tries--)

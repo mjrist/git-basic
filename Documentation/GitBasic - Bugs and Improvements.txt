@@ -1,0 +1,37 @@
+----------------------------------------------
+BUGS
+----------------------------------------------
+
+Text selection on console is not removed when command is executed.
+
+----------------------------------------------
+IMPROVEMENTS
+----------------------------------------------
+
+Sort FileStatus items - especially on staging and unstaging
+
+Figure out diff when file is staged (against index/HEAD)
+Disable command line till ready - this doesn't work if you need to ctrl-C
+Shorten height of branch menu
+
+Disable ctrl + c for console - Keyboard shortcuts Ctrl c, Ctrl v, and just control in general make copying and pasting with keyboard shortcuts a little nonfunctional, because ctrl + c kills the current process in the command prompt, and is additional input that is unintended.
+FileStatus Control Adorner on file drag - Add an adorner to show the file or directory name (or an image) when dragging the file.
+Line numbers in diff viewer - This would make the diffs more readable
+Keyboard shortcut or button to scroll to top of git command output - For large git log outputs, it can be a bit annoying to get to the top of the log with just the mouse wheel. A keyboard shortcut or button on the right side of the console window, or even a scroll bar might make this easier.
+FileStatus Control Add directory and file image - Add a folder and file image in front of the name for each file, like windows explorer.
+Unstaged TreeView file differentiation - Right now, both untracked and tracked files are shown in unstaged and they are not differentiated in any way. Proposal: Untracked files shown in a grey color Tracked files shown in white
+
+
+
+
+
+
+private void CheckConfig()
+{
+	var config = Configuration.BuildFrom(null, Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\.gitconfig");
+	var editor = config.Get<string>(new[] { "core", "editor" });            
+	if (editor == null)
+	{
+		MessageBox.Show("To use the commit command without an inline message (-m flag), Git Basic must use an external editor. Would you like to set notepad as your external editor?");
+	}
+}
